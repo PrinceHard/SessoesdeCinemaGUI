@@ -1,6 +1,6 @@
 package src;
 
-public class Filme implements Comparable<Filme>{
+public class Filme implements Comparable<Filme>{ //implements Serializable
 	private String titulo, tipoProducao;
 	private int duracao;
 	private String[] tipoAudio;
