@@ -1,3 +1,47 @@
-#btn:hover{
+#btn-home{
+	-fx-label-padding:  0 100 0 0;
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+
+#btn-home:hover{
 	-fx-background-color: #E1DDDD;
 }
+
+#btn-gerenciamento:hover{
+	-fx-background-color: #E1DDDD;
+}
+
+#btn-vendas:hover{
+	-fx-background-color: #E1DDDD;
+}
+
+#btn-faturamento:hover{
+	-fx-background-color: #E1DDDD;
+}
+
+#btn-gerenciamento{
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	
+}
+
+#btn-vendas{
+	-fx-label-padding:  0 80 0 0;
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+
+#btn-faturamento{
+	-fx-label-padding: 0 25 0 0;
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+
+.shadow{
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+
+
+

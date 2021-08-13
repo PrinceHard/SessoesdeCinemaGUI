@@ -9,9 +9,9 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="773.0" prefWidth="1211.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.SceneController">
    <left>
-      <VBox prefHeight="773.0" prefWidth="297.0" style="-fx-background-color: #f3f3f3;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="773.0" prefWidth="297.0" style="-fx-background-color: #f3f3f3;" styleClass="shadow" stylesheets="@style.css" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#switchToSceneHome" prefHeight="55.0" prefWidth="297.0" style="-fx-label-padding: 0 100 0 0; -fx-cursor: hand; -fx-background-color: transparent;" text="Ínicio">
+            <Button id="btn-home" mnemonicParsing="false" onAction="#switchToSceneHome" prefHeight="55.0" prefWidth="297.0" stylesheets="@style.css" text="Ínicio">
                <VBox.margin>
                   <Insets top="50.0" />
                </VBox.margin>
@@ -19,17 +19,17 @@
                   <Font name="Montserrat Light" size="21.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#switchToSceneGerenciamento" prefHeight="55.0" prefWidth="297.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Gerenciamento">
+            <Button id="btn-gerenciamento" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#switchToSceneGerenciamento" prefHeight="55.0" prefWidth="297.0" stylesheets="@style.css" text="Gerenciamento">
                <font>
                   <Font name="Montserrat Light" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="115.0" mnemonicParsing="false" onAction="#switchToSceneVendas" prefHeight="55.0" prefWidth="297.0" style="-fx-label-padding: 0 80 0 0; -fx-cursor: hand; -fx-background-color: transparent;" text="Vendas">
+            <Button id="btn-vendas" layoutX="10.0" layoutY="115.0" mnemonicParsing="false" onAction="#switchToSceneVendas" prefHeight="55.0" prefWidth="297.0" stylesheets="@style.css" text="Vendas">
                <font>
                   <Font name="Montserrat Light" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="10.0" layoutY="170.0" mnemonicParsing="false" onAction="#switchToSceneFaturamento" prefHeight="55.0" prefWidth="297.0" style="-fx-label-padding: 0 25 0 0; -fx-cursor: hand; -fx-background-color: transparent;" text="Faturamento">
+            <Button id="btn-faturamento" layoutX="10.0" layoutY="170.0" mnemonicParsing="false" onAction="#switchToSceneFaturamento" prefHeight="55.0" prefWidth="297.0" stylesheets="@style.css" text="Faturamento">
                <font>
                   <Font name="Montserrat Light" size="20.0" />
                </font>
@@ -38,6 +38,6 @@
       </VBox>
    </left>
    <center>
-      <AnchorPane prefHeight="773.0" prefWidth="909.0" style="-fx-background-color: #333333;" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
