@@ -6,117 +6,132 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.SceneController">
-   <top>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Pane layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0">
-               <children>
-                  <ImageView fitHeight="527.0" fitWidth="328.0" layoutX="579.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
-                     <image>
-                        <Image url="@images/exampleCinema.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="96.0" layoutY="37.0" prefHeight="56.0" prefWidth="277.0" text="CenterPlex">
-                     <font>
-                        <Font name="Montserrat Medium" size="45.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="264.0" layoutY="90.0" prefHeight="29.0" prefWidth="97.0" text="Cinemas">
-                     <font>
-                        <Font name="Montserrat Medium Italic" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="67.0" layoutY="252.0" prefHeight="56.0" prefWidth="319.0" text="FATURAMENTO DO DIA">
-                     <font>
-                        <Font name="Montserrat Bold" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="67.0" layoutY="300.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
-                     <font>
-                        <Font name="Montserrat Light" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="67.0" layoutY="406.0" prefHeight="56.0" prefWidth="347.0" text="FATURAMENTO MENSAL">
-                     <font>
-                        <Font name="Montserrat Bold" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="67.0" layoutY="452.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
-                     <font>
-                        <Font name="Montserrat Light" size="25.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <VBox prefHeight="720.0" prefWidth="297.0" style="-fx-background-color: #f3f3f3;" styleClass="shadow" stylesheets="@style.css">
-               <children>
-                  <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icons/home.png" />
-                           </image>
-                        </ImageView>
-                        <Button id="btn-home" layoutX="70.0" mnemonicParsing="false" onAction="#switchToSceneHome" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Início">
-                           <font>
-                              <Font name="Montserrat Light" size="21.0" />
-                           </font>
-                        </Button>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="70.0" />
-                     </VBox.margin>
-                  </Pane>
-                  <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icons/management.png" />
-                           </image>
-                        </ImageView>
-                        <Button id="btn-gerenciamento" layoutX="70.0" mnemonicParsing="false" onAction="#switchToSceneHome" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Gerenciamento">
-                           <font>
-                              <Font name="Montserrat Light" size="21.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-                  <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icons/sales.png" />
-                           </image>
-                        </ImageView>
-                        <Button id="btn-vendas" layoutX="70.0" mnemonicParsing="false" onAction="#switchToSceneHome" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Vendas">
-                           <font>
-                              <Font name="Montserrat Light" size="21.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-                  <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
-                     <children>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icons/finances.png" />
-                           </image>
-                        </ImageView>
-                        <Button id="btn-faturamento" layoutX="70.0" mnemonicParsing="false" onAction="#switchToSceneHome" prefHeight="55.0" prefWidth="221.0" styleClass="ooane" stylesheets="@style.css" text="Faturamento">
-                           <font>
-                              <Font name="Montserrat Light" size="21.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-               </children>
-            </VBox>
-         </children></AnchorPane>
-   </top>
-</BorderPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.SceneController">
+     <children>
+        <VBox prefHeight="720.0" prefWidth="297.0" style="-fx-background-color: #f3f3f3;" styleClass="shadow" stylesheets="@style.css">
+           <children>
+              <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
+                 <children>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
+                       <image>
+                          <Image url="@icons/home.png" />
+                       </image>
+                    </ImageView>
+                    <Button id="btn-home" layoutX="70.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Início">
+                       <font>
+                          <Font name="Montserrat Light" size="21.0" />
+                       </font>
+                    </Button>
+                 </children>
+                 <VBox.margin>
+                    <Insets top="70.0" />
+                 </VBox.margin>
+              </Pane>
+              <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
+                 <children>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
+                       <image>
+                          <Image url="@icons/management.png" />
+                       </image>
+                    </ImageView>
+                    <Button id="btn-gerenciamento" layoutX="70.0" mnemonicParsing="false" onAction="#switchToGerenciamento" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Gerenciamento">
+                       <font>
+                          <Font name="Montserrat Light" size="21.0" />
+                       </font>
+                    </Button>
+                 </children>
+              </Pane>
+              <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
+                 <children>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
+                       <image>
+                          <Image url="@icons/sales.png" />
+                       </image>
+                    </ImageView>
+                    <Button id="btn-vendas" layoutX="70.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Vendas">
+                       <font>
+                          <Font name="Montserrat Light" size="21.0" />
+                       </font>
+                    </Button>
+                 </children>
+              </Pane>
+              <Pane prefHeight="51.0" prefWidth="297.0" styleClass="panes" stylesheets="@style.css">
+                 <children>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
+                       <image>
+                          <Image url="@icons/finances.png" />
+                       </image>
+                    </ImageView>
+                    <Button id="btn-faturamento" layoutX="70.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="55.0" prefWidth="221.0" styleClass="ooane" stylesheets="@style.css" text="Faturamento">
+                       <font>
+                          <Font name="Montserrat Light" size="21.0" />
+                       </font>
+                    </Button>
+                 </children>
+              </Pane>
+           </children>
+        </VBox>
+        <Pane fx:id="paneHome" layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0" stylesheets="@style.css">
+           <children>
+              <ImageView fitHeight="527.0" fitWidth="328.0" layoutX="579.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+                 <image>
+                    <Image url="@images/exampleCinema.png" />
+                 </image>
+              </ImageView>
+              <Label layoutX="96.0" layoutY="37.0" prefHeight="56.0" prefWidth="277.0" text="CenterPlex">
+                 <font>
+                    <Font name="Montserrat Medium" size="45.0" />
+                 </font>
+              </Label>
+              <Label layoutX="264.0" layoutY="90.0" prefHeight="29.0" prefWidth="97.0" text="Cinemas">
+                 <font>
+                    <Font name="Montserrat Medium Italic" size="20.0" />
+                 </font>
+              </Label>
+              <Label layoutX="67.0" layoutY="252.0" prefHeight="56.0" prefWidth="319.0" text="FATURAMENTO DO DIA">
+                 <font>
+                    <Font name="Montserrat Bold" size="25.0" />
+                 </font>
+              </Label>
+              <Label layoutX="67.0" layoutY="300.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
+                 <font>
+                    <Font name="Montserrat Light" size="25.0" />
+                 </font>
+              </Label>
+              <Label layoutX="67.0" layoutY="406.0" prefHeight="56.0" prefWidth="347.0" text="FATURAMENTO MENSAL">
+                 <font>
+                    <Font name="Montserrat Bold" size="25.0" />
+                 </font>
+              </Label>
+              <Label layoutX="67.0" layoutY="452.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
+                 <font>
+                    <Font name="Montserrat Light" size="25.0" />
+                 </font>
+              </Label>
+           </children>
+        </Pane>
+        <Pane fx:id="paneGerenciamento" layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0" stylesheets="@style.css" visible="false">
+           <children>
+              <ImageView fitHeight="702.0" fitWidth="239.0" layoutX="69.0" opacity="0.15" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+               <image>
+                  <Image url="@images/sessoesImage.png" />
+               </image>
+              </ImageView>
+            <ImageView fitHeight="702.0" fitWidth="239.0" layoutX="369.0" opacity="0.15" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+               <image>
+                  <Image url="@images/filmesImage.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="702.0" fitWidth="239.0" layoutX="669.0" opacity="0.15" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+               <image>
+                  <Image url="@images/salasImage.png" />
+               </image>
+            </ImageView>
+           </children>
+        </Pane>
+	</children>
+</AnchorPane>
