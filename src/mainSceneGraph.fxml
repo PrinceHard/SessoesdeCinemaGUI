@@ -75,7 +75,7 @@
               </Pane>
            </children>
         </VBox>
-        <Pane fx:id="paneHome" layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0" stylesheets="@style.css">
+        <Pane fx:id="paneHome" layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0" stylesheets="@style.css" visible="true">
            <children>
               <ImageView fitHeight="527.0" fitWidth="328.0" layoutX="579.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
                  <image>
@@ -116,21 +116,36 @@
         </Pane>
         <Pane fx:id="paneGerenciamento" layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0" stylesheets="@style.css" visible="false">
            <children>
-              <ImageView fitHeight="702.0" fitWidth="239.0" layoutX="69.0" opacity="0.15" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+              <ImageView fitHeight="210.0" fitWidth="240.0" layoutX="70.0" layoutY="218.0" pickOnBounds="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/sessoesImage.png" />
+                  <Image url="@images/exampleCartaz.png" />
                </image>
               </ImageView>
-            <ImageView fitHeight="702.0" fitWidth="239.0" layoutX="369.0" opacity="0.15" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+            <ImageView fitHeight="210.0" fitWidth="240.0" layoutX="363.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/filmesImage.png" />
+                  <Image url="@images/exampleMovies.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="702.0" fitWidth="239.0" layoutX="669.0" opacity="0.15" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+            <ImageView fitHeight="210.0" fitWidth="240.0" layoutX="656.0" layoutY="218.0" opacity="0.84" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/salasImage.png" />
+                  <Image url="@images/exampleRooms.png" />
                </image>
             </ImageView>
+            <Label layoutX="124.0" layoutY="306.0" text="SESSÕES" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Bold" size="28.0" />
+               </font>
+            </Label>
+            <Label layoutX="429.0" layoutY="306.0" text="FILMES" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Bold" size="28.0" />
+               </font>
+            </Label>
+            <Label layoutX="728.0" layoutY="306.0" text="SALAS" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Bold" size="28.0" />
+               </font>
+            </Label>
            </children>
         </Pane>
 	</children>
