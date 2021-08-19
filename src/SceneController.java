@@ -5,6 +5,8 @@ import javafx.scene.layout.Pane;
 
 public class SceneController {
 	
+	CinemaUtil mainClass = new CinemaUtil();
+	
 	@FXML
 	private Pane paneHome, paneGerenciamento, paneVendas, paneFaturamento;
 
@@ -38,6 +40,11 @@ public class SceneController {
 		paneGerenciamento.setVisible(false);
 		paneVendas.setVisible(false);
 		paneFaturamento.setVisible(true);
+	}
+	
+	@FXML
+	private void openGerenciarSessoes() throws Exception {
+		mainClass.openGerenciarSessoes();
 	}
 	
 }

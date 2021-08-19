@@ -35,3 +35,7 @@
 	-fx-cursor: hand;
 }
 
+.text {
+	-fx-font-smoothing-type: gray;
+}
+
