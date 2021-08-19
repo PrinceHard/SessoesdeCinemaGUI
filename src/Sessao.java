@@ -9,10 +9,10 @@ public class Sessao implements Comparable<Sessao>{
     private LocalTime horarioFinal;
     private double valorIngresso;
     private char[] poltronas; //l = livre; m = meia; i = inteira
-    private boolean exibicao3D;
+    private String exibicao3D;
     private String tipoAudio;
 
-    public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, boolean exibicao3D, String tipoAudio){
+    public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, String exibicao3D, String tipoAudio){
         this.filme = filme;
         this.sala = sala;
         this.horarioInicial = horarioInicial;
@@ -131,15 +131,15 @@ public class Sessao implements Comparable<Sessao>{
         return poltronas;
     }
 
-    public Sala getSala(){
-        return sala;
+    public int getSala(){
+        return sala.getNumSala();
     }
 
-    public Filme getFilme(){
-        return filme;
+    public String getFilme(){
+        return filme.getTitulo();
     }
     
-    public boolean getExibicao3D(){
+    public String getExibicao3D(){
         return exibicao3D;
     }
 
@@ -159,7 +159,7 @@ public class Sessao implements Comparable<Sessao>{
         this.filme = filme; 
     }
 
-    public void setExibicao3D(boolean exibicao3D){
+    public void setExibicao3D(String exibicao3D){
         this.exibicao3D = exibicao3D; 
     }
 

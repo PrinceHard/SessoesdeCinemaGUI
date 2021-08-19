@@ -8,20 +8,20 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.GerenciarSessoesController">
    <children>
-      <TableView fx:id="listaSessoes" layoutX="24.0" layoutY="15.0" prefHeight="545.0" prefWidth="977.0">
+      <TableView fx:id="sessoesTable" layoutX="24.0" layoutY="15.0" prefHeight="545.0" prefWidth="977.0">
         <columns>
           <TableColumn prefWidth="40.33333206176758" />
-          <TableColumn prefWidth="391.33331298828125" text="FILME" />
-            <TableColumn minWidth="0.0" prefWidth="92.66668701171875" text="SALA" />
-            <TableColumn minWidth="0.0" prefWidth="175.33331298828125" text="HORÁRIO">
-               <columns>
-                  <TableColumn prefWidth="75.0" text="INICIAL" />
-                  <TableColumn prefWidth="75.0" text="FINAL" />
-               </columns>
-            </TableColumn>
-            <TableColumn prefWidth="153.0" text="ÁUDIO" />
-            <TableColumn prefWidth="79.66668701171875" text="EXIBIÇÃO" />
-            <TableColumn prefWidth="59.6666259765625" text="VALOR" />
+          <TableColumn fx:id="filmeCol" prefWidth="391.33331298828125" text="FILME" />
+          <TableColumn fx:id="salaCol" minWidth="0.0" prefWidth="92.66668701171875" text="SALA" />
+          <TableColumn fx:id="salaCol" minWidth="0.0" prefWidth="175.33331298828125" text="HORÁRIO">
+		       <columns>
+		          <TableColumn fx:id="horaIniCol" prefWidth="75.0" text="INICIAL" />
+		          <TableColumn fx:id="horaFinCol" prefWidth="75.0" text="FINAL" />
+		       </columns>
+          </TableColumn>
+          <TableColumn fx:id="audioCol" prefWidth="153.0" text="ÁUDIO" />
+          <TableColumn fx:id="exibicaoCol" prefWidth="79.66668701171875" text="EXIBIÇÃO" />
+          <TableColumn fx:id="valorCol" prefWidth="59.6666259765625" text="VALOR" />
         </columns>
       </TableView>
       <Button layoutX="24.0" layoutY="569.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="CRIAR NOVA SESSÃO">
@@ -29,12 +29,7 @@
             <Font name="Montserrat SemiBold" size="20.0" />
          </font>
       </Button>
-      <Button layoutX="445.0" layoutY="569.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="APAGAR SELECIONADOS">
-         <font>
-            <Font name="Montserrat SemiBold" size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="857.0" layoutY="569.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="143.0" styleClass="innerButtons" stylesheets="@style.css" text="VOLTAR">
+      <Button layoutX="711.0" layoutY="569.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="APAGAR SELECIONADOS">
          <font>
             <Font name="Montserrat SemiBold" size="20.0" />
          </font>

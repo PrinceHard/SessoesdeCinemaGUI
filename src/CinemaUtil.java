@@ -14,21 +14,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javafx.stage.Modality;
 import javafx.scene.text.Font;
+import java.util.ArrayList;
 
 public class CinemaUtil extends Application{
 
-	public static String cinemaName;
+	public static String cinemaName = "";
 	private static Stage stageFirstOpen = new Stage();
-	private static Stage stageGerenciarSessoes = new Stage();
 		
 	@FXML
 	private TextField userInput;
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
-		Parent rootNodeSceneMain = FXMLLoader.load(getClass().getResource("mainSceneGraph.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
+		Parent rootNodeSceneMain = (Parent) loader.load();
+		SceneController controller = loader.getController();
+
 		Parent rootNodeSceneFirstOpen = FXMLLoader.load(getClass().getResource("firstSceneGraph.fxml"));
-		
+			
 		Scene mainScene = new Scene(rootNodeSceneMain);
 		Scene firstOpenScene = new Scene(rootNodeSceneFirstOpen);
 		
@@ -44,13 +47,14 @@ public class CinemaUtil extends Application{
 	
 		if((char) readerFlagFirstOpen.read() == '0') {
 			stageFirstOpen.showAndWait();
-			System.out.println(cinemaName);
+			controller.changeCinemaName(cinemaName);
 		}
 
 		FileWriter writerFlagFirstOpen;
 		try {
 			writerFlagFirstOpen = new FileWriter("flagFirstOpen.txt");
 			writerFlagFirstOpen.write("1");
+			writerFlagFirstOpen.write(cinemaName);
 			writerFlagFirstOpen.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -69,14 +73,10 @@ public class CinemaUtil extends Application{
 			a.showAndWait();
 		}
 	}	
-	
-	public void openGerenciarSessoes() throws Exception{
-		Parent nodeRootGerenciarSessoes = FXMLLoader.load(getClass().getResource("gerenciarSessoesSceneGraph.fxml"));
-		Scene sceneGerenciarSessoes = new Scene(nodeRootGerenciarSessoes);
-		stageGerenciarSessoes.setScene(sceneGerenciarSessoes);
-		stageGerenciarSessoes.initModality(Modality.APPLICATION_MODAL);
-		stageGerenciarSessoes.showAndWait();
-	}	
+
+	public static ArrayList<Sessao> getSessoes() {
+		return new ArrayList<Sessao>();
+	}
 	
 	public static void main(String[] args) {
 		Font.loadFont("file:fonts/Montserrat-Light.ttf", 300);
