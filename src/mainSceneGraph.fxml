@@ -82,32 +82,32 @@
                     <Image url="@images/exampleCinema.png" />
                  </image>
               </ImageView>
-              <Label layoutX="96.0" layoutY="37.0" prefHeight="56.0" prefWidth="277.0" text="CenterPlex">
+              <Label fx:id="cinemaLabel" alignment="CENTER" layoutX="38.0" layoutY="74.0" prefHeight="56.0" prefWidth="451.0" text="">
                  <font>
-                    <Font name="Montserrat Medium" size="45.0" />
+                    <Font name="Montserrat Medium" size="50.0" />
                  </font>
               </Label>
-              <Label layoutX="264.0" layoutY="90.0" prefHeight="29.0" prefWidth="97.0" text="Cinemas">
+              <Label layoutX="211.0" layoutY="51.0" prefHeight="29.0" prefWidth="97.0" text="Cinema">
                  <font>
                     <Font name="Montserrat Medium Italic" size="20.0" />
                  </font>
               </Label>
-              <Label layoutX="67.0" layoutY="252.0" prefHeight="56.0" prefWidth="319.0" text="FATURAMENTO DO DIA">
+              <Label layoutX="67.0" layoutY="272.0" prefHeight="56.0" prefWidth="319.0" text="FATURAMENTO DO DIA">
                  <font>
                     <Font name="Montserrat Bold" size="25.0" />
                  </font>
               </Label>
-              <Label layoutX="67.0" layoutY="300.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
+              <Label layoutX="67.0" layoutY="320.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
                  <font>
                     <Font name="Montserrat Light" size="25.0" />
                  </font>
               </Label>
-              <Label layoutX="67.0" layoutY="406.0" prefHeight="56.0" prefWidth="347.0" text="FATURAMENTO MENSAL">
+              <Label layoutX="67.0" layoutY="426.0" prefHeight="56.0" prefWidth="347.0" text="FATURAMENTO MENSAL">
                  <font>
                     <Font name="Montserrat Bold" size="25.0" />
                  </font>
               </Label>
-              <Label layoutX="67.0" layoutY="452.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
+              <Label layoutX="67.0" layoutY="472.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
                  <font>
                     <Font name="Montserrat Light" size="25.0" />
                  </font>
@@ -116,7 +116,7 @@
         </Pane>
         <Pane fx:id="paneGerenciamento" layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0" stylesheets="@style.css" visible="false">
            <children>
-              <ImageView fx:id="sessaoImage" onMousePressed="#openGerenciarSessoes" fitHeight="210.0" fitWidth="240.0" layoutX="70.0" layoutY="218.0" pickOnBounds="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
+              <ImageView fx:id="sessaoImage" fitHeight="210.0" fitWidth="240.0" layoutX="70.0" layoutY="218.0" onMousePressed="#openGerenciarSessoes" pickOnBounds="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
                   <Image url="@images/exampleCartaz.png" />
                </image>
@@ -131,7 +131,7 @@
                   <Image url="@images/exampleRooms.png" />
                </image>
             </ImageView>
-            <Label fx:id="sessaoLabel" onMousePressed="#openGerenciarSessoes" layoutX="124.0" layoutY="306.0" text="SESSÕES" textFill="WHITE">
+            <Label fx:id="sessaoLabel" layoutX="124.0" layoutY="306.0" onMousePressed="#openGerenciarSessoes" text="SESSÕES" textFill="WHITE">
                <font>
                   <Font name="Montserrat Bold" size="28.0" />
                </font>

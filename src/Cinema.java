@@ -67,7 +67,7 @@ public class Cinema {
 
         if(sessao.ocuparPoltrona(poltrona, tipoIngresso)) { //Poltrona ocupada com sucesso.
 
-            if(sessao.getExibicao3D()) { //A sessão é 3D.
+            if(sessao.getExibicao3D().equals("3D")) { //A sessão é 3D.
 
                 if(tipoIngresso == 'i') {
                     ingressosInteiras3D++;
@@ -100,7 +100,7 @@ public class Cinema {
 
         if(sessao.liberarPoltrona(poltrona)) { //Poltrona liberada com sucesso.
 
-            if(sessao.getExibicao3D()) {    //A sessão é 3D.    
+            if(sessao.getExibicao3D().equals("3D")) {    //A sessão é 3D.    
 
                 if(tipoIngresso == 'i') {
                     ingressosInteiras3D--;
