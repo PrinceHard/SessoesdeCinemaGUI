@@ -12,11 +12,14 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import javafx.stage.Modality;
+import javafx.scene.text.Font;
 
 public class CinemaUtil extends Application{
 
 	public static String cinemaName;
 	private static Stage stageFirstOpen = new Stage();
+	private static Stage stageGerenciarSessoes = new Stage();
 		
 	@FXML
 	private TextField userInput;
@@ -67,7 +70,21 @@ public class CinemaUtil extends Application{
 		}
 	}	
 	
+	public void openGerenciarSessoes() throws Exception{
+		Parent nodeRootGerenciarSessoes = FXMLLoader.load(getClass().getResource("gerenciarSessoesSceneGraph.fxml"));
+		Scene sceneGerenciarSessoes = new Scene(nodeRootGerenciarSessoes);
+		stageGerenciarSessoes.setScene(sceneGerenciarSessoes);
+		stageGerenciarSessoes.initModality(Modality.APPLICATION_MODAL);
+		stageGerenciarSessoes.showAndWait();
+	}	
+	
 	public static void main(String[] args) {
+		Font.loadFont("file:fonts/Montserrat-Light.ttf", 300);
+		Font.loadFont("file:fonts/Montserrat-Medium.ttf", 500);
+		Font.loadFont("file:fonts/Montserrat-MediumItalic.ttf", 500);
+		Font.loadFont("file:fonts/Montserrat-SemiBold.ttf", 600); 
+		Font.loadFont("file:fonts/Montserrat-Bold.ttf", 700); 
+		Font.loadFont("file:fonts/Montserrat-Black.ttf", 900);
 		launch(args);
 	}
 
