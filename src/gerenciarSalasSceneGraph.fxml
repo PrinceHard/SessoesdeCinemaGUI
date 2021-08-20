@@ -13,9 +13,9 @@
    <children>
       <Pane fx:id="paneViewSalas" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="true">
          <children>
-            <TableView fx:id="salasTable" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
+            <TableView fx:id="salasTable" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
               <columns>
-                <TableColumn maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" />
+                <TableColumn fx:id="selectCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" />
                 <TableColumn fx:id="numCol" prefWidth="391.33331298828125" text="NÚMERO DA SALA" />
                 <TableColumn fx:id="capacidadeCol" minWidth="0.0" prefWidth="92.66668701171875" text="CAPACIDADE" />
               </columns>
@@ -28,7 +28,7 @@
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="699.0" layoutY="561.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="APAGAR SELECIONADOS">
+            <Button onAction="#deleteSala" layoutX="699.0" layoutY="561.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="APAGAR SELECIONADOS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
@@ -37,12 +37,12 @@
       </Pane>
       <Pane fx:id="paneCreatingSala" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="false">
          <children>
-            <Button onAction="#createSala" layoutX="340.0" layoutY="428.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="PRONTO">
+            <Button layoutX="340.0" layoutY="428.0" mnemonicParsing="false" onAction="#createSala" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="PRONTO">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
             </Button>
-            <Button onAction="#cancelCreatingSala" layoutX="517.0" layoutY="428.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
+            <Button layoutX="517.0" layoutY="428.0" mnemonicParsing="false" onAction="#cancelCreatingSala" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
