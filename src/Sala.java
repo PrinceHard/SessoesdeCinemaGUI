@@ -1,20 +1,27 @@
 package src;
 
 import java.io.Serializable;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.CheckBox;
+
 
 public class Sala implements Comparable<Sala>, Serializable{
 	private int numSala;
 	private int capacidade;
-	private boolean selected;
+	private transient CheckBox checkBox;
+
 
 	public Sala(int numSala, int capacidade) {
 		this.numSala = numSala;
 		this.capacidade = capacidade;
-		this.selected = false;
 	}
 
-	public boolean isSelected() {
-		return selected;
+	public CheckBox getCheckBox() {
+		if(checkBox == null) {
+			this.checkBox = new CheckBox();
+		}
+		return checkBox;
 	}
 	
 	public int getNumSala() {
@@ -25,8 +32,8 @@ public class Sala implements Comparable<Sala>, Serializable{
 		return capacidade;
 	}
 	
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setCheckBox(CheckBox checkBox) {
+		this.checkBox = checkBox;
 	}
 
 	public void setNumSala(int numSala) {

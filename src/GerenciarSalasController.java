@@ -21,6 +21,10 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.collections.ListChangeListener;
+import javafx.util.Callback;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.CheckBox;
 
 
 public class GerenciarSalasController implements Initializable{
@@ -35,12 +39,11 @@ public class GerenciarSalasController implements Initializable{
 	@FXML
 	private TableColumn<Sala, Integer> numCol, capacidadeCol;
 	@FXML
-	private TableColumn<Sala, Boolean> selectCol;
+	private TableColumn<Sala, CheckBox> selectCol;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
-		selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+		selectCol.setCellValueFactory(new PropertyValueFactory<>("checkBox"));
 		
 		numCol.setCellValueFactory(new PropertyValueFactory<>("numSala"));
 		numCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
@@ -68,7 +71,7 @@ public class GerenciarSalasController implements Initializable{
 	}	
 
 	private ObservableList<Sala> salasList() {
-		return FXCollections.observableArrayList(CinemaUtil.getSalas());
+    	return FXCollections.observableArrayList(CinemaUtil.getSalas());
 	}
 
 	@FXML
@@ -101,7 +104,7 @@ public class GerenciarSalasController implements Initializable{
 					break;
 				}
 			}
-			
+
 			if(!salaExiste){
 				Sala sala = new Sala(numSala, capacidade);
 				CinemaUtil.saveData(sala);
@@ -118,15 +121,13 @@ public class GerenciarSalasController implements Initializable{
 	
 	@FXML
 	private void deleteSala() {
-		System.out.println("Enter");
-		ArrayList<Sala> oldSalas = new ArrayList<>();
+		ObservableList<Sala> oldSalas = FXCollections.observableArrayList();
 		for (Sala sala : CinemaUtil.getSalas()) {
-			if(sala.isSelected()) {
-				System.out.println("Achou");
+			if(sala.getCheckBox().isSelected()) {
 				oldSalas.add(sala);
 			}
 		}
-		CinemaUtil.getSalas().remove(oldSalas);
+		CinemaUtil.getSalas().removeAll(oldSalas);
 		updateList();
 	}
 
