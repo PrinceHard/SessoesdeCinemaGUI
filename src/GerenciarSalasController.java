@@ -16,6 +16,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import java.util.ArrayList;
+import javafx.event.EventHandler;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.collections.ListChangeListener;
+import javafx.util.Callback;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.CheckBox;
+
 
 public class GerenciarSalasController implements Initializable{
 
@@ -27,14 +37,31 @@ public class GerenciarSalasController implements Initializable{
 	@FXML
 	private TableView<Sala> salasTable;
 	@FXML
-	private TableColumn<Sala, Integer> numCol;
+	private TableColumn<Sala, Integer> numCol, capacidadeCol;
 	@FXML
-	private TableColumn<Sala, Integer> capacidadeCol;
+	private TableColumn<Sala, CheckBox> selectCol;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		selectCol.setCellValueFactory(new PropertyValueFactory<>("checkBox"));
+		
 		numCol.setCellValueFactory(new PropertyValueFactory<>("numSala"));
+		numCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+		numCol.setOnEditCommit(new EventHandler<CellEditEvent<Sala, Integer>>() {
+				@Override
+				public void handle(CellEditEvent<Sala, Integer> sala) {
+					sala.getTableView().getItems().get(sala.getTablePosition().getRow()).setNumSala(sala.getNewValue());
+				}
+			});
+			
 		capacidadeCol.setCellValueFactory(new PropertyValueFactory<>("capacidade"));
+		capacidadeCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+		capacidadeCol.setOnEditCommit(new EventHandler<CellEditEvent<Sala, Integer>>() {
+				@Override
+				public void handle(CellEditEvent<Sala, Integer> sala) {
+					sala.getTableView().getItems().get(sala.getTablePosition().getRow()).setCapacidade(sala.getNewValue());
+				}
+			});
 
 		if(!CinemaUtil.getSalas().isEmpty()) {
 			updateList();
@@ -44,7 +71,7 @@ public class GerenciarSalasController implements Initializable{
 	}	
 
 	private ObservableList<Sala> salasList() {
-		return FXCollections.observableArrayList(CinemaUtil.getSalas());
+    	return FXCollections.observableArrayList(CinemaUtil.getSalas());
 	}
 
 	@FXML
@@ -64,18 +91,44 @@ public class GerenciarSalasController implements Initializable{
 	@FXML
 	private void createSala() {
 		int numSala, capacidade;
+		boolean salaExiste=false;
 		
 		try {
 			numSala = Integer.parseInt(inputNumSala.getText());
 			capacidade = Integer.parseInt(inputCapacidade.getText());
-			Sala sala = new Sala(numSala, capacidade);
-			CinemaUtil.saveData(sala);
-			updateList();
-			cancelCreatingSala();
+			
+			for(Sala sala : CinemaUtil.getSalas()){
+				if(sala.getNumSala() == numSala){
+					Alert a = new Alert(AlertType.INFORMATION, "Sala já existente, defina outra!");
+					salaExiste=true;
+					break;
+				}
+			}
+
+			if(!salaExiste){
+				Sala sala = new Sala(numSala, capacidade);
+				CinemaUtil.saveData(sala);
+				updateList();
+				cancelCreatingSala();
+			}
+			
+
 		} catch(Exception e) {
-			Alert a = new Alert(AlertType.INFORMATION, "Valores inválidos!");
+			Alert a = new Alert(AlertType.INFORMATION, "Valores inválidos, tente novamente.");
 			a.showAndWait();
 		}	
+	}
+	
+	@FXML
+	private void deleteSala() {
+		ObservableList<Sala> oldSalas = FXCollections.observableArrayList();
+		for (Sala sala : CinemaUtil.getSalas()) {
+			if(sala.getCheckBox().isSelected()) {
+				oldSalas.add(sala);
+			}
+		}
+		CinemaUtil.getSalas().removeAll(oldSalas);
+		updateList();
 	}
 
 	private void updateList() {
