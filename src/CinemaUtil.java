@@ -37,11 +37,6 @@ public class CinemaUtil extends Application{
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
-		try{
-			unserializeData();
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
 		Parent rootNodeSceneMain = (Parent) loader.load();
@@ -131,8 +126,8 @@ public class CinemaUtil extends Application{
 			data = (ArrayList<Object>) in.readObject();
 
 			sessoes = (ArrayList<Sessao>) data.get(0);
-			salas = (ArrayList<Sala>) data.get(1);
-			filmes = (ArrayList<Filme>) data.get(2);
+			filmes = (ArrayList<Filme>) data.get(1);
+			salas = (ArrayList<Sala>) data.get(2);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
