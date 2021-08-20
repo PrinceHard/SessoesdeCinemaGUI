@@ -19,14 +19,15 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import javafx.scene.control.Alert.AlertType;
 
 
 public class CinemaUtil extends Application{
 
-	private static ArrayList<Object> data = null;
-	private static ArrayList<Sessao> sessoes = null;
-	private static ArrayList<Filme> filmes = null;
-	private static ArrayList<Sala> salas = null;
+	private static ArrayList<Object> data = new ArrayList<>();
+	private static ArrayList<Sessao> sessoes = new ArrayList<>();
+	private static ArrayList<Filme> filmes = new ArrayList<>();
+	private static ArrayList<Sala> salas = new ArrayList<>();
 
 	public static String cinemaName = "";
 	private static Stage stageFirstOpen = new Stage();
@@ -36,6 +37,12 @@ public class CinemaUtil extends Application{
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
+		try{
+			unserializeData();
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
 		Parent rootNodeSceneMain = (Parent) loader.load();
 		SceneController controller = loader.getController();
@@ -61,6 +68,13 @@ public class CinemaUtil extends Application{
 		}
 		
 		mainStage.show();
+			mainStage.setOnCloseRequest(event -> {
+				try {
+					serializeData();
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+				}
+			});
 	}
 
 	@FXML
@@ -80,24 +94,28 @@ public class CinemaUtil extends Application{
 			}
 
 		} else {
-			Alert a = new Alert(Alert.AlertType.INFORMATION, "É necessário definir um nome para o cinema!");
+			Alert a = new Alert(AlertType.INFORMATION, "É necessário definir um nome para o cinema!");
 			a.showAndWait();
 		}
 	}	
 
-	public static void saveData(Object items, String type) {
-		if(type.equals("sessoes")) {
-			data.add(0, items);
-		} else if(type.equals("salas")) {
-			data.add(1, items);
+	public static void saveData(Object item) {
+		if(item instanceof Sessao) {
+			sessoes.add( (Sessao) item);
+		} else if(item instanceof Filme) {
+			filmes.add( (Filme) item);
 		} else {
-			data.add(2, items);
+			salas.add( (Sala) item);
 		}
 	}
 
 	private static void serializeData() throws Exception{
 		FileOutputStream fileOut = new FileOutputStream("data.ser");
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+
+		data.add(0, sessoes);
+		data.add(1, filmes);
+		data.add(2, salas);
 
 		out.writeObject(data);
 

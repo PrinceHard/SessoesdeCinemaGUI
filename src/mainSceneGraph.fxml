@@ -116,7 +116,7 @@
         </Pane>
         <Pane fx:id="paneGerenciamento" layoutX="309.0" layoutY="8.0" prefHeight="702.0" prefWidth="960.0" stylesheets="@style.css" visible="false">
            <children>
-              <ImageView fx:id="sessaoImage" fitHeight="210.0" fitWidth="240.0" layoutX="70.0" layoutY="218.0" onMousePressed="#openGerenciarSessoes" pickOnBounds="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
+              <ImageView onMousePressed="#openGerenciarSessoes" fitHeight="210.0" fitWidth="240.0" layoutX="70.0" layoutY="218.0" pickOnBounds="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
                   <Image url="@images/exampleCartaz.png" />
                </image>
@@ -126,12 +126,12 @@
                   <Image url="@images/exampleMovies.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="240.0" layoutX="656.0" layoutY="218.0" opacity="0.84" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
+            <ImageView onMousePressed="#openGerenciarSalas" fitHeight="210.0" fitWidth="240.0" layoutX="656.0" layoutY="218.0" opacity="0.84" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
                   <Image url="@images/exampleRooms.png" />
                </image>
             </ImageView>
-            <Label fx:id="sessaoLabel" layoutX="124.0" layoutY="306.0" onMousePressed="#openGerenciarSessoes" text="SESSÕES" textFill="WHITE">
+            <Label onMousePressed="#openGerenciarSessoes" layoutX="124.0" layoutY="306.0" text="SESSÕES" textFill="WHITE">
                <font>
                   <Font name="Montserrat Bold" size="28.0" />
                </font>
@@ -141,7 +141,7 @@
                   <Font name="Montserrat Bold" size="28.0" />
                </font>
             </Label>
-            <Label layoutX="728.0" layoutY="306.0" text="SALAS" textFill="WHITE">
+            <Label onMousePressed="#openGerenciarSalas" layoutX="728.0" layoutY="306.0" text="SALAS" textFill="WHITE">
                <font>
                   <Font name="Montserrat Bold" size="28.0" />
                </font>
