@@ -19,6 +19,7 @@ import javafx.stage.StageStyle;
 public class SceneController implements Initializable{
 	
 	private static Stage stageGerenciarSessoes = new Stage();
+	private static Stage stageGerenciarSalas = new Stage();
 	
 	@FXML
 	private Label cinemaLabel;
@@ -85,6 +86,14 @@ public class SceneController implements Initializable{
 		Scene sceneGerenciarSessoes = new Scene(nodeRootGerenciarSessoes);
 		stageGerenciarSessoes.setScene(sceneGerenciarSessoes);
 		stageGerenciarSessoes.showAndWait();
+	}
+
+	@FXML
+	private void openGerenciarSalas() throws Exception{
+		Parent nodeRootGerenciarSalas = FXMLLoader.load(getClass().getResource("gerenciarSalasSceneGraph.fxml"));
+		Scene sceneGerenciarSalas = new Scene(nodeRootGerenciarSalas);
+		stageGerenciarSalas.setScene(sceneGerenciarSalas);
+		stageGerenciarSalas.showAndWait();
 	}
 
 	public void changeCinemaName(String name) {

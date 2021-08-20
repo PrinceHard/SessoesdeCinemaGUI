@@ -1,6 +1,8 @@
 package src;
 
-public class Sala implements Comparable<Sala>{
+import java.io.Serializable;
+
+public class Sala implements Comparable<Sala>, Serializable{
 	private int numSala;
 	private int capacidade;
 
