@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
 
 public class GerenciarSessoesController implements Initializable{
 
@@ -37,7 +38,11 @@ public class GerenciarSessoesController implements Initializable{
 		exibicaoCol.setCellValueFactory(new PropertyValueFactory<>("exibicao3D"));
 		valorCol.setCellValueFactory(new PropertyValueFactory<>("valorIngresso"));
 
-		sessoesTable.setItems(sessaoList());
+		if(CinemaUtil.getSessoes() != null) {
+			sessoesTable.setItems(sessaoList());
+		} else {
+			sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
+		}
 	}	
 
 	private ObservableList<Sessao> sessaoList() {
