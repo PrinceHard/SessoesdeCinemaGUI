@@ -12,9 +12,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.GerenciarFilmesController">
    <children>
-      <Pane fx:id="paneViewFilmes" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="false">
+      <Pane fx:id="paneViewFilmes" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0">
          <children>
-            <TableView fx:id="tableFilmes" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
+            <TableView fx:id="tableFilmes" editable="false" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
               <columns>
                 <TableColumn fx:id="selectCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" />
                 <TableColumn fx:id="titCol" prefWidth="391.33331298828125" text="TÍTULO" />
@@ -37,9 +37,14 @@
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </Button>
+            <Button layoutX="361.0" layoutY="561.0" mnemonicParsing="false" onAction="#editFilme" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="EDITAR SELECIONADO">
+               <font>
+                  <Font name="Montserrat SemiBold" size="20.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
-      <Pane fx:id="paneCreatingFilme" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0">
+      <Pane fx:id="paneCreatingFilme" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="false">
          <children>
             <Button layoutX="340.0" layoutY="460.0" mnemonicParsing="false" onAction="#createFilme" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="PRONTO">
                <font>
@@ -86,12 +91,12 @@
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <CheckBox fx:id="selectProdNac" onAction="#selectProd" layoutX="449.0" layoutY="278.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="Nacional" textFill="#807b7b">
+            <CheckBox fx:id="prodNac" layoutX="449.0" layoutY="278.0" mnemonicParsing="false" onMouseClicked="#selectProdNac" prefHeight="32.0" prefWidth="97.0" text="Nacional" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <CheckBox fx:id="selectProdEst" layoutX="561.0" layoutY="278.0" mnemonicParsing="false" prefHeight="32.0" text="Estrangeira" textFill="#807b7b">
+            <CheckBox fx:id="prodEst" layoutX="561.0" layoutY="278.0" mnemonicParsing="false" onMouseClicked="#selectProdEst" prefHeight="32.0" text="Estrangeira" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
@@ -121,12 +126,12 @@
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <CheckBox fx:id="sim3D" onAction="#selectSim3D" layoutX="449.0" layoutY="358.0" mnemonicParsing="false" prefHeight="32.0" text="Sim" textFill="#807b7b">
+            <CheckBox fx:id="sim3D" layoutX="449.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#selectSim3D" prefHeight="32.0" text="Sim" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <CheckBox fx:id="nao3D" onAction="#selectNao3D"layoutX="561.0" layoutY="358.0" mnemonicParsing="false" prefHeight="32.0" text="Não" textFill="#807b7b">
+            <CheckBox fx:id="nao3D" layoutX="561.0" layoutY="358.0" mnemonicParsing="false" onMouseClicked="#selectNao3D" prefHeight="32.0" text="Não" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
