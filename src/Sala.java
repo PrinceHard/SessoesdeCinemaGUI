@@ -1,10 +1,7 @@
 package src;
 
 import java.io.Serializable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.CheckBox;
-
 
 public class Sala implements Comparable<Sala>, Serializable{
 	private int numSala;

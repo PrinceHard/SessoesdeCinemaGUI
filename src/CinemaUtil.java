@@ -37,7 +37,6 @@ public class CinemaUtil extends Application{
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
-
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
 		Parent rootNodeSceneMain = (Parent) loader.load();
 		SceneController controller = loader.getController();
@@ -61,6 +60,8 @@ public class CinemaUtil extends Application{
 			stageFirstOpen.showAndWait();
 			controller.changeCinemaName(cinemaName);
 		}
+
+		readerFlagFirstOpen.close();
 		
 		mainStage.show();
 			mainStage.setOnCloseRequest(event -> {

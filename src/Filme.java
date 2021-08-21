@@ -1,10 +1,14 @@
 package src;
 
-public class Filme implements Comparable<Filme>{ //implements Serializable
+import java.io.Serializable;
+import javafx.scene.control.CheckBox;
+
+public class Filme implements Comparable<Filme>, Serializable{ //implements Serializable
 	private String titulo, tipoProducao;
 	private int duracao;
 	private String[] tipoAudio;
 	private boolean permite3D;
+	private transient CheckBox checkBox;
 
 	public Filme(String titulo, int duracao, String tipoProducao, String[] tipoAudio, boolean permite3D) {
 		this.titulo = titulo;
@@ -12,6 +16,13 @@ public class Filme implements Comparable<Filme>{ //implements Serializable
 		this.tipoProducao = tipoProducao;
 		this.tipoAudio = tipoAudio;
 		this.permite3D = permite3D;
+	}
+
+	public CheckBox getCheckBox() {
+		if(checkBox == null) {
+			this.checkBox = new CheckBox();
+		}
+		return checkBox;
 	}
 
 	public String getTitulo() {
@@ -32,6 +43,10 @@ public class Filme implements Comparable<Filme>{ //implements Serializable
 	
 	public boolean getPermite3D()  {
 		return permite3D;
+	}
+
+	public void setCheckBox(CheckBox checkBox) {
+		this.checkBox = checkBox;
 	}
 
 	public void setTitulo(String titulo) {
