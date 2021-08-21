@@ -20,6 +20,7 @@ public class SceneController implements Initializable{
 	
 	private static Stage stageGerenciarSessoes = new Stage();
 	private static Stage stageGerenciarSalas = new Stage();
+	private static Stage stageGerenciarFilmes = new Stage();
 	
 	@FXML
 	private Label cinemaLabel;
@@ -32,6 +33,8 @@ public class SceneController implements Initializable{
 	@Override	
 	public void initialize(URL location, ResourceBundle resources) {
 		stageGerenciarSessoes.initModality(Modality.APPLICATION_MODAL);
+		stageGerenciarSalas.initModality(Modality.APPLICATION_MODAL);
+		stageGerenciarFilmes.initModality(Modality.APPLICATION_MODAL);
 
 		FileReader readerFlagFirstOpen = null;
 		try {
@@ -92,7 +95,15 @@ public class SceneController implements Initializable{
 	private void openGerenciarSalas() throws Exception{
 		Parent nodeRootGerenciarSalas = FXMLLoader.load(getClass().getResource("gerenciarSalasSceneGraph.fxml"));
 		Scene sceneGerenciarSalas = new Scene(nodeRootGerenciarSalas);
-		stageGerenciarSalas.setScene(sceneGerenciarSalas);
+		stageGerenciarFilmes.setScene(sceneGerenciarSalas);
+		stageGerenciarFilmes.showAndWait();
+	}
+
+	@FXML
+	private void openGerenciarFilmes() throws Exception{
+		Parent nodeRootGerenciarFilmes = FXMLLoader.load(getClass().getResource("gerenciarFilmesSceneGraph.fxml"));
+		Scene sceneGerenciarFilmes = new Scene(nodeRootGerenciarFilmes);
+		stageGerenciarSalas.setScene(sceneGerenciarFilmes);
 		stageGerenciarSalas.showAndWait();
 	}
 
