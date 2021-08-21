@@ -34,6 +34,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ChoiceDialog;
 import java.util.Arrays;
+import javafx.scene.control.Button;
 
 public class GerenciarFilmesController implements Initializable{
 
@@ -41,6 +42,8 @@ public class GerenciarFilmesController implements Initializable{
 	private TextField inputTitulo, inputDuracao;
 	@FXML
 	private CheckBox prodNac, prodEst, audioOriginal, audioLegendado, audioDublado, sim3D, nao3D;
+	@FXML
+	private Button buttonCreate, buttonEdit;
 
 	@FXML
 	private Pane paneViewFilmes, paneCreatingFilme;
@@ -59,6 +62,15 @@ public class GerenciarFilmesController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		if(!CinemaUtil.getFilmes().isEmpty()) {
+			updateList();
+		} else {
+			tableFilmes.setPlaceholder(new Label("Nenhum filme existente."));
+		}
+	}	
+	
+	private void factorys() {
 		selectCol.setCellValueFactory(new PropertyValueFactory<>("checkBox"));
 		
 		titCol.setCellValueFactory(new PropertyValueFactory("titulo"));
@@ -104,15 +116,10 @@ public class GerenciarFilmesController implements Initializable{
 				}
 			
 			}));
-		
-		if(!CinemaUtil.getFilmes().isEmpty()) {
-			updateList();
-		} else {
-			tableFilmes.setPlaceholder(new Label("Nenhum filme existente."));
-		}
-	}	
+	}
 
 	private ObservableList<Filme> filmesList() {
+		
     	return FXCollections.observableArrayList(CinemaUtil.getFilmes());
 	}
 
@@ -219,7 +226,7 @@ public class GerenciarFilmesController implements Initializable{
 	}
 
 	@FXML
-	private void editFilme() {
+	private void openEditFilme() {
 		int countSelect=0;
 		Filme filmeSelect=null;
 		for(Filme filme : filmesList()){
@@ -230,6 +237,10 @@ public class GerenciarFilmesController implements Initializable{
 		}
 		
 		if(countSelect == 1) {
+			buttonCreate.setVisible(false);
+			buttonEdit.setVisible(true);
+			newFilme();
+			
 			inputTitulo.setText(filmeSelect.getTitulo());
 			inputDuracao.setText(Integer.toString(filmeSelect.getDuracao()));
 			
@@ -255,7 +266,6 @@ public class GerenciarFilmesController implements Initializable{
 					sim3D.setSelected(true);
 			} 
 			
-			newFilme();
 		} else if(countSelect == 0){
 			Alert a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhum filme.");
 			a.showAndWait();
@@ -264,7 +274,93 @@ public class GerenciarFilmesController implements Initializable{
 			a.showAndWait();
 		}
 	}
+	
+	@FXML
+	private void editFilme() {
+		Filme filmeSelect=null;
+		for(Filme filme : filmesList()){
+			if(filme.getCheckBox().isSelected()){
+				filmeSelect = filme;
+				break;
+			}
+		}
+
+		ArrayList<String> tipoAudio= new ArrayList<>();
+		
+		Alert a;
+		
+		boolean filmeExiste=false;
+		try {
+			for(Filme filme : CinemaUtil.getFilmes()){
+				if(filme.getTitulo() == inputTitulo.getText() && filmeSelect != filme){
+					a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro!");
+					filmeExiste=true;
+					break;
+				}
+			}
+			
+			if(!filmeExiste){
+				
+				filmeSelect.setTitulo(inputTitulo.getText());
+				filmeSelect.setDuracao(Integer.parseInt(inputDuracao.getText()));
+				
+				if(prodNac.isSelected()){
+					filmeSelect.setTipoProducao(prodNac.getText());
+				} else if(prodEst.isSelected()){
+					filmeSelect.setTipoProducao(prodEst.getText());
+				} else {
+					a = new Alert(AlertType.INFORMATION, "Por favor, selecione um tipo de produção.");
+					a.showAndWait();
+				}
+			
+				if(audioOriginal.isSelected()){
+					tipoAudio.add(audioOriginal.getText());
+				}
+				if(audioDublado.isSelected()){
+					tipoAudio.add(audioDublado.getText());
+				}
+				if(audioLegendado.isSelected()){
+					tipoAudio.add(audioLegendado.getText());
+				}
+				
+				if(tipoAudio.isEmpty()){
+					a = new Alert(AlertType.INFORMATION, "Por favor, selecione um (ou mais) tipo(s) de áudio.");
+					a.showAndWait();
+				}
+				
+				String[] audioFinal = new String[tipoAudio.size()];
+				filmeSelect.setTipoAudio(tipoAudio.toArray(audioFinal));
+
+				if(sim3D.isSelected()){
+					filmeSelect.setPermite3D(true);
+				} else if(nao3D.isSelected()){
+					filmeSelect.setPermite3D(false);
+				} else {
+					a = new Alert(AlertType.INFORMATION, "Por favor, selecione se o filme permite exibição em 3D ou não");
+					a.showAndWait();
+				}
+
+				updateList();
+				cancelCreatingFilme();
+				buttonCreate.setVisible(true);
+				buttonEdit.setVisible(false);
+				
+			} else {
+				a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro título!");
+				a.showAndWait();
+			}
+			
+		} catch(Exception e) {
+			a = new Alert(AlertType.INFORMATION, "Ops! Algo deu errado, verifique os campos e tente novamente.");
+			a.showAndWait();
+		}	
+		
+		
+
+	}
+	
 	private void updateList() {
+		factorys();
 		tableFilmes.setItems(filmesList());
 	}
 
