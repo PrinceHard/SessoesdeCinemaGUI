@@ -1,8 +1,10 @@
 package src;
 
+import java.io.Serializable;
+import javafx.scene.control.CheckBox;
 import java.time.LocalTime;
 
-public class Sessao implements Comparable<Sessao>{
+public class Sessao implements Comparable<Sessao>, Serializable{
     private Filme filme;
     private Sala sala;
     private LocalTime horarioInicial;
@@ -11,6 +13,7 @@ public class Sessao implements Comparable<Sessao>{
     private char[] poltronas; //l = livre; m = meia; i = inteira
     private String exibicao3D;
     private String tipoAudio;
+	private transient CheckBox checkBox;
 
     public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, String exibicao3D, String tipoAudio){
         this.filme = filme;
@@ -106,6 +109,13 @@ public class Sessao implements Comparable<Sessao>{
         }
         return "\n Quantidade de poltronas Ocupadas: " + quantidade + "\n\n    > Poltronas <   \n" + poltronasOcupadas;
     }
+	
+	public CheckBox getCheckBox() {
+		if(checkBox == null) {
+			this.checkBox = new CheckBox();
+		}
+		return checkBox;
+	}
 
     public LocalTime getHorarioInicial(){
         return horarioInicial;
@@ -131,12 +141,12 @@ public class Sessao implements Comparable<Sessao>{
         return poltronas;
     }
 
-    public int getSala(){
-        return sala.getNumSala();
+    public Sala getSala(){
+        return sala;
     }
 
-    public String getFilme(){
-        return filme.getTitulo();
+    public Filme getFilme(){
+        return filme;
     }
     
     public String getExibicao3D(){
@@ -146,6 +156,10 @@ public class Sessao implements Comparable<Sessao>{
     public String getTipoAudio(){
         return tipoAudio;
     }
+	
+	public void setCheckBox(CheckBox checkBox) {
+		this.checkBox = checkBox;
+	}
 
     public void setValorIngresso(double valorIngresso){
         this.valorIngresso = valorIngresso; 
