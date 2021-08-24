@@ -63,7 +63,7 @@
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
             </Button>
-            <Button layoutX="512.0" layoutY="469.0" mnemonicParsing="false" onAction="#cancelCreatingFilme" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
+            <Button layoutX="512.0" layoutY="469.0" mnemonicParsing="false" onAction="#closeCreatingSessao" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
@@ -93,37 +93,37 @@
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <Label alignment="CENTER_RIGHT" layoutX="146.0" layoutY="390.0" prefHeight="32.0" prefWidth="261.0" text="Tipo de exibição">
+            <Label alignment="CENTER_RIGHT" layoutX="146.0" layoutY="406.0" prefHeight="32.0" prefWidth="261.0" text="Tipo de exibição">
                <font>
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <CheckBox fx:id="audioOriginal" layoutX="441.0" layoutY="350.0" mnemonicParsing="false" prefHeight="32.0" text="Original" textFill="#807b7b" visible="false">
+            <CheckBox fx:id="audioOriginal" layoutX="441.0" layoutY="366.0" mnemonicParsing="false" prefHeight="32.0" text="Original" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <CheckBox fx:id="audioLegendado" layoutX="553.0" layoutY="350.0" mnemonicParsing="false" prefHeight="32.0" text="Legendado" textFill="#807b7b" visible="false">
+            <CheckBox fx:id="audioLegendado" layoutX="553.0" layoutY="366.0" mnemonicParsing="false" prefHeight="32.0" text="Legendado" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <CheckBox fx:id="audioDublado" layoutX="692.0" layoutY="350.0" mnemonicParsing="false" prefHeight="32.0" text="Dublado" textFill="#807b7b" visible="false">
+            <CheckBox fx:id="audioDublado" layoutX="692.0" layoutY="366.0" mnemonicParsing="false" prefHeight="32.0" text="Dublado" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <Label alignment="CENTER_RIGHT" layoutX="146.0" layoutY="350.0" prefHeight="32.0" prefWidth="261.0" text="Tipo de áudio">
+            <Label alignment="CENTER_RIGHT" layoutX="146.0" layoutY="366.0" prefHeight="32.0" prefWidth="261.0" text="Tipo de áudio">
                <font>
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <CheckBox fx:id="exib3D" layoutX="442.0" layoutY="390.0" mnemonicParsing="false" onKeyPressed="#select3D" onMouseClicked="#select3D" prefHeight="32.0" text="3D" textFill="#807b7b" visible="false">
+            <CheckBox fx:id="exib3D" layoutX="441.0" layoutY="406.0" mnemonicParsing="false" onKeyPressed="#select3D" onMouseClicked="#select3D" prefHeight="32.0" text="3D" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <CheckBox fx:id="exib2D" layoutX="553.0" layoutY="390.0" mnemonicParsing="false" onKeyPressed="#select2D" onMouseClicked="#select2D" prefHeight="32.0" text="2D" textFill="#807b7b" visible="false">
+            <CheckBox fx:id="exib2D" layoutX="553.0" layoutY="406.0" mnemonicParsing="false" onKeyPressed="#select2D" onMouseClicked="#select2D" prefHeight="32.0" text="2D" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
@@ -138,6 +138,11 @@
                </font>
             </Label>
             <TextField fx:id="inputValorIngresso" layoutX="442.0" layoutY="310.0" prefHeight="32.0" prefWidth="340.0" promptText="Digite aqui..." />
+            <Label layoutX="453.0" layoutY="348.0" text="Se a sessão for 3D, o valor do ingresso será incrementado em 25%.">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
          </children>
 		  </Pane>
 	</children>

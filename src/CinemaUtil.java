@@ -20,14 +20,17 @@ import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import javafx.scene.control.Alert.AlertType;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
+
 
 
 public class CinemaUtil extends Application{
 
 	private static ArrayList<Object> data = new ArrayList<>();
-	private static ArrayList<Sessao> sessoes = new ArrayList<>();
-	private static ArrayList<Filme> filmes = new ArrayList<>();
-	private static ArrayList<Sala> salas = new ArrayList<>();
+	private static ObservableList<Sessao> sessoes = FXCollections.observableArrayList();
+	private static ObservableList<Filme> filmes = FXCollections.observableArrayList();
+	private static ObservableList<Sala> salas = FXCollections.observableArrayList();
 
 	public static String cinemaName = "";
 	private static Stage stageFirstOpen = new Stage();
@@ -126,23 +129,23 @@ public class CinemaUtil extends Application{
 		try {
 			data = (ArrayList<Object>) in.readObject();
 
-			sessoes = (ArrayList<Sessao>) data.get(0);
-			filmes = (ArrayList<Filme>) data.get(1);
-			salas = (ArrayList<Sala>) data.get(2);
+			sessoes = (ObservableList<Sessao>) data.get(0);
+			filmes = (ObservableList<Filme>) data.get(1);
+			salas = (ObservableList<Sala>) data.get(2);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	public static ArrayList<Sessao> getSessoes() {
+	public static ObservableList<Sessao> getSessoes() {
 		return sessoes;
 	}
 
-	public static ArrayList<Filme> getFilmes() {
+	public static ObservableList<Filme> getFilmes() {
 		return filmes;
 	}
 
-	public static ArrayList<Sala> getSalas() {
+	public static ObservableList<Sala> getSalas() {
 		return salas;
 	}
 	
