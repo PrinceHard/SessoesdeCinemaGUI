@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import javafx.stage.Modality;
 import javafx.scene.text.Font;
@@ -20,14 +21,21 @@ import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import javafx.scene.control.Alert.AlertType;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 
 
 public class CinemaUtil extends Application{
+	
+	private static Gson gson = new Gson();
 
 	private static ArrayList<Object> data = new ArrayList<>();
-	private static ArrayList<Sessao> sessoes = new ArrayList<>();
-	private static ArrayList<Filme> filmes = new ArrayList<>();
-	private static ArrayList<Sala> salas = new ArrayList<>();
+	private static ObservableList<Sessao> sessoes = FXCollections.observableArrayList(); 
+	private static ObservableList<Filme> filmes = FXCollections.observableArrayList();
+	private static ObservableList<Sala> salas = FXCollections.observableArrayList();
 
 	public static String cinemaName = "";
 	private static Stage stageFirstOpen = new Stage();
@@ -98,51 +106,76 @@ public class CinemaUtil extends Application{
 	public static void saveData(Object item) {
 		if(item instanceof Sessao) {
 			sessoes.add( (Sessao) item);
+			System.out.println("Sessao add");
 		} else if(item instanceof Filme) {
 			filmes.add( (Filme) item);
+			System.out.println("Filme add");
 		} else {
 			salas.add( (Sala) item);
+			System.out.println("Sala add");
 		}
 	}
 
 	private static void serializeData() throws Exception{
-		FileOutputStream fileOut = new FileOutputStream("data.ser");
-		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		FileWriter writerSessoes = new FileWriter("dataSessoes.json");
+		FileWriter writerFilmes = new FileWriter("dataFilmes.json");
+		FileWriter writerSalas = new FileWriter("dataSalas.json");
+		
+		writerSessoes.write(gson.toJson(sessoes, new TypeToken<ObservableList<Sessao>>(){}.getType()));
+		writerFilmes.write(gson.toJson(filmes, new TypeToken<ObservableList<Filme>>(){}.getType()));
+		writerSalas.write(gson.toJson(salas, new TypeToken<ObservableList<Sala>>(){}.getType()));
 
-		data.add(0, sessoes);
-		data.add(1, filmes);
-		data.add(2, salas);
-
-		out.writeObject(data);
-
-		fileOut.close();
-		out.close();
+		writerSessoes.close();
+		writerFilmes.close();
+		writerSalas.close();
 	}
 
 	private static void unserializeData() throws Exception {
-		FileInputStream fileIn = new FileInputStream("data.ser");
-		ObjectInputStream in = new ObjectInputStream(fileIn);
 		
 		try {
-			data = (ArrayList<Object>) in.readObject();
-
-			sessoes = (ArrayList<Sessao>) data.get(0);
-			filmes = (ArrayList<Filme>) data.get(1);
-			salas = (ArrayList<Sala>) data.get(2);
+			FileReader readerSessoes = new FileReader("dataSessoes.json");
+			FileReader readerFilmes = new FileReader("dataFilmes.json");
+			FileReader readerSalas = new FileReader("dataSalas.json");
+			
+			String sessoesExtracted="";
+			while(readerFilmes.ready()) {
+				sessoesExtracted+=(char)readerFilmes.read();
+			}
+			ArrayList<Sessao> sessoesArrayList = gson.fromJson(sessoesExtracted, new TypeToken<ArrayList<Sessao>>(){}.getType());
+			sessoes = FXCollections.observableArrayList(sessoesArrayList);
+			
+			String filmesExtracted="";
+			while(readerFilmes.ready()) {
+				sessoesExtracted+=(char)readerFilmes.read();
+			}
+			ArrayList<Filme> filmessArrayList = gson.fromJson(filmesExtracted, new TypeToken<ArrayList<Filme>>(){}.getType());
+			filmes = FXCollections.observableArrayList(filmessArrayList);
+			
+			String salasExtracted="";
+			while(readerSalas.ready()) {
+				salasExtracted+=(char)readerSalas.read();
+			}
+			ArrayList<Sala> salasArrayList = gson.fromJson(salasExtracted, new TypeToken<ArrayList<Sala>>(){}.getType());
+			salas = FXCollections.observableArrayList(salasArrayList);
+			
+			readerSessoes.close();
+			readerFilmes.close();
+			readerSalas.close();
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	public static ArrayList<Sessao> getSessoes() {
+	public static ObservableList<Sessao> getSessoes() {
 		return sessoes;
 	}
 
-	public static ArrayList<Filme> getFilmes() {
+	public static ObservableList<Filme> getFilmes() {
 		return filmes;
 	}
 
-	public static ArrayList<Sala> getSalas() {
+	public static ObservableList<Sala> getSalas() {
 		return salas;
 	}
 	

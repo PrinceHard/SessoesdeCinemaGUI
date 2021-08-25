@@ -1,36 +1,43 @@
 package src;
 
+import java.io.Serializable;
 import java.time.LocalTime;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 
-public class Sessao implements Comparable<Sessao>{
-    private Filme filme;
-    private Sala sala;
-    private LocalTime horarioInicial;
-    private LocalTime horarioFinal;
-    private double valorIngresso;
-    private char[] poltronas; //l = livre; m = meia; i = inteira
-    private String exibicao3D;
-    private String tipoAudio;
+public class Sessao implements Comparable<Sessao>, Serializable{
+    private final SimpleObjectProperty<Filme> filme;
+    private final SimpleObjectProperty<Sala> sala;
+    private final SimpleObjectProperty<LocalTime> horarioInicial;
+    private final SimpleObjectProperty<LocalTime> horarioFinal;
+    private final SimpleDoubleProperty valorIngresso;
+    private final SimpleObjectProperty<char[]> poltronas; //l = livre; m = meia; i = inteira
+    private final SimpleBooleanProperty exibicao3D;
+    private final SimpleStringProperty tipoAudio;
+	private final SimpleBooleanProperty selected;
 
-    public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, String exibicao3D, String tipoAudio){
-        this.filme = filme;
-        this.sala = sala;
-        this.horarioInicial = horarioInicial;
-        this.horarioFinal = horarioFinal;
-        this.valorIngresso = valorIngresso;
-        this.exibicao3D = exibicao3D;
-        this.tipoAudio = tipoAudio;
+    public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, boolean exibicao3D, String tipoAudio){
+        this.filme = new SimpleObjectProperty(filme);
+        this.sala = new SimpleObjectProperty(sala);
+        this.horarioInicial = new SimpleObjectProperty(horarioInicial);
+        this.horarioFinal = new SimpleObjectProperty(horarioFinal);
+        this.valorIngresso = new SimpleDoubleProperty(valorIngresso);
+		this.poltronas = new SimpleObjectProperty(new char[sala.getCapacidade()]);
+        this.exibicao3D = new SimpleBooleanProperty(exibicao3D);
+        this.tipoAudio = new SimpleStringProperty(tipoAudio);
+		this.selected = new SimpleBooleanProperty(false);
 
-        poltronas = new char[sala.getCapacidade()];
-        for(int i=0; i < poltronas.length; i++) { //Inicializando todas as poltronas como livres.
-            poltronas[i] = 'l';
+        for(int i=0; i < poltronas.get().length; i++) { //Inicializando todas as poltronas como livres.
+            poltronas.get()[i] = 'l';
         }
     }
 
     public boolean ocuparPoltrona(int poltrona, char tipoIngresso) {
 
-        if(poltronas[poltrona] == 'l') {
-            poltronas[poltrona] = tipoIngresso;
+        if(poltronas.get()[poltrona] == 'l') {
+            poltronas.get()[poltrona] = tipoIngresso;
             return true;
         } else {
             return false;
@@ -40,8 +47,8 @@ public class Sessao implements Comparable<Sessao>{
 
     public boolean liberarPoltrona(int poltrona) {
 
-        if(poltronas[poltrona] != 'l') {
-            poltronas[poltrona] = 'l';
+        if(poltronas.get()[poltrona] != 'l') {
+            poltronas.get()[poltrona] = 'l';
             return true;
         } else {
             return false;
@@ -52,22 +59,22 @@ public class Sessao implements Comparable<Sessao>{
     public double taxaOcupacao(){
         double ocupados=0;
 
-        for (char p : poltronas) {
+        for (char p : poltronas.get()) {
             if(p != 'l'){
                 ocupados++;
             }         
         }
 
-        return ocupados / sala.getCapacidade();
+        return ocupados / sala.get().getCapacidade();
     }
    
     public String poltronasLivres(){
         int quantidade = 0;
         String poltronasLivres = "|  ";
 
-        for(int i = 0; i < poltronas.length; i++){
+        for(int i = 0; i < poltronas.get().length; i++){
 
-            if(poltronas[i] == 'l'){
+            if(poltronas.get()[i] == 'l'){
                 quantidade++;
 
                 if (i<9){
@@ -76,7 +83,7 @@ public class Sessao implements Comparable<Sessao>{
                     poltronasLivres += (i+1) + "  |  ";
                 }
 
-                if((i+1) % 10 == 0 && i != 0 && i != poltronas.length) { //Dividir em 10 colunas
+                if((i+1) % 10 == 0 && i != 0 && i != poltronas.get().length) { //Dividir em 10 colunas
                     poltronasLivres += "\n|  ";
                 }
             }
@@ -88,9 +95,9 @@ public class Sessao implements Comparable<Sessao>{
         int quantidade = 0;
         String poltronasOcupadas = "|  ";
 
-        for(int i = 0; i < poltronas.length; i++){
+        for(int i = 0; i < poltronas.get().length; i++){
 
-            if(poltronas[i] != 'l'){
+            if(poltronas.get()[i] != 'l'){
                 quantidade++;
 
                 if (i<9){
@@ -99,80 +106,127 @@ public class Sessao implements Comparable<Sessao>{
                     poltronasOcupadas += (i+1) + "  |  ";    
                 }
 
-                if(i % 9 == 0 && i != 0 && i != poltronas.length) { //Dividir em 10 colunas
+                if(i % 9 == 0 && i != 0 && i != poltronas.get().length) { //Dividir em 10 colunas
                     poltronasOcupadas += "\n|  ";
                 }
             }
         }
         return "\n Quantidade de poltronas Ocupadas: " + quantidade + "\n\n    > Poltronas <   \n" + poltronasOcupadas;
     }
+	
+	//Propertys getters
+	public SimpleObjectProperty<Filme> filmeProperty() {
+		return filme;
+	}
+	
+	public SimpleObjectProperty<Sala> salaProperty() {
+		return sala;
+	}	
+	
+	public SimpleObjectProperty<LocalTime> horarioInicialProperty() {
+		return horarioInicial;
+	}	
+	
+	public SimpleObjectProperty<LocalTime> horarioFinalProperty() {
+		return horarioFinal;
+	}	
+	
+	public SimpleDoubleProperty valorIngressoProperty() {
+		return valorIngresso;
+	}	
+	
+	public SimpleObjectProperty<char[]> poltronasProperty() {
+		return poltronas;
+	}	
+	
+	public SimpleBooleanProperty exibicao3DProperty() {
+		return exibicao3D;
+	}		
+	
+	public SimpleBooleanProperty tipoAudioProperty() {
+		return exibicao3D;
+	}		
+
+	public SimpleBooleanProperty selectedProperty() {
+		return exibicao3D;
+	}		
+	
+	//Values getters
+    public Filme getFilme(){
+        return filme.get();
+    }
+	
+    public Sala getSala(){
+        return sala.get();
+    }
 
     public LocalTime getHorarioInicial(){
-        return horarioInicial;
+        return horarioInicial.get();
     }
 
     public LocalTime getHorarioFinal(){
-        return horarioFinal;
-    }
-
-    public void setHorarioInicial(LocalTime horarioInicial){
-        this.horarioInicial = horarioInicial;
-    }
-
-    public void setHorarioFinal(LocalTime horarioFinal){
-        this.horarioFinal = horarioFinal;
+        return horarioFinal.get();
     }
 
     public double getValorIngresso(){
-        return valorIngresso;
+        return valorIngresso.get();
     }
 
     public char[] getPoltronas(){
-        return poltronas;
+        return poltronas.get();
     }
 
-    public int getSala(){
-        return sala.getNumSala();
-    }
-
-    public String getFilme(){
-        return filme.getTitulo();
-    }
-    
-    public String getExibicao3D(){
-        return exibicao3D;
+    public boolean getExibicao3D(){
+        return exibicao3D.get();
     }
 
     public String getTipoAudio(){
-        return tipoAudio;
+        return tipoAudio.get();
+    }
+	
+	public boolean isSelected() {
+		return selected.get();
+	}
+	
+	//Values Setters
+    public void setFilme(Filme filme){
+        this.filme.set(filme); 
+    }
+	
+	public void setSala(Sala sala){
+        this.sala.set(sala); 
+    }
+	
+	public void setHorarioInicial(LocalTime horarioInicial){
+        this.horarioInicial.set(horarioInicial);
+    }
+
+    public void setHorarioFinal(LocalTime horarioFinal){
+        this.horarioFinal.set(horarioFinal);
     }
 
     public void setValorIngresso(double valorIngresso){
-        this.valorIngresso = valorIngresso; 
+        this.valorIngresso.set(valorIngresso); 
     }
-
-    public void setSala(Sala sala){
-        this.sala = sala; 
-    }
-
-    public void setFilme(Filme filme){
-        this.filme = filme; 
-    }
-
-    public void setExibicao3D(String exibicao3D){
-        this.exibicao3D = exibicao3D; 
-    }
-
+	
     public void setTipoAudio(String tipoAudio){
-        this.tipoAudio = tipoAudio;
+        this.tipoAudio.set(tipoAudio);
+    }
+	
+    public void setExibicao3D(boolean exibicao3D){
+        this.exibicao3D.set(exibicao3D); 
     }
 
+	public void setSelected(boolean selected) {
+		this.selected.set(selected);
+	}
+	
     @Override
     public int compareTo(Sessao sessao) {
-        if(this.horarioInicial.toSecondOfDay() > sessao.horarioInicial.toSecondOfDay()) {
+        if(this.horarioInicial.get().toSecondOfDay() > sessao.horarioInicial.get().toSecondOfDay()) {
             return 1;
         }
-        if(this.horarioInicial.toSecondOfDay() < sessao.horarioInicial.toSecondOfDay()) {
+        if(this.horarioInicial.get().toSecondOfDay() < sessao.horarioInicial.get().toSecondOfDay()) {
             return -1;
         }
         return 0;

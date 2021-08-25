@@ -50,7 +50,7 @@ public class GerenciarFilmesController implements Initializable{
 	@FXML
 	private TableView<Filme> tableFilmes;
 	@FXML
-	private TableColumn<Filme, CheckBox> selectCol;
+	private TableColumn<Filme, Boolean> selectCol;
 	@FXML
 	private TableColumn<Filme, String> titCol, prodCol;
 	@FXML
@@ -71,7 +71,7 @@ public class GerenciarFilmesController implements Initializable{
 	}	
 	
 	private void factorys() {
-		selectCol.setCellValueFactory(new PropertyValueFactory<>("checkBox"));
+		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
 		
 		titCol.setCellValueFactory(new PropertyValueFactory("titulo"));
 		titCol.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
@@ -217,7 +217,7 @@ public class GerenciarFilmesController implements Initializable{
 	private void deleteFilme() {
 		ObservableList<Filme> oldFilmes = FXCollections.observableArrayList();
 		for (Filme filme : CinemaUtil.getFilmes()) {
-			if(filme.getCheckBox().isSelected()) {
+			if(filme.isSelected()) {
 				oldFilmes.add(filme);
 			}
 		}
@@ -230,7 +230,7 @@ public class GerenciarFilmesController implements Initializable{
 		int countSelect=0;
 		Filme filmeSelect=null;
 		for(Filme filme : filmesList()){
-			if(filme.getCheckBox().isSelected()){
+			if(filme.isSelected()){
 				countSelect += 1;
 				filmeSelect = filme;
 			}
@@ -279,7 +279,7 @@ public class GerenciarFilmesController implements Initializable{
 	private void editFilme() {
 		Filme filmeSelect=null;
 		for(Filme filme : filmesList()){
-			if(filme.getCheckBox().isSelected()){
+			if(filme.isSelected()){
 				filmeSelect = filme;
 				break;
 			}
