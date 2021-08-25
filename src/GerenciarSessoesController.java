@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import java.time.LocalTime;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.CheckBox;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.scene.layout.Pane;
@@ -65,26 +66,14 @@ public class GerenciarSessoesController implements Initializable{
 	@FXML
 	private TableColumn<Sessao, Boolean> exibicaoCol;
 	@FXML
-	private TableColumn<Sessao, CheckBox> selectCol;
+	private TableColumn<Sessao, Boolean> selectCol;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		if(CinemaUtil.getSessoes() != null) {
-			updateTable();
-		} else {
+			factorys();
+			sessoesTable.setItems(CinemaUtil.getSessoes());
 			sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
-		}
 	}	
-	
-	private ObservableList<Sessao> sessaoList() {
-		return FXCollections.observableArrayList(CinemaUtil.getSessoes());
-	}
-	
-	private void updateTable() {
-		factorys();
-		sessoesTable.setItems(sessaoList());
-	}
 	
 	@FXML
 	private void openNewSessao() {
@@ -92,6 +81,61 @@ public class GerenciarSessoesController implements Initializable{
 		paneCreatingSessao.setVisible(true);
 		buttonCreate.setVisible(true);
 		buttonEdit.setVisible(false);
+	}
+	
+	@FXML
+	private void openEditSessao(){
+		int countSelect=0;
+		Sessao sessaoSelected=null;
+		for(Sessao sessao : CinemaUtil.getSessoes()){
+			if(sessao.isSelected()){
+				countSelect+=1;
+				sessaoSelected = sessao;
+			}
+		}
+		
+		if(countSelect == 1) {
+			viewTableSessoes.setVisible(false);
+			paneCreatingSessao.setVisible(true);
+			buttonCreate.setVisible(false);
+			buttonEdit.setVisible(true);
+			
+			choiceBoxFilmes.setValue(sessaoSelected.getFilme());
+			choiceBoxSalas.setValue(sessaoSelected.getSala());
+			String[] horario = sessaoSelected.getHorarioInicial().toString().split(":");
+			inputHora.setText(horario[0]);
+			inputMinuto.setText(horario[1]);
+			inputValorIngresso.setText(Double.toString(sessaoSelected.getValorIngresso()));
+			
+			switch(sessaoSelected.getTipoAudio()) {
+				case "Legendado":
+					audioLegendado.setSelected(true);
+				case "Dublado":
+					audioDublado.setSelected(true);
+				case "Original":
+					audioOriginal.setSelected(true);
+			}
+			
+			if(sessaoSelected.getFilme().getPermite3D()){
+				exib3D.setVisible(true);
+				exib2D.setVisible(true);
+				if(sessaoSelected.getExibicao3D()) {
+					exib3D.setSelected(true);
+					exib2D.setSelected(false);
+				} else {
+					exib3D.setSelected(true);
+					exib2D.setSelected(false);
+				}
+			}
+			
+		} else if(countSelect == 0){
+			Alert a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhuma sala.");
+			a.showAndWait();
+		} else {
+			Alert a = new Alert(AlertType.INFORMATION, "Selecione apenas 1 sala.");
+			a.showAndWait();
+		}
+		
 	}
 	
 	@FXML
@@ -112,18 +156,67 @@ public class GerenciarSessoesController implements Initializable{
 	private void deleteSessao(){
 		ObservableList<Sessao> oldSessoes = FXCollections.observableArrayList();
 		for (Sessao sessao : CinemaUtil.getSessoes()) {
-			if(sessao.getCheckBox().isSelected()) {
+			if(sessao.isSelected()) {
 				oldSessoes.add(sessao);
 			}
 		}
 		CinemaUtil.getSessoes().removeAll(oldSessoes);
-		updateTable();
 	}
 	
 	@FXML
-	private void editSessao(){
+	private void editSessao() {
+		Alert a;
+		LocalTime horarioInicial;
 		
+		Sessao sessaoSelected=null;
+		for(Sessao sessao : CinemaUtil.getSessoes()){
+			if(sessao.isSelected()){
+				sessaoSelected = sessao;
+				break;
+			}
+		}
+		
+		if(verifyInputs() && verifyTime(false, sessaoSelected)) {
+			
+			sessaoSelected.setFilme(choiceBoxFilmes.getValue());
+			
+			sessaoSelected.setSala(choiceBoxSalas.getValue());
+			
+			
+			sessaoSelected.setHorarioInicial(LocalTime.of(Integer.parseInt(inputHora.getText()), 
+														  Integer.parseInt(inputMinuto.getText())));			  
+										  
+			sessaoSelected.setHorarioFinal(LocalTime.ofSecondOfDay(sessaoSelected.getHorarioInicial().toSecondOfDay() + 
+												                   choiceBoxFilmes.getValue().getDuracao() * 60));	
+												   
+			sessaoSelected.setValorIngresso(Double.parseDouble(inputValorIngresso.getText()));
+			
+			if (audioLegendado.isSelected()) {
+				sessaoSelected.setTipoAudio("Legendado");
+			} else if (audioDublado.isSelected()) {
+				sessaoSelected.setTipoAudio("Dublado");
+			} else if (audioOriginal.isSelected()) {
+				sessaoSelected.setTipoAudio("Original");
+			}
+			
+			if(exib3D.isSelected()) {
+				sessaoSelected.setExibicao3D(true);
+			} else {
+				sessaoSelected.setExibicao3D(false);
+			}
+			
+			closeCreatingSessao();
+			
+		} else {
+			String verif1 = "Por favor, verifique se: \n" +
+							"1 - Nenhum campo ficou vazio ou desmarcado; \n" +
+							"2 - Você digitou apenas números nos campos 'valor do ingresso', 'hora', 'minuto'.";
+			a = new Alert(AlertType.INFORMATION, verif1);
+			a.showAndWait();
+		}
 	}
+	
+
 
 	@FXML
 	private void createSessao() {
@@ -169,7 +262,6 @@ public class GerenciarSessoesController implements Initializable{
 									   valorIngresso, exibicao3D, tipoAudio);
 			
 			CinemaUtil.saveData(sessao);
-			updateTable();
 			closeCreatingSessao();
 			
 		} else {
@@ -333,9 +425,9 @@ public class GerenciarSessoesController implements Initializable{
 					exib3D.setVisible(true);
 					exib2D.setVisible(true);
 				} else {
-					exib3D.setVisible(true);
-					exib2D.setVisible(true);
-					exib2D.setSelected(false);
+					exib3D.setVisible(false);
+					exib2D.setVisible(false);
+					exib3D.setSelected(false);
 					exib2D.setSelected(true);
 				}
 				
@@ -460,6 +552,36 @@ public class GerenciarSessoesController implements Initializable{
 	private void select2D(){
 		if(exib3D.isSelected()){
 			exib3D.fire();
+		}
+	}
+	
+	@FXML
+	private void selectAudioDublado() {
+		if(audioOriginal.isSelected()){
+			audioOriginal.fire();
+		}
+		if(audioLegendado.isSelected()){
+			audioLegendado.fire();
+		}
+	}
+	
+	@FXML
+	private void selectAudioLegendado() {
+		if(audioDublado.isSelected()){
+			audioDublado.fire();
+		}
+		if(audioOriginal.isSelected()){
+			audioOriginal.fire();
+		}
+	}
+	
+	@FXML
+	private void selectAudioOriginal() {
+		if(audioDublado.isSelected()){
+			audioDublado.fire();
+		}
+		if(audioLegendado.isSelected()){
+			audioLegendado.fire();
 		}
 	}
 

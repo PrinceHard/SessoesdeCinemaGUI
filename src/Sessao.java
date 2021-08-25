@@ -19,17 +19,18 @@ public class Sessao implements Comparable<Sessao>, Serializable{
 	private final SimpleBooleanProperty selected;
 
     public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, boolean exibicao3D, String tipoAudio){
-        this.filme.set(filme);
-        this.sala.set(sala);
-        this.horarioInicial.set(horarioInicial);
-        this.horarioFinal.set(horarioFinal);
-        this.valorIngresso.set(valorIngresso);
-        this.exibicao3D.set(exibicao3D);
-        this.tipoAudio.set(tipoAudio);
+        this.filme = new SimpleObjectProperty(filme);
+        this.sala = new SimpleObjectProperty(sala);
+        this.horarioInicial = new SimpleObjectProperty(horarioInicial);
+        this.horarioFinal = new SimpleObjectProperty(horarioFinal);
+        this.valorIngresso = new SimpleDoubleProperty(valorIngresso);
+		this.poltronas = new SimpleObjectProperty(new char[sala.getCapacidade()]);
+        this.exibicao3D = new SimpleBooleanProperty(exibicao3D);
+        this.tipoAudio = new SimpleStringProperty(tipoAudio);
+		this.selected = new SimpleBooleanProperty(false);
 
-        poltronas.get() = new char[sala.get().getCapacidade()];
         for(int i=0; i < poltronas.get().length; i++) { //Inicializando todas as poltronas como livres.
-            poltronas[i] = 'l';
+            poltronas.get()[i] = 'l';
         }
     }
 
@@ -142,7 +143,7 @@ public class Sessao implements Comparable<Sessao>, Serializable{
 		return exibicao3D;
 	}		
 	
-	public SimpleStringProperty tipoAudioProperty() {
+	public SimpleBooleanProperty tipoAudioProperty() {
 		return exibicao3D;
 	}		
 
