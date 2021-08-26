@@ -1,4 +1,4 @@
-package src;
+package com.cinemagui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,16 +23,10 @@ import java.io.ObjectInputStream;
 import javafx.scene.control.Alert.AlertType;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-
 
 public class CinemaUtil extends Application{
 
 	private static Cinema cinema = new Cinema();
-	
-	private static Gson gson = new Gson();
 
 	private static ArrayList<Object> data = new ArrayList<>();
 	private static ObservableList<Sessao> sessoes = FXCollections.observableArrayList(); 
@@ -47,6 +41,8 @@ public class CinemaUtil extends Application{
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
+		File file = new File(".");
+		for(String fileNames : file.list()) System.out.println(fileNames);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
 		Parent rootNodeSceneMain = (Parent) loader.load();
 		SceneController controller = loader.getController();
@@ -186,12 +182,12 @@ public class CinemaUtil extends Application{
 	}
 	
 	public static void main(String[] args) throws Exception{
-		Font.loadFont("file:fonts/Montserrat-Light.ttf", 300);
-		Font.loadFont("file:fonts/Montserrat-Medium.ttf", 500);
-		Font.loadFont("file:fonts/Montserrat-MediumItalic.ttf", 500);
-		Font.loadFont("file:fonts/Montserrat-SemiBold.ttf", 600); 
-		Font.loadFont("file:fonts/Montserrat-Bold.ttf", 700); 
-		Font.loadFont("file:fonts/Montserrat-Black.ttf", 900);
+		Font.loadFont("resources/fonts/Montserrat-Light.ttf", 300);
+		Font.loadFont("resources/fonts/Montserrat-Medium.ttf", 500);
+		Font.loadFont("resources/fonts/Montserrat-MediumItalic.ttf", 500);
+		Font.loadFont("resources/fonts/Montserrat-SemiBold.ttf", 600); 
+		Font.loadFont("resources/fonts/Montserrat-Bold.ttf", 700); 
+		Font.loadFont("resources/fonts/Montserrat-Black.ttf", 900);
 		try {
 			unserializeData();
 		} catch (java.io.FileNotFoundException e) {

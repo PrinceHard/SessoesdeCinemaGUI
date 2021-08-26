@@ -1,4 +1,4 @@
-package src;
+package com.cinemagui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

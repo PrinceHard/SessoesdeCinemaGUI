@@ -1,4 +1,4 @@
-package src;
+package com.cinemagui;
 
 import java.io.Serializable;
 import javafx.beans.property.SimpleObjectProperty;

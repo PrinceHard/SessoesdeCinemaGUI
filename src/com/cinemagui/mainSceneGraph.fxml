@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.SceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.SceneController">
      <children>
         <VBox prefHeight="720.0" prefWidth="297.0" style="-fx-background-color: #f3f3f3;" styleClass="shadow" stylesheets="@style.css">
            <children>
@@ -18,7 +18,7 @@
                  <children>
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
                        <image>
-                          <Image url="@icons/home.png" />
+                          <Image url="@resources/icons/home.png" />
                        </image>
                     </ImageView>
                     <Button id="btn-home" layoutX="70.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Início">
@@ -35,7 +35,7 @@
                  <children>
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
                        <image>
-                          <Image url="@icons/management.png" />
+                          <Image url="@resources/icons/management.png" />
                        </image>
                     </ImageView>
                     <Button id="btn-gerenciamento" layoutX="70.0" mnemonicParsing="false" onAction="#switchToGerenciamento" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Gerenciamento">
@@ -49,7 +49,7 @@
                  <children>
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
                        <image>
-                          <Image url="@icons/sales.png" />
+                          <Image url="@resources/icons/sales.png" />
                        </image>
                     </ImageView>
                     <Button id="btn-vendas" layoutX="70.0" mnemonicParsing="false" onAction="#switchToVendas" prefHeight="55.0" prefWidth="221.0" stylesheets="@style.css" text="Vendas">
@@ -63,7 +63,7 @@
                  <children>
                     <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="33.0" layoutY="12.0" opacity="0.84" pickOnBounds="true" preserveRatio="true">
                        <image>
-                          <Image url="@icons/finances.png" />
+                          <Image url="@resources/icons/finances.png" />
                        </image>
                     </ImageView>
                     <Button id="btn-faturamento" layoutX="70.0" mnemonicParsing="false" onAction="#switchToFaturamento" prefHeight="55.0" prefWidth="221.0" styleClass="ooane" stylesheets="@style.css" text="Faturamento">
@@ -79,7 +79,7 @@
            <children>
               <ImageView fitHeight="527.0" fitWidth="328.0" layoutX="579.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
                  <image>
-                    <Image url="@images/exampleCinema.png" />
+                    <Image url="@resources/images/exampleCinema.png" />
                  </image>
               </ImageView>
               <Label fx:id="cinemaLabel" alignment="CENTER" layoutX="38.0" layoutY="74.0" prefHeight="56.0" prefWidth="451.0" text="">
@@ -118,17 +118,17 @@
            <children>
               <ImageView onMousePressed="#openGerenciarSessoes" fitHeight="210.0" fitWidth="240.0" layoutX="70.0" layoutY="218.0" pickOnBounds="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/exampleCartaz.png" />
+                  <Image url="@resources/images/exampleCartaz.png" />
                </image>
               </ImageView>
             <ImageView onMousePressed="#openGerenciarFilmes" fitHeight="210.0" fitWidth="240.0" layoutX="363.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/exampleMovies.png" />
+                  <Image url="@resources/images/exampleMovies.png" />
                </image>
             </ImageView>
             <ImageView onMousePressed="#openGerenciarSalas" fitHeight="210.0" fitWidth="240.0" layoutX="656.0" layoutY="218.0" opacity="0.84" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/exampleRooms.png" />
+                  <Image url="@resources/images/exampleRooms.png" />
                </image>
             </ImageView>
             <Label onMousePressed="#openGerenciarSessoes" layoutX="124.0" layoutY="306.0" text="SESSÕES" textFill="WHITE">
@@ -152,12 +152,12 @@
          <children>
             <ImageView onMousePressed="#openVendas" fitHeight="210.0" fitWidth="240.0" layoutX="160.0" layoutY="218.0" pickOnBounds="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/exampleLucro.png" />
+                  <Image url="@resources/images/exampleLucro.png" />
                </image>
             </ImageView>
             <ImageView onMousePressed="#openCancelarVendas" fitHeight="210.0" fitWidth="240.0" layoutX="576.0" layoutY="218.0" opacity="0.84" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);" styleClass="imgButton">
                <image>
-                  <Image url="@images/examplePrejuizo.png" />
+                  <Image url="@resources/images/examplePrejuizo.png" />
                </image>
             </ImageView>
             <Label onMousePressed="#openVendas" layoutX="208.0" layoutY="273.0" prefHeight="41.0" prefWidth="148.0" text="VENDER" textFill="WHITE">
