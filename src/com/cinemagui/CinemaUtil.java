@@ -28,19 +28,52 @@ import javafx.collections.FXCollections;
 import java.util.List;
 import java.lang.ClassNotFoundException;
 
+/* CICLO DE VIDA DE UMA APLICAÇÃO JAVAFX
+ * 
+ * 1 - Faz uma instância da classe herdeira da classe Application. 
+ * 1 - Chama o método init().
+ * 3 - Chama o método start(javafx.stage.Stage).
+ * 4 - Espera a aplicação finalizar, isso pode acontecer de duas formas:
+       * A aplicação chama Platform.exit().
+	   * A última janela é fechada e o atributo implicitExit da Platform é true.
+ * 5 - Chama o método stop().
+*/
+
+
+	
+//Toda aplicação JavaFX precisa estender a classe Application.
 public class CinemaUtil extends Application{
 
+	//Instância da classe Cinema.
 	private static Cinema cinema = new Cinema();
-	
-	private static ObservableList<Sessao> sessoes = FXCollections.observableArrayList(); 
-	private static ObservableList<Filme> filmes = FXCollections.observableArrayList();
-	private static ObservableList<Sala> salas = FXCollections.observableArrayList();
 
-	public static String cinemaName = "";
-	private static Stage stageFirstOpen = new Stage();
+	//Stage para perguntar o nome do cinema.
+	private static Stage stageGetCinemaName = new Stage();
 		
 	@FXML
+	//Input para coletar o nome do cinema.
 	private TextField userInput;
+	
+	/*O método main é opcional em uma aplicação JavaFx.
+	 *
+	 *	public static void main(String[] args) throws Exception{
+	 *		Application.launch(args);
+	 *	}
+	 *
+	*/
+	
+	@Override
+	public void init() throws Exception {
+		//Carregando as fontes necessárias.
+		Font.loadFont("resources/fonts/Montserrat-Light.ttf", 300);
+		Font.loadFont("resources/fonts/Montserrat-Medium.ttf", 500);
+		Font.loadFont("resources/fonts/Montserrat-MediumItalic.ttf", 500);
+		Font.loadFont("resources/fonts/Montserrat-SemiBold.ttf", 600); 
+		Font.loadFont("resources/fonts/Montserrat-Bold.ttf", 700); 
+		Font.loadFont("resources/fonts/Montserrat-Black.ttf", 900);
+		//Chama o método para carregar dados para o programa.
+		unserializeData();
+	}
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
@@ -149,19 +182,6 @@ public class CinemaUtil extends Application{
 		return salas;
 	}
 	
-	public static void main(String[] args) throws Exception{
-		Font.loadFont("resources/fonts/Montserrat-Light.ttf", 300);
-		Font.loadFont("resources/fonts/Montserrat-Medium.ttf", 500);
-		Font.loadFont("resources/fonts/Montserrat-MediumItalic.ttf", 500);
-		Font.loadFont("resources/fonts/Montserrat-SemiBold.ttf", 600); 
-		Font.loadFont("resources/fonts/Montserrat-Bold.ttf", 700); 
-		Font.loadFont("resources/fonts/Montserrat-Black.ttf", 900);
-		try {
-			unserializeData();
-		} catch (FileNotFoundException e) {
-			System.out.println("Serialized data not found!");
-		}
-		launch(args);
-	}
+	
 
 }

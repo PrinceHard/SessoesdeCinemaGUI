@@ -3,7 +3,6 @@ package com.cinemagui;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -22,9 +21,10 @@ public class Cinema implements Serializable{
     private SimpleIntegerProperty ingressosInteiras3D;
     private SimpleIntegerProperty ingressosMeias; 
     private SimpleIntegerProperty ingressosMeias3D;
-    private SimpleObjectProperty<ArrayList<Sala>> salas;
-    private SimpleObjectProperty<ArrayList<Filme>> filmes;
-    private SimpleObjectProperty<ArrayList<Sessao>> sessoes;
+    private SimpleObjectProperty<ObservableList<Sala>> salas;
+    private SimpleObjectProperty<ObservableList<Filme>> filmes;
+    private SimpleObjectProperty<ObservableList<Sessao>> sessoes;
+	private SimpleStringProperty name;
 
     public Cinema(){
         this.faturamentoInteiras = new SimpleDoubleProperty();
@@ -35,9 +35,9 @@ public class Cinema implements Serializable{
         this.ingressosInteiras3D = new SimpleIntegerProperty();
         this.ingressosMeias = new SimpleIntegerProperty();
         this.ingressosMeias3D = new SimpleIntegerProperty();
-        this.salas = new SimpleObjectProperty<ArrayList<Sala>>();
-        this.filmes = new SimpleObjectProperty<ArrayList<Filme>>();
-        this.sessoes = new SimpleObjectProperty<ArrayList<Sessao>>();
+        this.salas = new SimpleObjectProperty<>();
+        this.filmes = new SimpleObjectProperty<>();
+        this.sessoes = new SimpleObjectProperty<>();
     }
 
     //Ler objeto serializado.
@@ -50,9 +50,9 @@ public class Cinema implements Serializable{
         this.ingressosInteiras3D = new SimpleIntegerProperty( (int) in.readObject());
         this.ingressosMeias = new SimpleIntegerProperty( (int) in.readObject());
         this.ingressosMeias3D = new SimpleIntegerProperty( (int) in.readObject());
-        this.salas = new SimpleObjectProperty<ArrayList<Sala>>( (ArrayList<Sala>) in.readObject());
-        this.filmes = new SimpleObjectProperty<ArrayList<Filme>>( (ArrayList<Filme>) in.readObject());
-        this.sessoes = new SimpleObjectProperty<ArrayList<Sessao>>( (ArrayList<Sessao>) in.readObject());
+        this.salas = new SimpleObjectProperty<>( (ObservableList<Sala>) in.readObject());
+        this.filmes = new SimpleObjectProperty<>( (ObservableList<Filme>) in.readObject());
+        this.sessoes = new SimpleObjectProperty<>( (ObservableList<Sessao>) in.readObject());
     }
 
     //Serializar objeto
@@ -194,6 +194,10 @@ public class Cinema implements Serializable{
     public SimpleIntegerProperty ingressosMeias3DProperty() {
         return ingressosMeias3D;
     }
+	
+	public SimpleStringProperty nameProperty() {
+		return name;
+	}
 
     //getters values
     public double getFaturamentoInteiras(){
@@ -228,16 +232,25 @@ public class Cinema implements Serializable{
         return ingressosMeias3D.get();
     }
 
-    public ArrayList<Sala> getSalas(){
+    public ObservableList<Sala> getSalas(){
         return salas.get();
     }
 
-    public ArrayList<Filme> getFilmes(){
+    public ObservableList<Filme> getFilmes(){
         return filmes.get();
     }
 
-    public ArrayList<Sessao> getSessoes(){
+    public ObservableList<Sessao> getSessoes(){
         return sessoes.get();
     }
+	
+	public String getName() {
+		return name;
+	}
+	
+	//Setters
+	public void setName(String name) {
+		this.name.set(name);
+	}
 
 }
