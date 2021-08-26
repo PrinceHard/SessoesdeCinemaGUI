@@ -42,7 +42,7 @@ public class GerenciarSalasController implements Initializable{
 	@FXML
 	private TableColumn<Sala, Integer> numCol, capacidadeCol;
 	@FXML
-	private TableColumn<Sala, CheckBox> selectCol;
+	private TableColumn<Sala, Boolean> selectCol;
 	
 	private Sala salaSelected=null;
 
@@ -58,7 +58,7 @@ public class GerenciarSalasController implements Initializable{
 	}	
 	
 	private void factorys() {
-		selectCol.setCellValueFactory(new PropertyValueFactory<>("checkBox"));
+		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
 		
 		numCol.setCellValueFactory(new PropertyValueFactory<>("numSala"));
 		numCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
@@ -95,7 +95,7 @@ public class GerenciarSalasController implements Initializable{
 	private void openEditSala() {
 		int countSelect=0;
 		for(Sala sala : CinemaUtil.getSalas()){
-			if(sala.getCheckBox().isSelected()){
+			if(sala.isSelected()){
 				countSelect+=1;
 				salaSelected = sala;
 			}
@@ -172,6 +172,7 @@ public class GerenciarSalasController implements Initializable{
 			for(Sala sala : CinemaUtil.getSalas()){
 				if(sala.getNumSala() == numSala){
 					Alert a = new Alert(AlertType.INFORMATION, "Sala já existente, defina outra!");
+					a.showAndWait();
 					salaExiste=true;
 					break;
 				}
@@ -195,7 +196,7 @@ public class GerenciarSalasController implements Initializable{
 	private void deleteSala() {
 		ObservableList<Sala> oldSalas = FXCollections.observableArrayList();
 		for (Sala sala : CinemaUtil.getSalas()) {
-			if(sala.getCheckBox().isSelected()) {
+			if(sala.isSelected()) {
 				oldSalas.add(sala);
 			}
 		}
