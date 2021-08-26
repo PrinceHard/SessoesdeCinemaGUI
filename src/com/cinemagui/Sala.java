@@ -69,9 +69,9 @@ public class Sala implements Comparable<Sala>, Serializable{
 	
 	//Custom deserializer
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		numSala = new SimpleIntegerProperty( (Integer) in.readObject());
-		capacidade = new SimpleIntegerProperty( (Integer) in.readObject());
-		selected = new SimpleBooleanProperty( (Boolean) in.readObject());
+		numSala = new SimpleIntegerProperty( (int) in.readObject());
+		capacidade = new SimpleIntegerProperty( (int) in.readObject());
+		selected = new SimpleBooleanProperty( (boolean) in.readObject());
 	}
 
 	@Override

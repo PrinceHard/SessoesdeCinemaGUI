@@ -25,9 +25,6 @@ import java.io.FileNotFoundException;
 import javafx.scene.control.Alert.AlertType;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import java.lang.ClassNotFoundException;
 
