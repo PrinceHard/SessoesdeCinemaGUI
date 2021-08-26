@@ -1,15 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.SceneController">
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1042.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.CancelarVendasController">
+   <children>
+      <Pane fx:id="viewTableSessoes" layoutX="23.0" layoutY="22.0" prefHeight="677.0" prefWidth="1002.0">
+         <children>
+            <TableView fx:id="sessoesTable" editable="true" layoutX="5.0" layoutY="57.0" prefHeight="545.0" prefWidth="989.0">
+               <columns>
+                  <TableColumn fx:id="selectCol" maxWidth="900.0" prefWidth="20.0" />
+                  <TableColumn fx:id="filmeCol" prefWidth="391.33331298828125" text="FILME" />
+                  <TableColumn fx:id="salaCol" minWidth="0.0" prefWidth="92.66668701171875" text="SALA" />
+                  <TableColumn minWidth="0.0" prefWidth="175.33331298828125" text="HORÁRIO">
+                     <columns>
+                        <TableColumn fx:id="horaIniCol" prefWidth="75.0" text="INICIAL" />
+                        <TableColumn fx:id="horaFinCol" prefWidth="75.0" text="FINAL" />
+                     </columns>
+                  </TableColumn>
+                  <TableColumn fx:id="audioCol" prefWidth="153.0" text="ÁUDIO" />
+                  <TableColumn fx:id="exibicaoCol" prefWidth="79.66668701171875" text="EXIBIÇÃO" />
+                  <TableColumn fx:id="valorCol" prefWidth="59.6666259765625" text="VALOR" />
+                  <TableColumn fx:id="taxaOcupacao" prefWidth="59.6666259765625" text="OCUPAÇAO" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Button onAction="#openCancelarVenda" layoutX="359.0" layoutY="618.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR VENDA">
+               <font>
+                  <Font name="Montserrat SemiBold" size="20.0" />
+               </font>
+            </Button>
+            <Label layoutX="372.0" layoutY="4.0" text="Escolha a sessão:">
+               <font>
+                  <Font name="Montserrat SemiBold" size="27.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="paneCancelVenda" layoutX="23.0" layoutY="22.0" prefHeight="677.0" prefWidth="1002.0"  visible="false">
+         <children>
+            <Button layoutX="563.0" layoutY="445.0" mnemonicParsing="false" onAction="#closePaneCancelVenda" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
+               <font>
+                  <Font name="Montserrat SemiBold" size="15.0" />
+               </font>
+            </Button>
+            <Label layoutX="220.0" layoutY="122.0" text="Você está cancelando a venda de  um ingresso!">
+               <font>
+                  <Font name="Montserrat SemiBold" size="27.0" />
+               </font>
+            </Label>
+            <Label layoutX="397.0" layoutY="166.0" text="Preencha os campos abaixo.">
+               <font>
+                  <Font name="Montserrat Medium" size="15.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER_RIGHT" layoutX="202.0" layoutY="278.0" prefHeight="32.0" prefWidth="261.0" text="Sessao">
+               <font>
+                  <Font name="Montserrat Medium" size="22.0" />
+               </font>
+            </Label>
+            <TextField fx:id="inputPoltrona" layoutX="488.0" layoutY="321.0" prefHeight="32.0" prefWidth="261.0" promptText="Digite aqui..." />
+            <Label fx:id="showSessao" layoutX="488.0" layoutY="278.0" prefHeight="32.0" prefWidth="261.0" text="Sessao" />
+            <Label alignment="CENTER_RIGHT" layoutX="202.0" layoutY="318.0" prefHeight="32.0" prefWidth="261.0" text="Número da poltrona">
+               <font>
+                  <Font name="Montserrat Medium" size="22.0" />
+               </font>
+            </Label>
+            <Button layoutX="309.0" layoutY="446.0" mnemonicParsing="false" onAction="#cancelarVenda" prefHeight="51.0" prefWidth="154.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR VENDA">
+               <font>
+                  <Font name="Montserrat SemiBold" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
 </AnchorPane>

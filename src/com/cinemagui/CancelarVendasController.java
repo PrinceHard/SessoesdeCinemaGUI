@@ -34,10 +34,10 @@ import javafx.collections.ListChangeListener.Change;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class vendasController implements Initializable {
-
+public class CancelarVendasController implements Initializable{
+	
 	@FXML
-	private Pane viewTableSessoes, paneSellTicket;
+	private Pane viewTableSessoes, paneCancelVenda;
 
 	@FXML
 	private CheckBox selectInteiro, selectMeio;
@@ -62,8 +62,8 @@ public class vendasController implements Initializable {
 	private TableColumn<Sessao, Double> valorCol, taxaOcupacao;
 	@FXML
 	private TableColumn<Sessao, Boolean> exibicaoCol, selectCol;
-
-	@Override
+	
+	@Override	
 	public void initialize(URL location, ResourceBundle resources) {
 		factorys();
 		sessoesTable.setItems(CinemaUtil.getSessoes());
@@ -71,7 +71,7 @@ public class vendasController implements Initializable {
 	}
 	
 	@FXML
-	private void openVenderIngresso() {
+	private void openCancelarVenda() {
 		Alert a;
 		int countSelect=0;
 		Sessao sessaoSelected = null;
@@ -83,7 +83,7 @@ public class vendasController implements Initializable {
 		}
 
 		if(countSelect == 1) {
-			paneSellTicket.setVisible(true);
+			paneCancelVenda.setVisible(true);
 			viewTableSessoes.setVisible(false);
 			
 			showSessao.setText(sessaoSelected.getFilme().getTitulo());
@@ -97,18 +97,9 @@ public class vendasController implements Initializable {
 		}
 		
 	}
-
+	
 	@FXML
-	private void cancelVenda() {
-		paneSellTicket.setVisible(false);
-		viewTableSessoes.setVisible(true);
-		inputPoltrona.setText("");
-		selectInteiro.setSelected(false);
-		selectMeio.setSelected(false);
-	}
-
-	@FXML
-	private void vender() {
+	private void cancelarVenda() {
 		Alert a;
 		Sessao sessaoSelected = null;
 		for (Sessao sessao : CinemaUtil.getSessoes()) {
@@ -118,20 +109,12 @@ public class vendasController implements Initializable {
 			}
 		}
 
-		char tipoIngresso;
-		if(selectInteiro.isSelected()) {
-			tipoIngresso = 'i';
-		} else {
-			tipoIngresso = 'm';
-		}
-
-		if (verifyInputs()) {
-
-			if (CinemaUtil.getCinema().venderIngresso(sessaoSelected, tipoIngresso, Integer.parseInt(inputPoltrona.getText()))) {
-				a = new Alert(AlertType.INFORMATION, "Ingresso vendido com sucesso!");
+		if (!inputPoltrona.getText().isEmpty()) {
+			if (CinemaUtil.getCinema().cancelarVenda(sessaoSelected, Integer.parseInt(inputPoltrona.getText()))) {
+				a = new Alert(AlertType.INFORMATION, "Venda cancelada com sucesso!");
 				a.showAndWait();
-
-				cancelVenda();
+				
+				closePaneCancelVenda();
 				
 			} else {
 				a = new Alert(AlertType.INFORMATION, "Essa poltrona já foi vendida!");
@@ -139,33 +122,16 @@ public class vendasController implements Initializable {
 			}
 
 		} else {
-			a = new Alert(AlertType.INFORMATION, "Verifique se você preencheu todos os campos.");
+			a = new Alert(AlertType.INFORMATION, "Por favor, informe o número da poltrona.");
 		}
 	}
-
-	private boolean verifyInputs() {
-		boolean valid = true;
-
-		if(inputPoltrona.getText().isEmpty()) {
-			valid = false;
-		}
-
-		try {
-			int i = Integer.parseInt(inputPoltrona.getText());
-		} catch (Exception e) {
-			valid = false;
-		}
-
-			//Duas caixas selecionadas
-		if (selectInteiro.isSelected() && selectMeio.isSelected() ||
-			//Nenhuma caixa selecionada
-			!(selectInteiro.isSelected() || selectMeio.isSelected())) {
-				valid = false;
-		} 
-
-		return valid;
+	
+	@FXML
+	private void closePaneCancelVenda() {
+		//paneCancelVenda.setVisible(false);
+		viewTableSessoes.setVisible(true);
+		inputPoltrona.setText("");
 	}
-
 
 	private void factorys() {
 		
@@ -253,4 +219,5 @@ public class vendasController implements Initializable {
 		taxaOcupacao.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));	
 		taxaOcupacao.setEditable(false);
 	}
-}	
+
+}

@@ -1,4 +1,4 @@
-package src;
+package com.cinemagui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +21,8 @@ public class SceneController implements Initializable{
 	private static Stage stageGerenciarSessoes = new Stage();
 	private static Stage stageGerenciarSalas = new Stage();
 	private static Stage stageGerenciarFilmes = new Stage();
-	private static Stage stageGerenciarVendas = new Stage();
+	private static Stage stageVender = new Stage();
+	private static Stage stageCancelarVendas = new Stage();
 	
 	@FXML
 	private Label cinemaLabel;
@@ -36,7 +37,8 @@ public class SceneController implements Initializable{
 		stageGerenciarSessoes.initModality(Modality.APPLICATION_MODAL);
 		stageGerenciarSalas.initModality(Modality.APPLICATION_MODAL);
 		stageGerenciarFilmes.initModality(Modality.APPLICATION_MODAL);
-		stageGerenciarVendas.initModality(Modality.APPLICATION_MODAL);;
+		stageVender.initModality(Modality.APPLICATION_MODAL);
+		stageCancelarVendas.initModality(Modality.APPLICATION_MODAL);;
 
 		FileReader readerFlagFirstOpen = null;
 		try {
@@ -113,18 +115,17 @@ public class SceneController implements Initializable{
 	private void openVendas() throws Exception {
 		Parent nodeRootVendas = FXMLLoader.load(getClass().getResource("vendasSceneGraph.fxml"));
 		Scene sceneVendas = new Scene(nodeRootVendas);
-		stageGerenciarVendas.setScene(sceneVendas);
-		stageGerenciarVendas.showAndWait();
+		stageVender.setScene(sceneVendas);
+		stageVender.showAndWait();
 	}
 
 	@FXML
 	private void openCancelarVendas() throws Exception {
 		Parent nodeRootCancelarVendas = FXMLLoader.load(getClass().getResource("cancelarVendasSceneGraph.fxml"));
 		Scene sceneCancelarVendas = new Scene(nodeRootCancelarVendas);
-		stageGerenciarVendas.setScene(sceneCancelarVendas);
-		stageGerenciarVendas.showAndWait();
+		stageCancelarVendas.setScene(sceneCancelarVendas);
+		stageCancelarVendas.showAndWait();
 	}
-
 
 	public void changeCinemaName(String name) {
 		cinemaLabel.setText(name);

@@ -1,4 +1,4 @@
-package src;
+package com.cinemagui;
 
 import java.util.ArrayList;
 import java.util.Collections;

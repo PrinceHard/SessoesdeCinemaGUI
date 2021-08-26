@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.vendasController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.VendasController">
    <children>
       <Pane fx:id="viewTableSessoes" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="true">
          <children>
@@ -19,7 +19,7 @@
                   <TableColumn fx:id="selectCol" maxWidth="900.0" prefWidth="20.0" />
                   <TableColumn fx:id="filmeCol" prefWidth="391.33331298828125" text="FILME" />
                   <TableColumn fx:id="salaCol" minWidth="0.0" prefWidth="92.66668701171875" text="SALA" />
-                  <TableColumn fx:id="salaCol" minWidth="0.0" prefWidth="175.33331298828125" text="HORÁRIO">
+                  <TableColumn minWidth="0.0" prefWidth="175.33331298828125" text="HORÁRIO">
                      <columns>
                         <TableColumn fx:id="horaIniCol" prefWidth="75.0" text="INICIAL" />
                         <TableColumn fx:id="horaFinCol" prefWidth="75.0" text="FINAL" />
@@ -34,7 +34,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="359.0" layoutY="618.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="CRIAR NOVA SESSÃO">
+            <Button onAction="#openVenderIngresso" layoutX="359.0" layoutY="618.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="VENDER INGRESSO">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
@@ -48,7 +48,7 @@
       </Pane>
       <Pane fx:id="paneSellTicket" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="false">
          <children>
-            <Button onAction="#cancelVenda" layoutX="567.0" layoutY="501.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
+            <Button layoutX="567.0" layoutY="501.0" mnemonicParsing="false" onAction="#cancelVenda" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
@@ -90,7 +90,7 @@
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <Button onAction="#vender" layoutX="313.0" layoutY="502.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="VENDER">
+            <Button layoutX="313.0" layoutY="502.0" mnemonicParsing="false" onAction="#vender" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="VENDER">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
