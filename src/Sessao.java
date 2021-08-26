@@ -16,6 +16,7 @@ public class Sessao implements Comparable<Sessao>, Serializable{
     private final SimpleObjectProperty<char[]> poltronas; //l = livre; m = meia; i = inteira
     private final SimpleBooleanProperty exibicao3D;
     private final SimpleStringProperty tipoAudio;
+	private final SimpleDoubleProperty taxaOcupacao;
 	private final SimpleBooleanProperty selected;
 
     public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, boolean exibicao3D, String tipoAudio){
@@ -27,6 +28,7 @@ public class Sessao implements Comparable<Sessao>, Serializable{
 		this.poltronas = new SimpleObjectProperty(new char[sala.getCapacidade()]);
         this.exibicao3D = new SimpleBooleanProperty(exibicao3D);
         this.tipoAudio = new SimpleStringProperty(tipoAudio);
+		this.taxaOcupacao = new SimpleDoubleProperty(0.0);
 		this.selected = new SimpleBooleanProperty(false);
 
         for(int i=0; i < poltronas.get().length; i++) { //Inicializando todas as poltronas como livres.
@@ -38,7 +40,18 @@ public class Sessao implements Comparable<Sessao>, Serializable{
 
         if(poltronas.get()[poltrona] == 'l') {
             poltronas.get()[poltrona] = tipoIngresso;
-            return true;
+
+			int ocupados=0;			
+			for (char p : poltronas.get()) {
+				if(p != 'l'){
+				    ocupados++;
+				}
+            }         
+
+			taxaOcupacao.set(ocupados / sala.get().getCapacidade());
+
+			return true;
+            
         } else {
             return false;
         }
@@ -49,23 +62,20 @@ public class Sessao implements Comparable<Sessao>, Serializable{
 
         if(poltronas.get()[poltrona] != 'l') {
             poltronas.get()[poltrona] = 'l';
+
+			int ocupados=0;			
+			for (char p : poltronas.get()) {
+				if(p != 'l'){
+				    ocupados++;
+				}
+            }         
+
+			taxaOcupacao.set(ocupados / sala.get().getCapacidade());
+
             return true;
         } else {
             return false;
         }
-
-    }
-
-    public double taxaOcupacao(){
-        double ocupados=0;
-
-        for (char p : poltronas.get()) {
-            if(p != 'l'){
-                ocupados++;
-            }         
-        }
-
-        return ocupados / sala.get().getCapacidade();
     }
    
     public String poltronasLivres(){
@@ -143,13 +153,17 @@ public class Sessao implements Comparable<Sessao>, Serializable{
 		return exibicao3D;
 	}		
 	
-	public SimpleBooleanProperty tipoAudioProperty() {
-		return exibicao3D;
+	public SimpleStringProperty tipoAudioProperty() {
+		return tipoAudio;
 	}		
 
 	public SimpleBooleanProperty selectedProperty() {
-		return exibicao3D;
+		return selected;
 	}		
+
+	public SimpleDoubleProperty taxaOcupacaoProperty() {
+		return taxaOcupacao;
+	}
 	
 	//Values getters
     public Filme getFilme(){
@@ -186,6 +200,10 @@ public class Sessao implements Comparable<Sessao>, Serializable{
 	
 	public boolean isSelected() {
 		return selected.get();
+	}
+
+	public double getTaxaOcupacao() {
+		return taxaOcupacao.get();
 	}
 	
 	//Values Setters

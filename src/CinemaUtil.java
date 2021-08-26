@@ -29,6 +29,8 @@ import com.google.gson.reflect.TypeToken;
 
 
 public class CinemaUtil extends Application{
+
+	private static Cinema cinema = new Cinema();
 	
 	private static Gson gson = new Gson();
 
@@ -81,6 +83,10 @@ public class CinemaUtil extends Application{
 			});
 	}
 
+	public static Cinema getCinema() {
+		return cinema;
+	}
+
 	@FXML
 	private void enterCinemaName() {
 		if(!userInput.getText().isEmpty()){
@@ -116,7 +122,7 @@ public class CinemaUtil extends Application{
 		}
 	}
 
-	private static void serializeData() throws Exception{
+	private static void serializeData() throws Exception{/*
 		FileWriter writerSessoes = new FileWriter("dataSessoes.json");
 		FileWriter writerFilmes = new FileWriter("dataFilmes.json");
 		FileWriter writerSalas = new FileWriter("dataSalas.json");
@@ -127,11 +133,11 @@ public class CinemaUtil extends Application{
 
 		writerSessoes.close();
 		writerFilmes.close();
-		writerSalas.close();
+		writerSalas.close();*/
 	}
 
 	private static void unserializeData() throws Exception {
-		
+		/*
 		try {
 			FileReader readerSessoes = new FileReader("dataSessoes.json");
 			FileReader readerFilmes = new FileReader("dataFilmes.json");
@@ -164,7 +170,7 @@ public class CinemaUtil extends Application{
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		}
+		}*/
 	}
 
 	public static ObservableList<Sessao> getSessoes() {

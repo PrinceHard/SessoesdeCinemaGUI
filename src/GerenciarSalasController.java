@@ -68,7 +68,8 @@ public class GerenciarSalasController implements Initializable{
 					sala.getTableView().getItems().get(sala.getTablePosition().getRow()).setNumSala(sala.getNewValue());
 				}
 			});
-			
+		numCol.setEditable(false);
+	
 		capacidadeCol.setCellValueFactory(new PropertyValueFactory<>("capacidade"));
 		capacidadeCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 		capacidadeCol.setOnEditCommit(new EventHandler<CellEditEvent<Sala, Integer>>() {
@@ -77,6 +78,7 @@ public class GerenciarSalasController implements Initializable{
 					sala.getTableView().getItems().get(sala.getTablePosition().getRow()).setCapacidade(sala.getNewValue());
 				}
 			});
+		capacidadeCol.setEditable(false);
 	}
 
 	private ObservableList<Sala> salasList() {
