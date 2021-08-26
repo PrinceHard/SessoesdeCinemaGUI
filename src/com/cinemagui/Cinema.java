@@ -3,64 +3,98 @@ package com.cinemagui;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Cinema {
-    private double faturamentoInteiras, faturamentoInteiras3D, faturamentoMeias, faturamentoMeias3D;
-    private int ingressosInteiras, ingressosInteiras3D, ingressosMeias, ingressosMeias3D; 
-    private ArrayList<Sala> salas;
-    private ArrayList<Filme> filmes;
-    private ArrayList<Sessao> sessoes;
+
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
+import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+
+public class Cinema implements Serializable{
+    private SimpleDoubleProperty faturamentoInteiras;
+    private SimpleDoubleProperty faturamentoInteiras3D;
+    private SimpleDoubleProperty faturamentoMeias;
+    private SimpleDoubleProperty faturamentoMeias3D;
+    private SimpleIntegerProperty ingressosInteiras;
+    private SimpleIntegerProperty ingressosInteiras3D;
+    private SimpleIntegerProperty ingressosMeias; 
+    private SimpleIntegerProperty ingressosMeias3D;
+    private SimpleObjectProperty<ArrayList<Sala>> salas;
+    private SimpleObjectProperty<ArrayList<Filme>> filmes;
+    private SimpleObjectProperty<ArrayList<Sessao>> sessoes;
 
     public Cinema(){
-        faturamentoInteiras = 0;
-        faturamentoInteiras3D = 0;
-        faturamentoMeias = 0;
-        faturamentoMeias3D = 0;
-        ingressosInteiras = 0;
-        ingressosInteiras3D = 0;
-        ingressosMeias = 0;
-        ingressosMeias3D =  0;
-        salas = new ArrayList<>();
-        filmes = new ArrayList<>();
-        sessoes = new ArrayList<>();
+        this.faturamentoInteiras = new SimpleDoubleProperty();
+        this.faturamentoInteiras3D = new SimpleDoubleProperty();
+        this.faturamentoMeias = new SimpleDoubleProperty();
+        this.faturamentoMeias3D = new SimpleDoubleProperty();
+        this.ingressosInteiras = new SimpleIntegerProperty();
+        this.ingressosInteiras3D = new SimpleIntegerProperty();
+        this.ingressosMeias = new SimpleIntegerProperty();
+        this.ingressosMeias3D = new SimpleIntegerProperty();
+        this.salas = new SimpleObjectProperty<ArrayList<Sala>>();
+        this.filmes = new SimpleObjectProperty<ArrayList<Filme>>();
+        this.sessoes = new SimpleObjectProperty<ArrayList<Sessao>>();
     }
 
-	public void fechar(){
-		faturamentoInteiras = 0;
-		faturamentoInteiras3D = 0;
-        faturamentoMeias = 0;
-        faturamentoMeias3D = 0;
-        ingressosInteiras = 0;
-        ingressosInteiras3D = 0;
-        ingressosMeias = 0;
-        ingressosMeias3D =  0;
-        sessoes.clear();
-	}
+    //Ler objeto serializado.
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        this.faturamentoInteiras = new SimpleDoubleProperty( (double) in.readObject());
+        this.faturamentoInteiras3D = new SimpleDoubleProperty( (double) in.readObject());
+        this.faturamentoMeias = new SimpleDoubleProperty( (double) in.readObject());
+        this.faturamentoMeias3D = new SimpleDoubleProperty( (double) in.readObject());
+        this.ingressosInteiras = new SimpleIntegerProperty( (int) in.readObject());
+        this.ingressosInteiras3D = new SimpleIntegerProperty( (int) in.readObject());
+        this.ingressosMeias = new SimpleIntegerProperty( (int) in.readObject());
+        this.ingressosMeias3D = new SimpleIntegerProperty( (int) in.readObject());
+        this.salas = new SimpleObjectProperty<ArrayList<Sala>>( (ArrayList<Sala>) in.readObject());
+        this.filmes = new SimpleObjectProperty<ArrayList<Filme>>( (ArrayList<Filme>) in.readObject());
+        this.sessoes = new SimpleObjectProperty<ArrayList<Sessao>>( (ArrayList<Sessao>) in.readObject());
+    }
+
+    //Serializar objeto
+    private void writeObject(ObjectOutputStream out) throws IOException{
+        out.writeObject(faturamentoInteiras.get());
+        out.writeObject(faturamentoInteiras3D.get());
+        out.writeObject(faturamentoMeias.get());
+        out.writeObject(faturamentoMeias3D.get());
+        out.writeObject(ingressosInteiras.get());
+        out.writeObject(ingressosInteiras3D.get());
+        out.writeObject(ingressosMeias.get());
+        out.writeObject(ingressosMeias3D.get());
+        out.writeObject(salas.get());
+        out.writeObject(filmes.get());
+        out.writeObject(sessoes.get());
+    }
 
     public void novaSala(Sala sala) {
-        salas.add(sala);
-        Collections.sort(salas);
+        salas.get().add(sala);
+        Collections.sort(salas.get());
     }
 
     public void removerSala(Sala sala) {
-        salas.remove(sala);
+        salas.get().remove(sala);
     }
 
     public void novoFilme(Filme filme) {
-        filmes.add(filme);
-        Collections.sort(filmes);
+        filmes.get().add(filme);
+        Collections.sort(filmes.get());
     }
 
     public void removerFilme(Filme filme) {
-        filmes.remove(filme);
+        filmes.get().remove(filme);
     }
 
     public void novaSessao(Sessao sessao) {
-        sessoes.add(sessao);
-        Collections.sort(sessoes);
+        sessoes.get().add(sessao);
+        Collections.sort(sessoes.get());
     }
 
     public void removerSessao(Sessao sessao) {
-        sessoes.remove(sessao);
+        sessoes.get().remove(sessao);
     }
 
     public boolean venderIngresso(Sessao sessao, char tipoIngresso, int poltrona){               
@@ -70,21 +104,21 @@ public class Cinema {
             if(sessao.getExibicao3D()) { //A sessão é 3D.
 
                 if(tipoIngresso == 'i') {
-                    ingressosInteiras3D++;
-                    faturamentoInteiras3D += sessao.getValorIngresso();
+                    ingressosInteiras3D.set(ingressosInteiras3D.get()+1);
+                    faturamentoInteiras.set(faturamentoInteiras3D.get() + sessao.getValorIngresso());
                 } else {
-                    ingressosMeias3D++;
-                    faturamentoMeias3D += sessao.getValorIngresso() / 2;
+                    ingressosMeias3D.set(ingressosMeias3D.get()+1);
+                    faturamentoMeias3D.set(faturamentoMeias3D.get() + sessao.getValorIngresso() / 2);
                 }
 
             } else {                       
 
                 if(tipoIngresso == 'i') {
-                    ingressosInteiras++;
-                    faturamentoInteiras += sessao.getValorIngresso();
+                    ingressosInteiras.set(ingressosInteiras.get()+1);
+                    faturamentoInteiras.set(faturamentoInteiras.get() + sessao.getValorIngresso());
                 } else {
-                    ingressosMeias++;
-                    faturamentoMeias += sessao.getValorIngresso() / 2;
+                    ingressosMeias.set(ingressosMeias.get()+1);
+                    faturamentoMeias.set(faturamentoMeias.get() + sessao.getValorIngresso() / 2);
                 }
             }
 
@@ -100,23 +134,24 @@ public class Cinema {
 
         if(sessao.liberarPoltrona(poltrona)) { //Poltrona liberada com sucesso.
 
-            if(sessao.getExibicao3D()) {    //A sessão é 3D.    
+            if(sessao.getExibicao3D()) { //A sessão é 3D.
 
                 if(tipoIngresso == 'i') {
-                    ingressosInteiras3D--;
-                    faturamentoInteiras3D -= sessao.getValorIngresso();
+                    ingressosInteiras3D.set(ingressosInteiras3D.get()-1);
+                    faturamentoInteiras.set(faturamentoInteiras3D.get() - sessao.getValorIngresso());
                 } else {
-                    ingressosMeias3D--;
-                    faturamentoMeias3D -= sessao.getValorIngresso() / 2;
+                    ingressosMeias3D.set(ingressosMeias3D.get()-1);
+                    faturamentoMeias3D.set(faturamentoMeias3D.get() - sessao.getValorIngresso() / 2);
                 }
 
-            } else {
+            } else {                       
+
                 if(tipoIngresso == 'i') {
-                    ingressosInteiras--;
-                    faturamentoInteiras -= sessao.getValorIngresso();
+                    ingressosInteiras.set(ingressosInteiras.get()-1);
+                    faturamentoInteiras.set(faturamentoInteiras.get() - sessao.getValorIngresso());
                 } else {
-                    ingressosMeias--;
-                    faturamentoMeias -= sessao.getValorIngresso() / 2;
+                    ingressosMeias.set(ingressosMeias.get()-1);
+                    faturamentoMeias.set(faturamentoMeias.get() - sessao.getValorIngresso() / 2);
                 }
             }
 
@@ -127,48 +162,82 @@ public class Cinema {
         return true;
     }
 
-    public double getFaturamentoInteiras(){
+    //getters properties
+    public SimpleDoubleProperty faturamentoInteirasProperty() {
         return faturamentoInteiras;
     }
 
-    public double getFaturamentoInteiras3D(){
+    public SimpleDoubleProperty faturamentoInteiras3DProperty() {
         return faturamentoInteiras3D;
     }
 
-    public double getFaturamentoMeias(){
+    public SimpleDoubleProperty faturamentoMeiasProperty() {
         return faturamentoMeias;
     }
 
-    public double getFaturamentoMeias3D(){
+    public SimpleDoubleProperty faturamentoMeias3DProperty() {
         return faturamentoMeias3D;
     }
 
-    public int getIngressosInteiras(){
+    public SimpleIntegerProperty ingressosInteirasProperty() {
         return ingressosInteiras;
     }
 
-    public int getIngressosInteiras3D(){
+    public SimpleIntegerProperty ingressosInteiras3DProperty() {
         return ingressosInteiras3D;
     }
 
-    public int getIngressosMeias(){
+    public SimpleIntegerProperty ingressosMeiasProperty() {
         return ingressosMeias;
     }
 
-    public int getIngressosMeias3D(){
+    public SimpleIntegerProperty ingressosMeias3DProperty() {
         return ingressosMeias3D;
     }
 
+    //getters values
+    public double getFaturamentoInteiras(){
+        return faturamentoInteiras.get();
+    }
+
+    public double getFaturamentoInteiras3D(){
+        return faturamentoInteiras3D.get();
+    }
+
+    public double getFaturamentoMeias(){
+        return faturamentoMeias.get();
+    }
+
+    public double getFaturamentoMeias3D(){
+        return faturamentoMeias3D.get();
+    }
+
+    public int getIngressosInteiras(){
+        return ingressosInteiras.get();
+    }
+
+    public int getIngressosInteiras3D(){
+        return ingressosInteiras3D.get();
+    }
+
+    public int getIngressosMeias(){
+        return ingressosMeias.get();
+    }
+
+    public int getIngressosMeias3D(){
+        return ingressosMeias3D.get();
+    }
+
     public ArrayList<Sala> getSalas(){
-        return salas;
+        return salas.get();
     }
 
     public ArrayList<Filme> getFilmes(){
-        return filmes;
+        return filmes.get();
     }
 
     public ArrayList<Sessao> getSessoes(){
-        return sessoes;
+        return sessoes.get();
     }
 
 }

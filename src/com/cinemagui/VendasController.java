@@ -34,7 +34,7 @@ import javafx.collections.ListChangeListener.Change;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class vendasController implements Initializable {
+public class VendasController implements Initializable {
 
 	@FXML
 	private Pane viewTableSessoes, paneSellTicket;

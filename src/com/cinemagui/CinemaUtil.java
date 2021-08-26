@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import javafx.stage.Modality;
 import javafx.scene.text.Font;
 import java.util.ArrayList;
@@ -20,15 +21,17 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.io.FileNotFoundException;
 import javafx.scene.control.Alert.AlertType;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import java.util.List;
+import java.lang.ClassNotFoundException;
 
 public class CinemaUtil extends Application{
 
 	private static Cinema cinema = new Cinema();
-
-	private static ArrayList<Object> data = new ArrayList<>();
+	
 	private static ObservableList<Sessao> sessoes = FXCollections.observableArrayList(); 
 	private static ObservableList<Filme> filmes = FXCollections.observableArrayList();
 	private static ObservableList<Sala> salas = FXCollections.observableArrayList();
@@ -41,6 +44,7 @@ public class CinemaUtil extends Application{
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
+		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
 		Parent rootNodeSceneMain = (Parent) loader.load();
 		SceneController controller = loader.getController();
@@ -106,65 +110,31 @@ public class CinemaUtil extends Application{
 	public static void saveData(Object item) {
 		if(item instanceof Sessao) {
 			sessoes.add( (Sessao) item);
-			System.out.println("Sessao add");
 		} else if(item instanceof Filme) {
 			filmes.add( (Filme) item);
-			System.out.println("Filme add");
 		} else {
 			salas.add( (Sala) item);
-			System.out.println("Sala add");
 		}
 	}
 
-	private static void serializeData() throws Exception{/*
-		FileWriter writerSessoes = new FileWriter("dataSessoes.json");
-		FileWriter writerFilmes = new FileWriter("dataFilmes.json");
-		FileWriter writerSalas = new FileWriter("dataSalas.json");
+	private static void serializeData() throws IOException {
 		
-		writerSessoes.write(gson.toJson(sessoes, new TypeToken<ObservableList<Sessao>>(){}.getType()));
-		writerFilmes.write(gson.toJson(filmes, new TypeToken<ObservableList<Filme>>(){}.getType()));
-		writerSalas.write(gson.toJson(salas, new TypeToken<ObservableList<Sala>>(){}.getType()));
-
-		writerSessoes.close();
-		writerFilmes.close();
-		writerSalas.close();*/
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data.ser"));
+		
+		out.writeObject(new ArrayList<Sessao>(sessoes));
+		out.writeObject(new ArrayList<Filme>(filmes));
+		out.writeObject(new ArrayList<Sala>(salas));
+	
 	}
 
-	private static void unserializeData() throws Exception {
-		/*
-		try {
-			FileReader readerSessoes = new FileReader("dataSessoes.json");
-			FileReader readerFilmes = new FileReader("dataFilmes.json");
-			FileReader readerSalas = new FileReader("dataSalas.json");
+	private static void unserializeData() throws IOException, ClassNotFoundException{
+		
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream("data.ser"));
+		
+		sessoes = FXCollections.observableArrayList( (ArrayList<Sessao>) in.readObject() );
+		filmes = FXCollections.observableArrayList( (ArrayList<Filme>) in.readObject() );
+		salas = FXCollections.observableArrayList( (ArrayList<Sala>) in.readObject()) ;
 			
-			String sessoesExtracted="";
-			while(readerFilmes.ready()) {
-				sessoesExtracted+=(char)readerFilmes.read();
-			}
-			ArrayList<Sessao> sessoesArrayList = gson.fromJson(sessoesExtracted, new TypeToken<ArrayList<Sessao>>(){}.getType());
-			sessoes = FXCollections.observableArrayList(sessoesArrayList);
-			
-			String filmesExtracted="";
-			while(readerFilmes.ready()) {
-				sessoesExtracted+=(char)readerFilmes.read();
-			}
-			ArrayList<Filme> filmessArrayList = gson.fromJson(filmesExtracted, new TypeToken<ArrayList<Filme>>(){}.getType());
-			filmes = FXCollections.observableArrayList(filmessArrayList);
-			
-			String salasExtracted="";
-			while(readerSalas.ready()) {
-				salasExtracted+=(char)readerSalas.read();
-			}
-			ArrayList<Sala> salasArrayList = gson.fromJson(salasExtracted, new TypeToken<ArrayList<Sala>>(){}.getType());
-			salas = FXCollections.observableArrayList(salasArrayList);
-			
-			readerSessoes.close();
-			readerFilmes.close();
-			readerSalas.close();
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}*/
 	}
 
 	public static ObservableList<Sessao> getSessoes() {
@@ -188,7 +158,7 @@ public class CinemaUtil extends Application{
 		Font.loadFont("resources/fonts/Montserrat-Black.ttf", 900);
 		try {
 			unserializeData();
-		} catch (java.io.FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.out.println("Serialized data not found!");
 		}
 		launch(args);

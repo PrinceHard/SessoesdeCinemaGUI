@@ -1,18 +1,22 @@
 package com.cinemagui;
 
-import java.io.Serializable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+
 public class Filme implements Comparable<Filme>, Serializable{ //implements Serializable
-	private final SimpleStringProperty titulo, tipoProducao;
-	private final SimpleIntegerProperty duracao;
-	private final SimpleObjectProperty<String[]> tipoAudio;
-	private final SimpleBooleanProperty permite3D;
-	private final SimpleBooleanProperty selected;
+	private SimpleStringProperty titulo, tipoProducao;
+	private SimpleIntegerProperty duracao;
+	private SimpleObjectProperty<String[]> tipoAudio;
+	private SimpleBooleanProperty permite3D;
+	private SimpleBooleanProperty selected;
 
 	public Filme(String titulo, int duracao, String tipoProducao, String[] tipoAudio, boolean permite3D) {
 		this.titulo = new SimpleStringProperty(titulo);
@@ -21,6 +25,26 @@ public class Filme implements Comparable<Filme>, Serializable{ //implements Seri
 		this.tipoAudio = new SimpleObjectProperty<String[]>(tipoAudio);
 		this.permite3D = new SimpleBooleanProperty(permite3D);
 		this.selected = new SimpleBooleanProperty(false);
+	}
+
+	//Ler objeto serializado.
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		this.titulo = new SimpleStringProperty( (String) in.readObject());
+		this.duracao = new SimpleIntegerProperty( (int) in.readObject());
+		this.tipoProducao = new SimpleStringProperty( (String) in.readObject());
+		this.tipoAudio = new SimpleObjectProperty<String[]>( (String[]) in.readObject());
+		this.permite3D = new SimpleBooleanProperty( (boolean) in.readObject());
+		this.selected = new SimpleBooleanProperty( (boolean) in.readObject());
+	}
+
+	//Serializar objeto
+	private void writeObject(ObjectOutputStream out) throws IOException{
+		out.writeObject(titulo.get());
+		out.writeObject(duracao.get());
+		out.writeObject(tipoProducao.get());
+		out.writeObject(tipoAudio.get());
+		out.writeObject(permite3D.get());
+		out.writeObject(selected.get());
 	}
 	
 	public SimpleStringProperty tituloProperty() {

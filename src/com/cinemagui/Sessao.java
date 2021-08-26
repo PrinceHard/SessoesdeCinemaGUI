@@ -1,23 +1,27 @@
 package com.cinemagui;
 
-import java.io.Serializable;
 import java.time.LocalTime;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+
 public class Sessao implements Comparable<Sessao>, Serializable{
-    private final SimpleObjectProperty<Filme> filme;
-    private final SimpleObjectProperty<Sala> sala;
-    private final SimpleObjectProperty<LocalTime> horarioInicial;
-    private final SimpleObjectProperty<LocalTime> horarioFinal;
-    private final SimpleDoubleProperty valorIngresso;
-    private final SimpleObjectProperty<char[]> poltronas; //l = livre; m = meia; i = inteira
-    private final SimpleBooleanProperty exibicao3D;
-    private final SimpleStringProperty tipoAudio;
-	private final SimpleDoubleProperty taxaOcupacao;
-	private final SimpleBooleanProperty selected;
+    private SimpleObjectProperty<Filme> filme;
+    private SimpleObjectProperty<Sala> sala;
+    private SimpleObjectProperty<LocalTime> horarioInicial;
+    private SimpleObjectProperty<LocalTime> horarioFinal;
+    private SimpleDoubleProperty valorIngresso;
+    private SimpleObjectProperty<char[]> poltronas; //l = livre; m = meia; i = inteira
+    private SimpleBooleanProperty exibicao3D;
+    private SimpleStringProperty tipoAudio;
+	private SimpleDoubleProperty taxaOcupacao;
+	private SimpleBooleanProperty selected;
 
     public Sessao(Filme filme, Sala sala, LocalTime horarioInicial, LocalTime horarioFinal, double valorIngresso, boolean exibicao3D, String tipoAudio){
         this.filme = new SimpleObjectProperty(filme);
@@ -34,6 +38,35 @@ public class Sessao implements Comparable<Sessao>, Serializable{
         for(int i=0; i < poltronas.get().length; i++) { //Inicializando todas as poltronas como livres.
             poltronas.get()[i] = 'l';
         }
+    }
+
+    //Ler objeto serializado.
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        this.filme = new SimpleObjectProperty( (Filme) in.readObject());
+        this.sala = new SimpleObjectProperty( (Sala) in.readObject());
+        this.horarioInicial = new SimpleObjectProperty( (LocalTime) in.readObject());
+        this.horarioFinal = new SimpleObjectProperty( (LocalTime) in.readObject());
+        this.valorIngresso = new SimpleDoubleProperty( (double) in.readObject());
+        this.poltronas = new SimpleObjectProperty( (char[]) in.readObject());
+        this.exibicao3D = new SimpleBooleanProperty( (boolean) in.readObject());
+        this.tipoAudio = new SimpleStringProperty( (String) in.readObject());
+        this.taxaOcupacao = new SimpleDoubleProperty( (double) in.readObject());
+        this.selected = new SimpleBooleanProperty( (boolean) in.readObject());
+    }
+
+    //Serializar objeto
+    private void writeObject(ObjectOutputStream out) throws IOException{
+        out.writeObject(filme.get());
+        out.writeObject(sala.get());
+        out.writeObject(horarioInicial.get());
+        out.writeObject(horarioFinal.get());
+        out.writeObject(valorIngresso.get());
+        out.writeObject(poltronas.get());
+        out.writeObject(exibicao3D.get());
+        out.writeObject(tipoAudio.get());
+        out.writeObject(taxaOcupacao.get());
+        out.writeObject(selected.get());
+
     }
 
     public boolean ocuparPoltrona(int poltrona, char tipoIngresso) {
