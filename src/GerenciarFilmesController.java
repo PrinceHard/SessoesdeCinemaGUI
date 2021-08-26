@@ -72,15 +72,20 @@ public class GerenciarFilmesController implements Initializable{
 	
 	private void factorys() {
 		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
+		selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+		
 		
 		titCol.setCellValueFactory(new PropertyValueFactory("titulo"));
 		titCol.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
-			
+		titCol.setEditable(false);
+
 		durCOl.setCellValueFactory(new PropertyValueFactory<>("duracao"));
 		durCOl.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+		durCOl.setEditable(false);
 
 		prodCol.setCellValueFactory(new PropertyValueFactory<>("tipoProducao"));
 		prodCol.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
+		prodCol.setEditable(false);
 
 		audioCol.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
 		audioCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String[]>(){
@@ -95,6 +100,7 @@ public class GerenciarFilmesController implements Initializable{
 				}
 		
 			}));
+		audioCol.setEditable(false);
 
 		exib3DCol.setCellValueFactory(new PropertyValueFactory<>("permite3D"));
 		exib3DCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
@@ -116,6 +122,7 @@ public class GerenciarFilmesController implements Initializable{
 				}
 			
 			}));
+		exib3DCol.setEditable(false);
 	}
 
 	private ObservableList<Filme> filmesList() {

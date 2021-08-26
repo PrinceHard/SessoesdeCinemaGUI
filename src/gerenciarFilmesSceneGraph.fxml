@@ -14,7 +14,7 @@
    <children>
       <Pane fx:id="paneViewFilmes" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0">
          <children>
-            <TableView fx:id="tableFilmes" editable="false" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
+            <TableView fx:id="tableFilmes" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
               <columns>
                 <TableColumn fx:id="selectCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" />
                 <TableColumn fx:id="titCol" prefWidth="391.33331298828125" text="TÍTULO" />

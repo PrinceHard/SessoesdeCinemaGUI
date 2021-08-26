@@ -70,9 +70,11 @@ public class GerenciarSessoesController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-			factorys();
-			sessoesTable.setItems(CinemaUtil.getSessoes());
-			sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
+
+		factorys();
+		sessoesTable.setItems(CinemaUtil.getSessoes());
+		sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
+
 	}	
 	
 	@FXML
@@ -403,7 +405,11 @@ public class GerenciarSessoesController implements Initializable{
 		choiceBoxFilmes.setConverter(new StringConverter<Filme>() {
 			@Override
 			public String toString(Filme filme) {
-				return filme.getTitulo();
+				if(!(filme==null)){
+					return filme.getTitulo();
+				} else {
+					return "Clique aqui para selecionar um filme...";
+				}
 			}
 			@Override
 			public Filme fromString(String string){
@@ -449,9 +455,12 @@ public class GerenciarSessoesController implements Initializable{
 		
 		choiceBoxSalas.getItems().addAll(CinemaUtil.getSalas());
 		choiceBoxSalas.setConverter(new StringConverter<Sala>() {
-			@Override
 			public String toString(Sala sala) {
-				return Integer.toString(sala.getNumSala());
+				if(!(sala==null)){
+					return Integer.toString(sala.getNumSala());
+				} else {
+					return "Clique aqui para selecionar uma sala...";
+				}
 			}
 			@Override
 			public Sala fromString(String string){
@@ -487,7 +496,8 @@ public class GerenciarSessoesController implements Initializable{
 					return filme;
 				}
 			}));
-			
+		filmeCol.setEditable(false);
+	
 		salaCol.setCellValueFactory(new PropertyValueFactory<>("sala"));
 		salaCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Sala>() {
 				@Override
@@ -506,15 +516,19 @@ public class GerenciarSessoesController implements Initializable{
 					return sala;
 				}
 			}));
-			
+		salaCol.setEditable(false);
+	
 		horaIniCol.setCellValueFactory(new PropertyValueFactory<>("horarioInicial"));
 		horaIniCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
-		
+		horaIniCol.setEditable(false);
+
 		horaFinCol.setCellValueFactory(new PropertyValueFactory<>("horarioFinal"));
 		horaIniCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
-		
+		horaIniCol.setEditable(false);
+
 		audioCol.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
-		
+		audioCol.setEditable(false);
+
 		exibicaoCol.setCellValueFactory(new PropertyValueFactory<>("exibicao3D"));
 		exibicaoCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
 				@Override
@@ -535,9 +549,11 @@ public class GerenciarSessoesController implements Initializable{
 				}
 			
 			}));
-			
+		exibicaoCol.setEditable(false);
+	
 		valorCol.setCellValueFactory(new PropertyValueFactory<>("valorIngresso"));
 		valorCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+		valorCol.setEditable(false);
 	}
 	
 
