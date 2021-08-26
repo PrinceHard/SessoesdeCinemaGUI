@@ -41,8 +41,6 @@ public class CinemaUtil extends Application{
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
-		File file = new File(".");
-		for(String fileNames : file.list()) System.out.println(fileNames);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
 		Parent rootNodeSceneMain = (Parent) loader.load();
 		SceneController controller = loader.getController();
