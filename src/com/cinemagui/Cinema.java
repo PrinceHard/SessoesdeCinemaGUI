@@ -1,107 +1,74 @@
 package com.cinemagui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 
-import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
 
-public class Cinema implements Serializable{
-    private SimpleDoubleProperty faturamentoInteiras;
-    private SimpleDoubleProperty faturamentoInteiras3D;
-    private SimpleDoubleProperty faturamentoMeias;
-    private SimpleDoubleProperty faturamentoMeias3D;
-    private SimpleIntegerProperty ingressosInteiras;
-    private SimpleIntegerProperty ingressosInteiras3D;
-    private SimpleIntegerProperty ingressosMeias; 
-    private SimpleIntegerProperty ingressosMeias3D;
-    private SimpleObjectProperty<ObservableList<Sala>> salas;
-    private SimpleObjectProperty<ObservableList<Filme>> filmes;
-    private SimpleObjectProperty<ObservableList<Sessao>> sessoes;
-	private SimpleStringProperty name;
+public class Cinema {
 
-    public Cinema(){
-        this.faturamentoInteiras = new SimpleDoubleProperty();
-        this.faturamentoInteiras3D = new SimpleDoubleProperty();
-        this.faturamentoMeias = new SimpleDoubleProperty();
-        this.faturamentoMeias3D = new SimpleDoubleProperty();
-        this.ingressosInteiras = new SimpleIntegerProperty();
-        this.ingressosInteiras3D = new SimpleIntegerProperty();
-        this.ingressosMeias = new SimpleIntegerProperty();
-        this.ingressosMeias3D = new SimpleIntegerProperty();
-        this.salas = new SimpleObjectProperty<>();
-        this.filmes = new SimpleObjectProperty<>();
-        this.sessoes = new SimpleObjectProperty<>();
-    }
+    /*
+     * Não existe a necessidade de instanciar objetos desta classe, 
+     * então todas as variáveis e quase todos os métodos serão estáticos.
+    */
 
-    //Ler objeto serializado.
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        this.faturamentoInteiras = new SimpleDoubleProperty( (double) in.readObject());
-        this.faturamentoInteiras3D = new SimpleDoubleProperty( (double) in.readObject());
-        this.faturamentoMeias = new SimpleDoubleProperty( (double) in.readObject());
-        this.faturamentoMeias3D = new SimpleDoubleProperty( (double) in.readObject());
-        this.ingressosInteiras = new SimpleIntegerProperty( (int) in.readObject());
-        this.ingressosInteiras3D = new SimpleIntegerProperty( (int) in.readObject());
-        this.ingressosMeias = new SimpleIntegerProperty( (int) in.readObject());
-        this.ingressosMeias3D = new SimpleIntegerProperty( (int) in.readObject());
-        this.salas = new SimpleObjectProperty<>( (ObservableList<Sala>) in.readObject());
-        this.filmes = new SimpleObjectProperty<>( (ObservableList<Filme>) in.readObject());
-        this.sessoes = new SimpleObjectProperty<>( (ObservableList<Sessao>) in.readObject());
-    }
+    private static SimpleStringProperty name = new SimpleStringProperty();
+    private static SimpleDoubleProperty faturamentoInteiras = new SimpleDoubleProperty();
+    private static SimpleDoubleProperty faturamentoInteiras3D = new SimpleDoubleProperty();
+    private static SimpleDoubleProperty faturamentoMeias = new SimpleDoubleProperty();
+    private static SimpleDoubleProperty faturamentoMeias3D = new SimpleDoubleProperty();
+    private static SimpleIntegerProperty ingressosInteiras = new SimpleIntegerProperty();
+    private static SimpleIntegerProperty ingressosInteiras3D = new SimpleIntegerProperty();
+    private static SimpleIntegerProperty ingressosMeias = new SimpleIntegerProperty();
+    private static SimpleIntegerProperty ingressosMeias3D = new SimpleIntegerProperty();
+    private static SimpleObjectProperty<ObservableList<Sala>> salas = new SimpleObjectProperty<ObservableList<Sala>>();
+    private static SimpleObjectProperty<ObservableList<Filme>> filmes = new SimpleObjectProperty<ObservableList<Filme>>();
+    private static SimpleObjectProperty<ObservableList<Sessao>> sessoes = new SimpleObjectProperty<ObservableList<Sessao>>();
 
-    //Serializar objeto
-    private void writeObject(ObjectOutputStream out) throws IOException{
-        out.writeObject(faturamentoInteiras.get());
-        out.writeObject(faturamentoInteiras3D.get());
-        out.writeObject(faturamentoMeias.get());
-        out.writeObject(faturamentoMeias3D.get());
-        out.writeObject(ingressosInteiras.get());
-        out.writeObject(ingressosInteiras3D.get());
-        out.writeObject(ingressosMeias.get());
-        out.writeObject(ingressosMeias3D.get());
-        out.writeObject(salas.get());
-        out.writeObject(filmes.get());
-        out.writeObject(sessoes.get());
-    }
-
-    public void novaSala(Sala sala) {
+    //Métodos para modificar as ObservableLists:
+    public static void addSala(Sala sala) {
         salas.get().add(sala);
-        Collections.sort(salas.get());
     }
 
-    public void removerSala(Sala sala) {
-        salas.get().remove(sala);
+    public static void removeSalas(List<Sala> oldSalas) {
+        salas.get().removeAll(oldSalas);
     }
 
-    public void novoFilme(Filme filme) {
+    public static void addFilme(Filme filme) {
         filmes.get().add(filme);
-        Collections.sort(filmes.get());
     }
 
-    public void removerFilme(Filme filme) {
-        filmes.get().remove(filme);
+    public static void removeFilmes(List<Filme> oldFilmes) {
+        filmes.get().removeAll(oldFilmes);
     }
 
-    public void novaSessao(Sessao sessao) {
+    public static void addSessao(Sessao sessao) {
         sessoes.get().add(sessao);
-        Collections.sort(sessoes.get());
     }
 
-    public void removerSessao(Sessao sessao) {
-        sessoes.get().remove(sessao);
+    public static void removeSessoes(List<Sessao> oldSessoes) {
+        sessoes.get().removeAll(oldSessoes);
     }
 
-    public boolean venderIngresso(Sessao sessao, char tipoIngresso, int poltrona){               
+    //Métodos de interação com os objetos do tipo Sessao:
+    public static boolean venderIngresso(Sessao sessao, char tipoIngresso, int poltrona){               
 
-        if(sessao.ocuparPoltrona(poltrona, tipoIngresso)) { //Poltrona ocupada com sucesso.
+        //Poltrona ocupada com sucesso.
+        if(sessao.ocuparPoltrona(poltrona, tipoIngresso)) { 
 
-            if(sessao.getExibicao3D()) { //A sessão é 3D.
+            //A sessão é 3D.
+            if(sessao.getExibicao3D()) { 
 
                 if(tipoIngresso == 'i') {
                     ingressosInteiras3D.set(ingressosInteiras3D.get()+1);
@@ -123,18 +90,25 @@ public class Cinema implements Serializable{
             }
 
         } else {
+
+            //Não foi possível vender o ingresso.
             return false;
         }
-        
+
+        //O ingresso foi vendido com sucesso.
         return true;
     }
 
-    public boolean cancelarVenda(Sessao sessao, int poltrona){
-        char tipoIngresso = sessao.getPoltronas()[poltrona]; //Salva o tipo de ingresso que será sobrescrito.
+    public static boolean cancelarVenda(Sessao sessao, int poltrona){
 
-        if(sessao.liberarPoltrona(poltrona)) { //Poltrona liberada com sucesso.
+        //Salva o tipo de ingresso que será sobrescrito.
+        char tipoIngresso = sessao.getPoltronas()[poltrona];
 
-            if(sessao.getExibicao3D()) { //A sessão é 3D.
+        //Poltrona liberada com sucesso.
+        if(sessao.liberarPoltrona(poltrona)) { 
+
+            //A sessão é 3D.
+            if(sessao.getExibicao3D()) { 
 
                 if(tipoIngresso == 'i') {
                     ingressosInteiras3D.set(ingressosInteiras3D.get()-1);
@@ -154,103 +128,148 @@ public class Cinema implements Serializable{
                     faturamentoMeias.set(faturamentoMeias.get() - sessao.getValorIngresso() / 2);
                 }
             }
-
         } else {
+
+            //Não foi possível cancelar a venda.
             return false;
         }
 
+        //A venda foi cancelada com sucesso.
         return true;
     }
 
-    //getters properties
-    public SimpleDoubleProperty faturamentoInteirasProperty() {
+    //Método para serializar os dados.
+    public static void serializeData() throws IOException{
+
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data.ser"));
+    
+        /*
+         * É necessário converter a ObservableList para ArrayList, pois a primeira não é
+         * serializável.
+         *
+         */
+
+        out.writeObject(new ArrayList<Sessao>(sessoes.get()));
+        out.writeObject(new ArrayList<Filme>(filmes.get()));
+        out.writeObject(new ArrayList<Sala>(salas.get()));
+    
+    }
+
+    //Método para deserializar os dados.
+    public static void unserializeData() throws ClassNotFoundException {
+        try {
+
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("data.ser"));
+        
+            sessoes.set(FXCollections.observableArrayList( (ArrayList<Sessao>) in.readObject() ));
+            filmes.set(FXCollections.observableArrayList( (ArrayList<Filme>) in.readObject() ));
+            salas.set(FXCollections.observableArrayList( (ArrayList<Sala>) in.readObject()) );
+
+        } catch (IOException e) {
+
+            System.out.println("Serialized file not found, aborting unserialization.");
+
+            /*
+             * Caso o programa não ache dados serializados, 
+             * ele instancia as variáveis com listas vazias.
+             *
+            */
+
+            sessoes.set(FXCollections.observableArrayList());
+            filmes.set(FXCollections.observableArrayList());
+            salas.set(FXCollections.observableArrayList());
+        }
+    }
+
+    //Getters das propriedas
+    public static SimpleDoubleProperty faturamentoInteirasProperty() {
         return faturamentoInteiras;
     }
 
-    public SimpleDoubleProperty faturamentoInteiras3DProperty() {
+    public static SimpleDoubleProperty faturamentoInteiras3DProperty() {
         return faturamentoInteiras3D;
     }
 
-    public SimpleDoubleProperty faturamentoMeiasProperty() {
+    public static SimpleDoubleProperty faturamentoMeiasProperty() {
         return faturamentoMeias;
     }
 
-    public SimpleDoubleProperty faturamentoMeias3DProperty() {
+    public static SimpleDoubleProperty faturamentoMeias3DProperty() {
         return faturamentoMeias3D;
     }
 
-    public SimpleIntegerProperty ingressosInteirasProperty() {
+    public static SimpleIntegerProperty ingressosInteirasProperty() {
         return ingressosInteiras;
     }
 
-    public SimpleIntegerProperty ingressosInteiras3DProperty() {
+    public static SimpleIntegerProperty ingressosInteiras3DProperty() {
         return ingressosInteiras3D;
     }
 
-    public SimpleIntegerProperty ingressosMeiasProperty() {
+    public static SimpleIntegerProperty ingressosMeiasProperty() {
         return ingressosMeias;
     }
 
-    public SimpleIntegerProperty ingressosMeias3DProperty() {
+    public static SimpleIntegerProperty ingressosMeias3DProperty() {
         return ingressosMeias3D;
     }
 	
-	public SimpleStringProperty nameProperty() {
+	public static SimpleStringProperty nameProperty() {
 		return name;
 	}
 
-    //getters values
-    public double getFaturamentoInteiras(){
+    //Getters dos valores
+    public static String getName() {
+        return name.get();
+    }
+    
+    public static double getFaturamentoInteiras(){
         return faturamentoInteiras.get();
     }
 
-    public double getFaturamentoInteiras3D(){
+    public static double getFaturamentoInteiras3D(){
         return faturamentoInteiras3D.get();
     }
 
-    public double getFaturamentoMeias(){
+    public static double getFaturamentoMeias(){
         return faturamentoMeias.get();
     }
 
-    public double getFaturamentoMeias3D(){
+    public static double getFaturamentoMeias3D(){
         return faturamentoMeias3D.get();
     }
 
-    public int getIngressosInteiras(){
+    public static int getIngressosInteiras(){
         return ingressosInteiras.get();
     }
 
-    public int getIngressosInteiras3D(){
+    public static int getIngressosInteiras3D(){
         return ingressosInteiras3D.get();
     }
 
-    public int getIngressosMeias(){
+    public static int getIngressosMeias(){
         return ingressosMeias.get();
     }
 
-    public int getIngressosMeias3D(){
+    public static int getIngressosMeias3D(){
         return ingressosMeias3D.get();
     }
 
-    public ObservableList<Sala> getSalas(){
+    public static ObservableList<Sala> getSalas(){
         return salas.get();
     }
 
-    public ObservableList<Filme> getFilmes(){
+    public static ObservableList<Filme> getFilmes(){
         return filmes.get();
     }
 
-    public ObservableList<Sessao> getSessoes(){
+    public static ObservableList<Sessao> getSessoes(){
         return sessoes.get();
     }
 	
-	public String getName() {
-		return name;
-	}
-	
-	//Setters
-	public void setName(String name) {
-		this.name.set(name);
+	//Setters dos valores
+	public static void setName(String nameCinema) {
+		name.set(nameCinema);
 	}
 
 }

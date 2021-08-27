@@ -50,7 +50,7 @@ public class GerenciarSalasController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 
 
-		if(!CinemaUtil.getSalas().isEmpty()) {
+		if(!Cinema.getSalas().isEmpty()) {
 			updateList();
 		} else {
 			salasTable.setPlaceholder(new Label("Nenhuma sala existente."));
@@ -82,7 +82,7 @@ public class GerenciarSalasController implements Initializable{
 	}
 
 	private ObservableList<Sala> salasList() {
-    	return FXCollections.observableArrayList(CinemaUtil.getSalas());
+    	return FXCollections.observableArrayList(Cinema.getSalas());
 	}
 
 	@FXML
@@ -94,7 +94,7 @@ public class GerenciarSalasController implements Initializable{
 	@FXML
 	private void openEditSala() {
 		int countSelect=0;
-		for(Sala sala : CinemaUtil.getSalas()){
+		for(Sala sala : Cinema.getSalas()){
 			if(sala.isSelected()){
 				countSelect+=1;
 				salaSelected = sala;
@@ -127,7 +127,7 @@ public class GerenciarSalasController implements Initializable{
 			numSala = Integer.parseInt(inputNumSala.getText());
 			capacidade = Integer.parseInt(inputCapacidade.getText());
 			
-			for(Sala sala : CinemaUtil.getSalas()){
+			for(Sala sala : Cinema.getSalas()){
 				if(sala.getNumSala() == numSala && sala != salaSelected){
 					Alert a = new Alert(AlertType.INFORMATION, "Sala já existente, defina outra!");
 					salaExiste=true;
@@ -169,7 +169,7 @@ public class GerenciarSalasController implements Initializable{
 			numSala = Integer.parseInt(inputNumSala.getText());
 			capacidade = Integer.parseInt(inputCapacidade.getText());
 			
-			for(Sala sala : CinemaUtil.getSalas()){
+			for(Sala sala : Cinema.getSalas()){
 				if(sala.getNumSala() == numSala){
 					Alert a = new Alert(AlertType.INFORMATION, "Sala já existente, defina outra!");
 					a.showAndWait();
@@ -180,7 +180,7 @@ public class GerenciarSalasController implements Initializable{
 
 			if(!salaExiste){
 				Sala sala = new Sala(numSala, capacidade);
-				CinemaUtil.saveData(sala);
+				Cinema.addSala(sala);
 				updateList();
 				cancelCreatingSala();
 			}
@@ -195,12 +195,12 @@ public class GerenciarSalasController implements Initializable{
 	@FXML
 	private void deleteSala() {
 		ObservableList<Sala> oldSalas = FXCollections.observableArrayList();
-		for (Sala sala : CinemaUtil.getSalas()) {
+		for (Sala sala : Cinema.getSalas()) {
 			if(sala.isSelected()) {
 				oldSalas.add(sala);
 			}
 		}
-		CinemaUtil.getSalas().removeAll(oldSalas);
+		Cinema.removeSalas(oldSalas);
 		updateList();
 	}
 

@@ -63,7 +63,7 @@ public class GerenciarFilmesController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		if(!CinemaUtil.getFilmes().isEmpty()) {
+		if(!Cinema.getFilmes().isEmpty()) {
 			updateList();
 		} else {
 			tableFilmes.setPlaceholder(new Label("Nenhum filme existente."));
@@ -127,7 +127,7 @@ public class GerenciarFilmesController implements Initializable{
 
 	private ObservableList<Filme> filmesList() {
 		
-    	return FXCollections.observableArrayList(CinemaUtil.getFilmes());
+    	return FXCollections.observableArrayList(Cinema.getFilmes());
 	}
 
 	@FXML
@@ -197,7 +197,7 @@ public class GerenciarFilmesController implements Initializable{
 				a.showAndWait();
 			}
 
-			for(Filme filme : CinemaUtil.getFilmes()){
+			for(Filme filme : Cinema.getFilmes()){
 				if(filme.getTitulo() == titulo){
 					a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro!");
 					filmeExiste=true;
@@ -208,7 +208,7 @@ public class GerenciarFilmesController implements Initializable{
 			String[] audioFinal = new String[tipoAudio.size()];
 			if(!filmeExiste){
 				Filme filme = new Filme(titulo, duracao, tipoProducao, tipoAudio.toArray(audioFinal), permite3D);
-				CinemaUtil.saveData(filme);
+				Cinema.addFilme(filme);
 				updateList();
 				cancelCreatingFilme();
 			}
@@ -223,12 +223,12 @@ public class GerenciarFilmesController implements Initializable{
 	@FXML
 	private void deleteFilme() {
 		ObservableList<Filme> oldFilmes = FXCollections.observableArrayList();
-		for (Filme filme : CinemaUtil.getFilmes()) {
+		for (Filme filme : Cinema.getFilmes()) {
 			if(filme.isSelected()) {
 				oldFilmes.add(filme);
 			}
 		}
-		CinemaUtil.getFilmes().removeAll(oldFilmes);
+		Cinema.removeFilmes(oldFilmes);
 		updateList();
 	}
 
@@ -298,7 +298,7 @@ public class GerenciarFilmesController implements Initializable{
 		
 		boolean filmeExiste=false;
 		try {
-			for(Filme filme : CinemaUtil.getFilmes()){
+			for(Filme filme : Cinema.getFilmes()){
 				if(filme.getTitulo() == inputTitulo.getText() && filmeSelect != filme){
 					a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro!");
 					filmeExiste=true;

@@ -9,11 +9,8 @@ import javafx.scene.Parent;
 import javafx.stage.Modality;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.io.IOException;
 import javafx.stage.StageStyle;
 
 public class SceneController implements Initializable{
@@ -40,19 +37,7 @@ public class SceneController implements Initializable{
 		stageVender.initModality(Modality.APPLICATION_MODAL);
 		stageCancelarVendas.initModality(Modality.APPLICATION_MODAL);;
 
-		FileReader readerFlagFirstOpen = null;
-		try {
-			readerFlagFirstOpen = new FileReader("flagFirstOpen.txt");
-			if((char) readerFlagFirstOpen.read() == '1') {
-				int character;
-				while((character = readerFlagFirstOpen.read()) != -1) {
-					cinemaLabel.setText(cinemaLabel.getText() + (char) character);
-				}
-				readerFlagFirstOpen.close();
-			}
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
+		cinemaLabel.set(Cinema.getName());
 	}	
 
 	@FXML
@@ -125,10 +110,6 @@ public class SceneController implements Initializable{
 		Scene sceneCancelarVendas = new Scene(nodeRootCancelarVendas);
 		stageCancelarVendas.setScene(sceneCancelarVendas);
 		stageCancelarVendas.showAndWait();
-	}
-
-	public void changeCinemaName(String name) {
-		cinemaLabel.setText(name);
 	}
 
 }
