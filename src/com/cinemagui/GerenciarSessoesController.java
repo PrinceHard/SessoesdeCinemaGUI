@@ -72,7 +72,7 @@ public class GerenciarSessoesController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 
 		factorys();
-		sessoesTable.setItems(CinemaUtil.getSessoes());
+		sessoesTable.setItems(Cinema.getSessoes());
 		sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
 
 	}	
@@ -89,7 +89,7 @@ public class GerenciarSessoesController implements Initializable{
 	private void openEditSessao(){
 		int countSelect=0;
 		Sessao sessaoSelected=null;
-		for(Sessao sessao : CinemaUtil.getSessoes()){
+		for(Sessao sessao : Cinema.getSessoes()){
 			if(sessao.isSelected()){
 				countSelect+=1;
 				sessaoSelected = sessao;
@@ -157,12 +157,12 @@ public class GerenciarSessoesController implements Initializable{
 	@FXML
 	private void deleteSessao(){
 		ObservableList<Sessao> oldSessoes = FXCollections.observableArrayList();
-		for (Sessao sessao : CinemaUtil.getSessoes()) {
+		for (Sessao sessao : Cinema.getSessoes()) {
 			if(sessao.isSelected()) {
 				oldSessoes.add(sessao);
 			}
 		}
-		CinemaUtil.getSessoes().removeAll(oldSessoes);
+		Cinema.getSessoes().removeAll(oldSessoes);
 	}
 	
 	@FXML
@@ -171,7 +171,7 @@ public class GerenciarSessoesController implements Initializable{
 		LocalTime horarioInicial;
 		
 		Sessao sessaoSelected=null;
-		for(Sessao sessao : CinemaUtil.getSessoes()){
+		for(Sessao sessao : Cinema.getSessoes()){
 			if(sessao.isSelected()){
 				sessaoSelected = sessao;
 				break;
@@ -263,7 +263,7 @@ public class GerenciarSessoesController implements Initializable{
 			Sessao sessao = new Sessao(filme, sala, horarioInicial, horarioFinal, 
 									   valorIngresso, exibicao3D, tipoAudio);
 			
-			CinemaUtil.saveData(sessao);
+			Cinema.addSessao(sessao);
 			closeCreatingSessao();
 			
 		} else {
@@ -304,7 +304,7 @@ public class GerenciarSessoesController implements Initializable{
         }*/
 
 		//Verifica o horário que está sendo criado com todos os horários já definidos.
-		for (Sessao sessaoExistente : CinemaUtil.getSessoes()) {
+		for (Sessao sessaoExistente : Cinema.getSessoes()) {
 			//Se as verificações anteriores acharem um problema, o loop é desnecessário.
 			if(!valid) {
 				break;
@@ -414,7 +414,7 @@ public class GerenciarSessoesController implements Initializable{
 			@Override
 			public Filme fromString(String string){
 				Filme filme=null;
-				for(Filme filmeFound : CinemaUtil.getFilmes()) {
+				for(Filme filmeFound : Cinema.getFilmes()) {
 					if(filmeFound.getTitulo() == filme.getTitulo())  {
 						filme = filmeFound;
 						break;
@@ -451,9 +451,9 @@ public class GerenciarSessoesController implements Initializable{
 			}
 		};
 		choiceBoxFilmes.getSelectionModel().selectedItemProperty().addListener(filmeListener);
-		choiceBoxFilmes.getItems().addAll(CinemaUtil.getFilmes());
+		choiceBoxFilmes.getItems().addAll(Cinema.getFilmes());
 		
-		choiceBoxSalas.getItems().addAll(CinemaUtil.getSalas());
+		choiceBoxSalas.getItems().addAll(Cinema.getSalas());
 		choiceBoxSalas.setConverter(new StringConverter<Sala>() {
 			public String toString(Sala sala) {
 				if(!(sala==null)){
@@ -465,7 +465,7 @@ public class GerenciarSessoesController implements Initializable{
 			@Override
 			public Sala fromString(String string){
 				Sala sala=null;
-				for(Sala salaFound : CinemaUtil.getSalas()) {
+				for(Sala salaFound : Cinema.getSalas()) {
 					if(salaFound.getNumSala() == sala.getNumSala())  {
 						sala = salaFound;
 						break;
@@ -487,7 +487,7 @@ public class GerenciarSessoesController implements Initializable{
 				@Override
 				public Filme fromString(String string) {
 					Filme filme=null;
-					for(Filme filmeFound : CinemaUtil.getFilmes()) {
+					for(Filme filmeFound : Cinema.getFilmes()) {
 						if(filmeFound.getTitulo() == string){
 							filme = filmeFound;
 							break;
@@ -507,7 +507,7 @@ public class GerenciarSessoesController implements Initializable{
 				@Override
 				public Sala fromString(String string) {
 					Sala sala=null;
-					for(Sala salaFound : CinemaUtil.getSalas()) {
+					for(Sala salaFound : Cinema.getSalas()) {
 						if(Integer.toString(salaFound.getNumSala()) == string){
 							sala = salaFound;
 							break;

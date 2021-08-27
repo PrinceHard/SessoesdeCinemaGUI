@@ -66,7 +66,7 @@ public class VendasController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		factorys();
-		sessoesTable.setItems(CinemaUtil.getSessoes());
+		sessoesTable.setItems(Cinema.getSessoes());
 		sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
 	}
 	
@@ -75,7 +75,7 @@ public class VendasController implements Initializable {
 		Alert a;
 		int countSelect=0;
 		Sessao sessaoSelected = null;
-		for (Sessao sessao : CinemaUtil.getSessoes()) {
+		for (Sessao sessao : Cinema.getSessoes()) {
 			if(sessao.isSelected()) {
 				countSelect += 1;
 				sessaoSelected = sessao;
@@ -111,7 +111,7 @@ public class VendasController implements Initializable {
 	private void vender() {
 		Alert a;
 		Sessao sessaoSelected = null;
-		for (Sessao sessao : CinemaUtil.getSessoes()) {
+		for (Sessao sessao : Cinema.getSessoes()) {
 			if(sessao.isSelected()) {
 				sessaoSelected = sessao;
 				break;
@@ -127,7 +127,7 @@ public class VendasController implements Initializable {
 
 		if (verifyInputs()) {
 
-			if (CinemaUtil.getCinema().venderIngresso(sessaoSelected, tipoIngresso, Integer.parseInt(inputPoltrona.getText()))) {
+			if (Cinema.venderIngresso(sessaoSelected, tipoIngresso, Integer.parseInt(inputPoltrona.getText()))) {
 				a = new Alert(AlertType.INFORMATION, "Ingresso vendido com sucesso!");
 				a.showAndWait();
 
@@ -181,7 +181,7 @@ public class VendasController implements Initializable {
 				@Override
 				public Filme fromString(String string) {
 					Filme filme=null;
-					for(Filme filmeFound : CinemaUtil.getFilmes()) {
+					for(Filme filmeFound : Cinema.getFilmes()) {
 						if(filmeFound.getTitulo() == string){
 							filme = filmeFound;
 							break;
@@ -201,7 +201,7 @@ public class VendasController implements Initializable {
 				@Override
 				public Sala fromString(String string) {
 					Sala sala=null;
-					for(Sala salaFound : CinemaUtil.getSalas()) {
+					for(Sala salaFound : Cinema.getSalas()) {
 						if(Integer.toString(salaFound.getNumSala()) == string){
 							sala = salaFound;
 							break;

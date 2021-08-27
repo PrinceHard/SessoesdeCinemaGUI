@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 
-public class Filme implements Comparable<Filme>, Serializable{ //implements Serializable
+public class Filme implements Comparable<Filme>, Serializable{
 	private SimpleStringProperty titulo, tipoProducao;
 	private SimpleIntegerProperty duracao;
 	private SimpleObjectProperty<String[]> tipoAudio;
