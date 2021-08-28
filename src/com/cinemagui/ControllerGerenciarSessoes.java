@@ -4,129 +4,152 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-import java.time.LocalTime;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
-import java.time.LocalTime;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.CheckBox;
-import javafx.util.converter.LocalTimeStringConverter;
-import javafx.scene.layout.Pane;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.control.CheckBox;
+import javafx.scene.layout.Pane;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.StringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
+
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+
+import java.util.ResourceBundle;
+
+import java.net.URL;
+
+/*
+ * A interface Initializable possui o método "initialize()" que é chamado quando
+ * o arquivo FXML (que possui essa classe como controlador) for carregado.
+*/
 
 public class GerenciarSessoesController implements Initializable{
 	
-	@FXML
-	private TextField inputHora, inputMinuto, inputValorIngresso;	
-	
-	@FXML
-	private ChoiceBox<Filme> choiceBoxFilmes;
-	@FXML
-	private ChoiceBox<Sala> choiceBoxSalas;
-	@FXML
-	private Button buttonEdit, buttonCreate;
-	@FXML
-	private CheckBox audioLegendado, audioOriginal, audioDublado, exib3D, exib2D;
-	
-	@FXML
-	private Pane viewTableSessoes, paneCreatingSessao;
+	//Inputs para coletar a hora e o valor do inresso.
+	@FXML private TextField inputHora, inputMinuto, inputValorIngresso;	
 
-	@FXML
-	private TableView<Sessao> sessoesTable;
-	@FXML
-	private TableColumn<Sessao, Filme> filmeCol;
-	@FXML
-	private TableColumn<Sessao, Sala> salaCol;
-	@FXML
-	private TableColumn<Sessao, LocalTime> horaIniCol, horaFinCol;
-	@FXML
-	private TableColumn<Sessao, String> audioCol;
-	@FXML
-	private TableColumn<Sessao, Double> valorCol;
-	@FXML
-	private TableColumn<Sessao, Boolean> exibicaoCol;
-	@FXML
-	private TableColumn<Sessao, Boolean> selectCol;
+	//ChoiceBoxes para coletar o filme e a sala.
+	@FXML private ChoiceBox<Filme> choiceFilmes;
+	@FXML private ChoiceBox<Sala> choiceSalas;
+
+	//CheckBoxes para coletar o tipo de áudio e o tipo de exibição.
+	@FXML private CheckBox checkAudioLegendado, checkAudioOriginal, checkAudioDublado, 
+	@FXML private CheckBox checkExibicao3D, checkExibicao2D;
+
+	//Botões para criar ou editar os filmes.
+	@FXML private Button buttonEdit, buttonCreate;
+	
+	//Painel para visualizar as sessões e painel para criar/editar as sessões.
+	@FXML private Pane paneViewSessoes, paneCreateSessao;
+
+	//Tabela para visualizar as sessões.
+	@FXML private TableView<Sessao> sessoesTable;
+
+	//Colunas da tabela
+	@FXML private TableColumn<Sessao, Boolean> colSelect;
+	@FXML private TableColumn<Sessao, Filme> colFilme;
+	@FXML private TableColumn<Sessao, Sala> colSala;
+	@FXML private TableColumn<Sessao, LocalTime> colHorarioInicial, colHorarioFinal;
+	@FXML private TableColumn<Sessao, String> colTipoAudio;
+	@FXML private TableColumn<Sessao, Double> colValorIngresso;
+	@FXML private TableColumn<Sessao, Boolean> colTipoExibicao;	
+
+	//Variável para armazenar a sessão que será editado
+	private Sessao sessaoSelected = null;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		System.out.println(location);
+		System.out.println(resources);
 
+		//Inicializa as fábricas de células.
 		factorys();
+
+		//Define a lista de filmes para aparecer na tabelas.
 		sessoesTable.setItems(Cinema.getSessoes());
+
+		//Caso a lista esteja vazia, a mensagem abaixo irá aparecer.
 		sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
 
 	}	
 	
 	@FXML
-	private void openNewSessao() {
-		viewTableSessoes.setVisible(false);
-		paneCreatingSessao.setVisible(true);
-		buttonCreate.setVisible(true);
-		buttonEdit.setVisible(false);
+	private void openCreatePane() {
+
+		//Para de renderizar o painel de visualização dos filmes.
+		paneViewSessoes.setVisible(false);
+
+		//Renderiza o painel de criação de filmes.
+		paneCreateSessao.setVisible(true);
+
 	}
 	
 	@FXML
 	private void openEditSessao(){
+
+		//Verificar se o usuário selecionou apenas 1 sessao.
 		int countSelect=0;
 		Sessao sessaoSelected=null;
 		for(Sessao sessao : Cinema.getSessoes()){
+
 			if(sessao.isSelected()){
-				countSelect+=1;
+				countSelect += 1;
 				sessaoSelected = sessao;
 			}
 		}
 		
 		if(countSelect == 1) {
-			viewTableSessoes.setVisible(false);
-			paneCreatingSessao.setVisible(true);
+
+			//Para de renderizar o botão de criar sessão (botão do painel de criação).
 			buttonCreate.setVisible(false);
+
+			//Renderiza o botão de editar sessão (botão do painel de criação).
 			buttonEdit.setVisible(true);
-			
-			choiceBoxFilmes.setValue(sessaoSelected.getFilme());
-			choiceBoxSalas.setValue(sessaoSelected.getSala());
+
+			//Abre o painel de criar filme.
+			openCreatePane();
+
+			//Preenche os inputs com as informações da sessão que o usuário escolheu.
 			String[] horario = sessaoSelected.getHorarioInicial().toString().split(":");
 			inputHora.setText(horario[0]);
 			inputMinuto.setText(horario[1]);
 			inputValorIngresso.setText(Double.toString(sessaoSelected.getValorIngresso()));
+
+			//Preenche os ChoiceBoxes com as informações da sessão que o usuário escolheu.
+			choiceFilmes.setValue(sessaoSelected.getFilme());
+			choiceSalas.setValue(sessaoSelected.getSala());
 			
+			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
 			switch(sessaoSelected.getTipoAudio()) {
 				case "Legendado":
-					audioLegendado.setSelected(true);
+					checkAudioLegendado.setSelected(true);
 				case "Dublado":
-					audioDublado.setSelected(true);
+					checkAudioDublado.setSelected(true);
 				case "Original":
-					audioOriginal.setSelected(true);
+					checkAudioOriginal.setSelected(true);
 			}
 			
+			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
 			if(sessaoSelected.getFilme().getPermite3D()){
-				exib3D.setVisible(true);
-				exib2D.setVisible(true);
+				checkExibicao3D.setVisible(true);
+				checkExibicao2D.setVisible(true);
+
 				if(sessaoSelected.getExibicao3D()) {
-					exib3D.setSelected(true);
-					exib2D.setSelected(false);
+					checkExibicao3D.setSelected(true);
+					checkExibicao2D.setSelected(false);
 				} else {
-					exib3D.setSelected(true);
-					exib2D.setSelected(false);
+					checkExibicao3D.setSelected(true);
+					checkExibicao2D.setSelected(false);
 				}
 			}
 			
@@ -142,54 +165,93 @@ public class GerenciarSessoesController implements Initializable{
 	
 	@FXML
 	private void closeCreatingSessao(){
-		viewTableSessoes.setVisible(true);
-		paneCreatingSessao.setVisible(false);
+
+		//Limpa os inputs e os CheckBoxes		
 		inputHora.setText("");
 		inputMinuto.setText("");
 		inputValorIngresso.setText("");
-		audioLegendado.setSelected(false);
-		audioOriginal.setSelected(false);
-		audioDublado.setSelected(false);
-		exib3D.setSelected(false);
-		exib2D.setSelected(false);
+		checkAudioLegendado.setSelected(false);
+		checkAudioDublado.setSelected(false);
+		checkAudioOriginal.setSelected(false);
+		checkExibicao3D.setSelected(false);
+		checkExibicao2D.setSelected(false);
+
+		//Para de renderizar o painel de visualização das salas.
+		paneCreateSessao.setVisible(false);
+
+		//Renderiza o painel de criação de salas.
+		paneViewSessoes.setVisible(true);
+		
 	}
-	
+
 	@FXML
-	private void deleteSessao(){
-		ObservableList<Sessao> oldSessoes = FXCollections.observableArrayList();
-		for (Sessao sessao : Cinema.getSessoes()) {
-			if(sessao.isSelected()) {
-				oldSessoes.add(sessao);
+	private void createSessao() {
+
+		//Variáveis temporárias
+		Filme filme;
+		Sala sala;
+		LocalTime horarioInicial;
+		LocalTime horarioFinal;
+		double valorIngresso;
+		boolean exibicao3D = false;
+		String tipoAudio = "Original";
+		
+		
+		if(verifyInputs() && verifyTime(true, null)) {
+			
+			//Coleta os dados e armazena em variáveis temporárias
+			filme = choiceBoxFilmes.getValue();
+			
+			sala = choiceBoxSalas.getValue();
+			
+			horarioInicial = LocalTime.of(Integer.parseInt(inputHora.getText()), 
+										  Integer.parseInt(inputMinuto.getText()));			  
+										  
+			horarioFinal = LocalTime.ofSecondOfDay(horarioInicial.toSecondOfDay() + 
+												   choiceBoxFilmes.getValue().getDuracao() * 60);	
+												   
+			valorIngresso = Double.parseDouble(inputValorIngresso.getText());
+			
+			if (audioLegendado.isSelected()) {
+				tipoAudio = "Legendado";
+			} else if (audioDublado.isSelected()) {
+				tipoAudio = "Dublado";
 			}
+			
+			if(exib3D.isSelected()) {
+				exibicao3D = true;
+			}
+			
+			//Cria o sessão
+			Sessao sessao = new Sessao(filme, sala, horarioInicial, horarioFinal, 
+									   valorIngresso, exibicao3D, tipoAudio);
+			
+			//Adiciona o sessão na lista.
+			Cinema.addSessao(sessao);
+
+			//Fecha o painel de criação
+			closeCreateSessao();
+			
 		}
-		Cinema.getSessoes().removeAll(oldSessoes);
+
 	}
-	
+
 	@FXML
 	private void editSessao() {
-		Alert a;
-		LocalTime horarioInicial;
 		
-		Sessao sessaoSelected=null;
-		for(Sessao sessao : Cinema.getSessoes()){
-			if(sessao.isSelected()){
-				sessaoSelected = sessao;
-				break;
-			}
-		}
-		
-		if(verifyInputs() && verifyTime(false, sessaoSelected)) {
+		if(verifyInputs() && verifyTime) {
 			
-			sessaoSelected.setFilme(choiceBoxFilmes.getValue());
+			//Modifica os atributos da Sala selecionada.
+			sessaoSelected.setFilme(choiceFilmes.getValue());
 			
-			sessaoSelected.setSala(choiceBoxSalas.getValue());
+			sessaoSelected.setSala(choiceSalas.getValue());
 			
 			
 			sessaoSelected.setHorarioInicial(LocalTime.of(Integer.parseInt(inputHora.getText()), 
 														  Integer.parseInt(inputMinuto.getText())));			  
 										  
 			sessaoSelected.setHorarioFinal(LocalTime.ofSecondOfDay(sessaoSelected.getHorarioInicial().toSecondOfDay() + 
-												                   choiceBoxFilmes.getValue().getDuracao() * 60));	
+												                   choiceFilmes.getValue().getDuracao() * 60));	
 												   
 			sessaoSelected.setValorIngresso(Double.parseDouble(inputValorIngresso.getText()));
 			
@@ -207,76 +269,97 @@ public class GerenciarSessoesController implements Initializable{
 				sessaoSelected.setExibicao3D(false);
 			}
 			
-			closeCreatingSessao();
+			//Para de renderizar o botão de criar sessão (botão do painel de criação).
+			buttonCreate.setVisible(false);
+
+			//Renderiza o botão de editar sessão (botão do painel de criação).
+			buttonEdit.setVisible(true);
+
+			//Fecha o painel de criação
+			closeCreatePane();
 			
-		} else {
-			String verif1 = "Por favor, verifique se: \n" +
-							"1 - Nenhum campo ficou vazio ou desmarcado; \n" +
-							"2 - Você digitou apenas números nos campos 'valor do ingresso', 'hora', 'minuto'.";
-			a = new Alert(AlertType.INFORMATION, verif1);
-			a.showAndWait();
 		}
 	}
 	
-
-
 	@FXML
-	private void createSessao() {
-		Alert a;
-		Filme filme;
-		Sala sala;
-		LocalTime horarioInicial;
-		LocalTime horarioFinal;
-		double valorIngresso;
-		boolean exibicao3D;
-		String tipoAudio="";
-		
-		
-		if(verifyInputs() && verifyTime(true, null)) {
-			
-			filme = choiceBoxFilmes.getValue();
-			
-			sala = choiceBoxSalas.getValue();
-			
-			horarioInicial = LocalTime.of(Integer.parseInt(inputHora.getText()), 
-										  Integer.parseInt(inputMinuto.getText()));			  
-										  
-			horarioFinal = LocalTime.ofSecondOfDay(horarioInicial.toSecondOfDay() + 
-												   choiceBoxFilmes.getValue().getDuracao() * 60);	
-												   
-			valorIngresso = Double.parseDouble(inputValorIngresso.getText());
-			
-			if (audioLegendado.isSelected()) {
-				tipoAudio = "Legendado";
-			} else if (audioDublado.isSelected()) {
-				tipoAudio = "Dublado";
-			} else if (audioOriginal.isSelected()) {
-				tipoAudio = "Original";
+	private void deleteSessao(){
+
+		//Lista temporária para armazenar as sessões que serão removidas.
+		ArrayList<Sessao> oldSessoes;
+
+		for (Sessao sessao : Cinema.getSessoes()) {
+
+			if(sessao.isSelected()) {
+				oldSessoes.add(sessao);
 			}
-			
-			if(exib3D.isSelected()) {
-				exibicao3D = true;
-			} else {
-				exibicao3D = false;
-			}
-			
-			Sessao sessao = new Sessao(filme, sala, horarioInicial, horarioFinal, 
-									   valorIngresso, exibicao3D, tipoAudio);
-			
-			Cinema.addSessao(sessao);
-			closeCreatingSessao();
-			
-		} else {
-			String verif1 = "Por favor, verifique se: \n" +
-							"1 - Nenhum campo ficou vazio ou desmarcado; \n" +
-							"2 - Você digitou apenas números nos campos 'valor do ingresso', 'hora', 'minuto'.";
-			a = new Alert(AlertType.INFORMATION, verif1);
-			a.showAndWait();
 		}
+
+		Cinema.removeSessoes(oldSessoes);
 	}
+
+	private boolean verifyInputs() {
+
+		 /*
+		 * Flag que será retornada.
+		 * Essa flag também será usada para evitar de fazer uma verificação quando outra já a invalidou.
+		*/
+		boolean valid = true;
+		
+		//Verifica se o usuário selecionou um filme e uma sala.
+		if(choiceFilmes.getValue() == null || choiceSalas.getValue() == null) {
+			valid = false;
+		}
+		
+		//Verifica se os inputs estão vazios.
+		if(inputHora.getText().isEmpty() || inputMinuto.getText().isEmpty() || 
+			inputValorIngresso.getText().isEmpty() && valid) {
+			valid = false;
+		}
+
+		//Verifica se os inputs estão vazios
+		if(inputHora.getText().isEmpty() || inputMinuto.getText().isEmpty() || 
+			inputValorIngresso.getText().isEmpty() && valid) {
+			valid = false;
+		}
+		
+		//Verifica se a hora pode ser convertida para inteiro e se o valor pode ser convertido para double.
+		if (valid) {
+			try {
+
+				int hora = Integer.parseInt(inputHora.getText());
+				int minuto = Integer.parseInt(inputMinuto.getText());
+				double valor = Double.parseDouble(inputValorIngresso.getText());
+
+			} catch (NumberFormatException e) {
+				valid = false;
+			}
+		}
+		
+		/*
+		 * Primeiro verifica se os checkboxes estão visiveis.
+		 * Depois verifica se o usuário selecionou pelo menos 1.
+		*/
+		if((checkAudioLegendado.isVisible() || checkAudioDublado.isVisible() || checkAudioOriginal.isVisible()) &&
+		  !(checkAudioLegendado.isSelected() || checkAudioDublado.isSelected() || checkAudioOriginal.isSelected()) && valid) {
+			valid = false;
+		}
+		
+		/*
+		 * Primeiro verifica se os checkboxes estão visiveis.
+		 * Depois verifica se o usuário selecionou pelo menos 1.
+		*/
+		if((checkExibicao3D.isVisible()) && !(checkExibicao3D.isSelected() || checkExibicao2D.isSelected()) && valid) {
+			valid = false;
+		}
+
+		if(valid)
+		return valid;
+	}	
 	
 	private boolean verifyTime(boolean criando, Sessao sessao) {
-		Alert a;
+
+		//Flag que será retornada.
+		//Essa flag também será usada para evitar de fazer uma verificação quando outra já a invalidou.
 		boolean valid=true;
 		
 		//Esse recurso também é utilizado para modificar sessão.
@@ -296,12 +379,12 @@ public class GerenciarSessoesController implements Initializable{
 		} else {
 			horarioFinal = LocalTime.ofSecondOfDay(horarioInicial.toSecondOfDay() + choiceBoxFilmes.getValue().getDuracao() * 60);
 		}
-		/*
+		
 		if(horarioInicial.toSecondOfDay() < LocalTime.now().toSecondOfDay()) {
             a = new Alert(AlertType.INFORMATION, "\nAinda não podemos voltar no tempo. Por favor, defina um horário depois das " + 
 												 LocalTime.now());
             valid = false;
-        }*/
+        }
 
 		//Verifica o horário que está sendo criado com todos os horários já definidos.
 		for (Sessao sessaoExistente : Cinema.getSessoes()) {
@@ -354,50 +437,6 @@ public class GerenciarSessoesController implements Initializable{
 		}
 		
 		return valid;
-	}
-	
-	private boolean verifyInputs() {
-		boolean validInputs=true;
-		
-		//Nenhum filme ou sala foi escolhido
-		if(choiceBoxFilmes.getValue() == null || choiceBoxSalas.getValue() == null) {
-			validInputs = false;
-		}
-		
-		//inputs estão vazios
-		if(inputHora.getText().isEmpty() || inputMinuto.getText().isEmpty() || inputValorIngresso.getText().isEmpty()) {
-			validInputs = false;
-		}
-		
-		//Verifica se os inputs são, de fato, int ou double.
-		try {
-			int hora = Integer.parseInt(inputHora.getText());
-			int minuto = Integer.parseInt(inputMinuto.getText());
-			double valor = Double.parseDouble(inputValorIngresso.getText());
-		} catch (NumberFormatException e) {
-			validInputs = false;
-		}
-		
-		//Checkboxes disponíveis.
-		if((audioLegendado.isVisible() || audioDublado.isVisible() || audioOriginal.isVisible()) &&
-		  //Uusário não selecionou nenhuma opção.
-		  !(audioLegendado.isSelected() || audioDublado.isSelected() || audioOriginal.isSelected())) {
-			validInputs = false;
-		}
-		
-		//Checkboxes disponíveis.
-		if((exib3D.isVisible() || exib3D.isVisible()) && 
-		  //Uusário não selecionou nenhuma opção.
-		  !(exib3D.isSelected() || exib3D.isSelected())) {
-			validInputs = false;
-		}
-		
-		//inputs estão vazios
-		if(inputHora.getText().isEmpty() || inputMinuto.getText().isEmpty() || inputValorIngresso.getText().isEmpty()) {
-			validInputs = false;
-		}
-		
-		return validInputs;
 	}
 	
 	

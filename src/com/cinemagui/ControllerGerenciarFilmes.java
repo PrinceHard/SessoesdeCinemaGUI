@@ -51,10 +51,14 @@ public class GerenciarFilmesController implements Initializable{
 
 	//Colunas da tabela
 	@FXML private TableColumn<Filme, Boolean> colSelect;
-	@FXML private TableColumn<Filme, String> colTitulo, colTipoProducao;
+	@FXML private TableColumn<Filme, String> colTitulo;
 	@FXML private TableColumn<Filme, Integer> colDuracao;
+	@FXML private TableColumn<Filme, String> colTipoProducao;
 	@FXML private TableColumn<Filme, String[]> colTipoAudio;
 	@FXML private TableColumn<Filme, Boolean> colTipoExibicao;
+
+	//Variável para armazenar o filme que será editado
+	private Filme filmeSelected = null;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -120,16 +124,13 @@ public class GerenciarFilmesController implements Initializable{
 			}
 			
 			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
-			for(String string : filmeSelect.getTipoAudio()){
-				if(string.equals("Dublado")) {
+			switch (filmeSelect.getTipoAudio()) {
+				case "Dublado":
 					audioDublado.setSelected(true);
-				}
-				if(string.equals("Legendado")) {
+				case "Legendado":
 					audioLegendado.setSelected(true);
-				}
-				if(string.equals("Original")) {
+				case "Original":
 					audioOriginal.setSelected(true);
-				}
 			}
 			
 			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
@@ -152,19 +153,169 @@ public class GerenciarFilmesController implements Initializable{
 		//Limpa os inputs e os CheckBoxes
 		inputTitulo.setText("");
 		inputDuracao.setText("");
-		prodNac.setSelected(false);
-		prodEst.setSelected(false);
-		audioOriginal.setSelected(false);
-		audioLegendado.setSelected(false);
-		audioDublado.setSelected(false);
-		sim3D.setSelected(false);
-		nao3D.setSelected(false);
+		checkProdEstrangeira.setSelected(false);
+		checkProdNacional.setSelected(false);
+		checkAudioDublado.setSelected(false);
+		checkAudioLegendado.setSelected(false);
+		checkAudioOriginal.setSelected(false);
+		checkPermite3D.setSelected(false);
+		checkNaoPermite3D.setSelected(false);
+
+		//Para de renderizar o painel de visualização das salas.
+		paneCreateFilme.setVisible(false);
 
 		//Renderiza o painel de criação de salas.
 		paneViewFilmes.setVisible(true);
+		
+	}
 
-		//Para de renderizar o painel de visualização das salas.
-		paneCreatingFilme.setVisible(false);
+	@FXML
+	private void createFilme() {
+
+		//Variáveis temporárias
+		String titulo = "";
+		Strin tipoProducao = "";
+		ArrayList<String> tipoAudioTemporario = new ArrayList<>();;
+		int duracao;
+		boolean permite3D = false;
+
+		if(verifyInputs()) {
+
+			//Coleta os dados e armazena em variáveis temporárias
+			titulo = inputTitulo.getText();
+			duracao = Integer.parseInt(inputDuracao.getText());
+
+			if(prodNac.isSelected()){
+				tipoProducao = prodNac.getText();
+			} else if(prodEst.isSelected()){
+				tipoProducao = prodEst.getText();
+			}
+
+			if(audioOriginal.isSelected() ){
+				tipoAudioTemporario.add(audioOriginal.getText());
+			}
+			if(audioDublado.isSelected()){
+				tipoAudioTemporario.add(audioDublado.getText());
+			}
+			if(audioLegendado.isSelected()){
+				tipoAudioTemporario.add(audioLegendado.getText());
+			}
+
+			String[] tipoAudioFinal = new String[tipoAudioTemporario.size()];
+			tipoAudioTemporario.toArray(tipoAudioFinal);
+
+			if(sim3D.isSelected()){
+				permite3D = true;
+			}
+
+			//Cria o filme
+			Filme filme = new Filme(titulo, duracao, tipoProducao, audioFinal, permite3D);
+
+			//Adiciona o filme na lista.
+			Cinema.addFilme(filme);
+
+			//Fecha o painel de criação
+			closeCreatePane();
+		}
+
+	}
+
+	@FXML
+	private void editFilme() {
+
+		//Variáveis temporárias
+		ArrayList<String> tipoAudioTemporario = new ArrayList<>();
+		
+		if(verifyInputs()) {
+
+			//Modifica os atributos da Sala selecionada.
+			filmeSelected.setTitulo(inputTitulo.getText());
+			filmeSelected.setDuracao(Integer.parseInt(inputDuracao.getText()));
+
+			if(checkProdEstrangeira.isSelected()){
+				filmeSelected.setTipoProducao("Estrangeira");
+			} else {
+				filmeSelected.setTipoProducao("Nacional");
+			}
+
+			if(checkAudioOriginal.isSelected()){
+				tipoAudioTemporario.add(checkAudioOriginal.getText());
+			}
+			if(checkAudioDublado.isSelected()){
+				tipoAudioTemporario.add(checkAudioDublado.getText());
+			}
+			if(checkAudioLegendado.isSelected()){
+				tipoAudioTemporario.add(checkAudioLegendado.getText());
+			}
+
+			String[] tipoAudioFinal = new String[tipoAudioTemporario.size()];
+			filmeSelected.setTipoAudio(tipoAudioTemporario.toArray(tipoAudioFinal));
+
+			if(checkPermite3D.isSelected()){
+				filmeSelect.setPermite3D(true);
+			} else {
+				filmeSelect.setPermite3D(false);
+			}
+
+			//Para de renderizar o botão de criar sala (botão do painel de criação).
+			buttonCreate.setVisible(false);
+
+			//Renderiza o botão de editar sala (botão do painel de criação).
+			buttonEdit.setVisible(true);
+
+			//Fecha o painel de criação
+			closeCreatePane();
+		}
+
+	}
+	
+	@FXML
+	private void deleteFilme() {
+
+		//Lista temporária para armazenar os filmes e as sessões que serão removidas.
+		ArrayList<Sala> oldFilmes;
+		ArrayList<Sessao> oldSessoes;
+
+		//Flag para cancelar a exclusão.
+		boolean cancel = false;
+
+		for (Filme filme : Cinema.getFilmes()) {
+			if(filme.isSelected()) {
+
+				//Verifica se existem sessões que reproduzem este filme.
+				for(Sessao sessao : Cinema.getSessoes()) {
+
+					if (sessao.getFilme() == sala) {
+						Alert a = new Alert(AlertType.CONFIRMATION, "A sessão " + sessao.getFilme().getTitulo() + 
+																	" (" + sessao.getHorarioInicial() + ")" +  
+																	"reproduz este filme. Se continuar, a sessão será apagada.");
+
+						//Verifica se o usuário ainda deseja excluir.
+						a.showAndWait().ifPresent(response -> {
+							if(response != ButtonType.OK) {
+								cancel = true;
+								break;
+							}
+						});
+
+						oldSessoes.add(sessao);
+
+					}
+
+				}
+
+				if(cancel) {
+					break;
+				}
+
+				oldFilmes.add(filme);
+			}
+		}
+
+		if(!cancel) {
+			Cinema.removeSessoes(oldSessoes);
+			Cinema.removeFilmes(oldFilmes);			
+		}
 	}
 
 	private boolean verifyInputs() {
@@ -210,7 +361,7 @@ public class GerenciarFilmesController implements Initializable{
 
 		//Verifica se o filme já foi definido.
 		for(Filme filme : Cinema.getFilmes()){
-			if(filme.getTitulo().equals(inputTitulo.getText())){
+			if(filme.getTitulo().equals(inputTitulo.getText()) && filme != filmeSelected){
 				Alert a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro!");
 				valid = false;
 				break;
@@ -219,220 +370,94 @@ public class GerenciarFilmesController implements Initializable{
 
 	}
 
-	@FXML
-	private void createFilme() {
-
-		//Variáveis temporárias
-		String titulo="", tipoProducao="";
-		ArrayList<String> tipoAudioTemporario = new ArrayList<>();;
-		int duracao;
-		boolean permite3D = false;
-
-		if(verifyInputs()) {
-			titulo = inputTitulo.getText();
-			duracao = Integer.parseInt(inputDuracao.getText());
-
-			if(prodNac.isSelected()){
-				tipoProducao = prodNac.getText();
-			} else if(prodEst.isSelected()){
-				tipoProducao = prodEst.getText();
-			}
-
-			if(audioOriginal.isSelected() ){
-				tipoAudioTemporario.add(audioOriginal.getText());
-			}
-			if(audioDublado.isSelected()){
-				tipoAudioTemporario.add(audioDublado.getText());
-			}
-			if(audioLegendado.isSelected()){
-				tipoAudioTemporario.add(audioLegendado.getText());
-			}
-
-			String[] tipoAudioFinal = new String[tipoAudioTemporario.size()];
-			tipoAudioTemporario.toArray(tipoAudioFinal);
-
-			if(sim3D.isSelected()){
-				permite3D = true;
-			}
-
-			Filme filme = new Filme(titulo, duracao, tipoProducao, audioFinal, permite3D);
-			Cinema.addFilme(filme);
-			closeCreatePane();
-		}
-
-	}
-	
-	@FXML
-	private void deleteFilme() {
-		ObservableList<Filme> oldFilmes = FXCollections.observableArrayList();
-		for (Filme filme : Cinema.getFilmes()) {
-			if(filme.isSelected()) {
-				oldFilmes.add(filme);
-			}
-		}
-		Cinema.removeFilmes(oldFilmes);
-		updateList();
-	}
-
-	
-	
-	@FXML
-	private void editFilme() {
-		Filme filmeSelect=null;
-		for(Filme filme : filmesList()){
-			if(filme.isSelected()){
-				filmeSelect = filme;
-				break;
-			}
-		}
-
-		ArrayList<String> tipoAudio= new ArrayList<>();
-		
-		Alert a;
-		
-		boolean filmeExiste=false;
-		try {
-			for(Filme filme : Cinema.getFilmes()){
-				if(filme.getTitulo() == inputTitulo.getText() && filmeSelect != filme){
-					a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro!");
-					filmeExiste=true;
-					break;
-				}
-			}
-			
-			if(!filmeExiste){
-				
-				filmeSelect.setTitulo(inputTitulo.getText());
-				filmeSelect.setDuracao(Integer.parseInt(inputDuracao.getText()));
-				
-				if(prodNac.isSelected()){
-					filmeSelect.setTipoProducao(prodNac.getText());
-				} else if(prodEst.isSelected()){
-					filmeSelect.setTipoProducao(prodEst.getText());
-				} else {
-					a = new Alert(AlertType.INFORMATION, "Por favor, selecione um tipo de produção.");
-					a.showAndWait();
-				}
-			
-				if(audioOriginal.isSelected()){
-					tipoAudio.add(audioOriginal.getText());
-				}
-				if(audioDublado.isSelected()){
-					tipoAudio.add(audioDublado.getText());
-				}
-				if(audioLegendado.isSelected()){
-					tipoAudio.add(audioLegendado.getText());
-				}
-				
-				if(tipoAudio.isEmpty()){
-					a = new Alert(AlertType.INFORMATION, "Por favor, selecione um (ou mais) tipo(s) de áudio.");
-					a.showAndWait();
-				}
-				
-				String[] audioFinal = new String[tipoAudio.size()];
-				filmeSelect.setTipoAudio(tipoAudio.toArray(audioFinal));
-
-				if(sim3D.isSelected()){
-					filmeSelect.setPermite3D(true);
-				} else if(nao3D.isSelected()){
-					filmeSelect.setPermite3D(false);
-				} else {
-					a = new Alert(AlertType.INFORMATION, "Por favor, selecione se o filme permite exibição em 3D ou não");
-					a.showAndWait();
-				}
-
-				updateList();
-				cancelCreatingFilme();
-				buttonCreate.setVisible(true);
-				buttonEdit.setVisible(false);
-				
-			} else {
-				a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro título!");
-				a.showAndWait();
-			}
-			
-		} catch(Exception e) {
-			a = new Alert(AlertType.INFORMATION, "Ops! Algo deu errado, verifique os campos e tente novamente.");
-			a.showAndWait();
-		}	
-		
-		
-
-	}
-
-	@FXML
-	private void selectProdNac(){
-		if(prodEst.isSelected()){
-			prodEst.fire();
-			
-		}
-	}
-
-	@FXML
-	private void selectProdEst(){
-		if(prodNac.isSelected()){
-			prodNac.fire();
-		}
-	}
-
-	@FXML
-	private void selectSim3D(){
-		if(nao3D.isSelected()){
-			nao3D.fire();
-		}
-	}
-
-	@FXML
-	private void selectNao3D(){
-		if(sim3D.isSelected()){
-			sim3D.fire();
-		}
-	}
-
 	private void factorys() {
-		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
-		selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+
+		/*
+		 * O "CellValueFactory" é a fabrica que coleta as propriedades dos objetos da lista
+		 * que foi definida para "tableFilmes".
+		 *
+		 * O "CellFactory" é a fábrica que define como que os valores coletados na fábrica
+		 * anterior serão renderizados na tabela.
+		*/
+
+		//Chama o método "selectedProperty()" para cada Filme na lista.
+		colSelect.setCellValueFactory(new PropertyValueFactory<>("selected"));
+
+		/*
+		 * Renderiza uma CheckBox na célula. Quando o valor da propridedade for true, a
+		 * CheckBox será renderizada como selecionada.
+		*/
+		colSelect.setCellFactory(CheckBoxTableCell.forTableColumn(colSelect));
 		
-		
-		titCol.setCellValueFactory(new PropertyValueFactory("titulo"));
-		titCol.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
-		titCol.setEditable(false);
+		//Chama o método "tituloProperty()" para cada Sala na lista.
+		colTitulo.setCellValueFactory(new PropertyValueFactory("titulo"));
 
-		durCOl.setCellValueFactory(new PropertyValueFactory<>("duracao"));
-		durCOl.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-		durCOl.setEditable(false);
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colTitulo.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
 
-		prodCol.setCellValueFactory(new PropertyValueFactory<>("tipoProducao"));
-		prodCol.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
-		prodCol.setEditable(false);
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTitulo.setEditable(false);
 
-		audioCol.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
-		audioCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String[]>(){
+		//Chama o método "duracaoProperty()" para cada Sala na lista.
+		colDuracao.setCellValueFactory(new PropertyValueFactory<>("duracao"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colDuracao.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colDuracao.setEditable(false);
+
+		//Chama o método "tipoProducaoProperty()" para cada Sala na lista.
+		colTipoProducao.setCellValueFactory(new PropertyValueFactory<>("tipoProducao"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colTipoProducao.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTipoProducao.setEditable(false);
+
+		//Chama o método "tipoAudioProperty()" para cada Sala na lista.
+		colTipoAudio.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colTipoAudio.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String[]>(){
+
 				@Override
 				public String toString(String[] audios){
 					return Arrays.toString(audios).replace("[", " ").replace("]", " ");
 				}
+
 				@Override
 				public String[] fromString(String string){
+
 					String[] a = {string};
 					return a;
 				}
 		
 			}));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
 		audioCol.setEditable(false);
 
-		exib3DCol.setCellValueFactory(new PropertyValueFactory<>("permite3D"));
-		exib3DCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
+		//Chama o método "tipoExibicaoProperty()" para cada Sala na lista.
+		colTipoExibicao.setCellValueFactory(new PropertyValueFactory<>("permite3D"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colTipoExibicao.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
+
 				@Override
 				public String toString(Boolean perm3d) {
+
 					if(perm3d){
 						return "SIM";
 					} else {
 						return "NÃO";
 					}
 				}
+
 				@Override
 				public Boolean fromString(String string){
+
 					if(string.equals("SIM")){
 						return true;
 					} else {
@@ -441,7 +466,44 @@ public class GerenciarFilmesController implements Initializable{
 				}
 			
 			}));
-		exib3DCol.setEditable(false);
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTipoExibicao.setEditable(false);
+
+	}
+
+	/*
+	 * Para o tipo de exibição e o tipo de produção o usuário só pode selecionar
+	 * uma das CheckBoxes disponíveis. Os métodos abaixo servem para garantir isso.
+	*/
+	
+	@FXML
+	private void selectProdNac(){
+		if(checkProdEstrangeira.isSelected()){
+			checkProdEstrangeira.fire();
+			
+		}
+	}
+
+	@FXML
+	private void selectProdEst(){
+		if(checkProdNacional.isSelected()){
+			checkProdNacional.fire();
+		}
+	}
+
+	@FXML
+	private void selectPermite3D(){
+		if(checkNaoPermite3D.isSelected()){
+			checkNaoPermite3D.fire();
+		}
+	}
+
+	@FXML
+	private void selectNao3D(){
+		if(checkPermite3D.isSelected()){
+			checkPermite3D.fire();
+		}
 	}
 
 }

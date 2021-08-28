@@ -41,11 +41,11 @@ public class ControllerGerenciarSalas implements Initializable{
 	@FXML private TableView<Sala> tableSalas;
 	
 	//Colunas da tabela
-	@FXML private TableColumn<Sala, Integer> colNumSala, colCapacity;
 	@FXML private TableColumn<Sala, Boolean> colSelect;
+	@FXML private TableColumn<Sala, Integer> colNumSala, colCapacity;	
 	
 	//Sala selecionada para edição.
-	private Sala salaSelected=null;
+	private Sala salaSelected = null;
 
 	@Override
 
@@ -84,12 +84,9 @@ public class ControllerGerenciarSalas implements Initializable{
 		for(Sala sala : Cinema.getSalas()) {
 
 			if (sala.isSelected()) {
-
 				countSelect += 1;
 				salaSelected = sala;
-
 			}
-
 		}
 		
 		if(countSelect == 1) {
@@ -128,11 +125,11 @@ public class ControllerGerenciarSalas implements Initializable{
 		inputNumSala.setText("");
 		inputCapacidade.setText("");
 
-		//Renderiza o painel de criação de salas.
+		//Para de renderizar o painel de criação de salas.
 		paneCreateSala.setVisible(false);
 		
 
-		//Para de renderizar o painel de visualização das salas.
+		//Renderiza o painel de visualização das salas.
 		paneViewSalas.setVisible(true);
 
 	}
@@ -148,6 +145,7 @@ public class ControllerGerenciarSalas implements Initializable{
 
 		if(verifyInputs()) {
 
+			//Cria a sala
 			Sala sala = new Sala(Integer.parseInt(inputNumSala.getText()),
 						 		 Integer.parseInt(inputCapacidade.getText()));
 
@@ -185,47 +183,10 @@ public class ControllerGerenciarSalas implements Initializable{
 				
 	}
 
-	private boolean verifyInputs() {
-
-		//Flag que será retornada.
-		boolean valid = true;
-
-		try {
-
-			//Coleta o texto do input e converte em número.
-			numSala = Integer.parseInt(inputNumSala.getText());
-			capacidade = Integer.parseInt(inputCapacidade.getText());
-			
-			//Verifica se já existe uma sala com esse número.
-			for (Sala sala : Cinema.getSalas()) {
-
-				//A segunda verificação impede que a comparação seja feita com a própria sala.
-				if (sala.getNumSala() == numSala && sala != salaSelected) {
-
-					Alert a = new Alert(AlertType.INFORMATION, "Sala já existente, defina outra!");
-					a.showAndWait();
-
-					valid = false;
-					break;
-
-				}
-
-			}
-
-		} catch (Exception e) {
-
-			valid = false;
-
-		}
-
-		return valid;
-
-	}
-	
 	@FXML
 	private void deleteSalas() {
 
-		//Lista temporária para armazenar as salas que serão removidas.
+		//Lista temporária para armazenar as salas e as sessões que serão removidas.
 		ArrayList<Sala> oldSalas;
 		ArrayList<Sessao> oldSessoes;
 
@@ -274,6 +235,43 @@ public class ControllerGerenciarSalas implements Initializable{
 
 	}
 
+	private boolean verifyInputs() {
+
+		//Flag que será retornada.
+		boolean valid = true;
+
+		try {
+
+			//Coleta o texto do input e converte em número.
+			numSala = Integer.parseInt(inputNumSala.getText());
+			capacidade = Integer.parseInt(inputCapacidade.getText());
+			
+			//Verifica se já existe uma sala com esse número.
+			for (Sala sala : Cinema.getSalas()) {
+
+				//A segunda verificação impede que a comparação seja feita com a própria sala.
+				if (sala.getNumSala() == numSala && sala != salaSelected) {
+
+					Alert a = new Alert(AlertType.INFORMATION, "Sala já existente, defina outra!");
+					a.showAndWait();
+
+					valid = false;
+					break;
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			valid = false;
+
+		}
+
+		return valid;
+
+	}
+
 	private void factorys() {
 
 		/*
@@ -285,30 +283,30 @@ public class ControllerGerenciarSalas implements Initializable{
 		*/
 
 		//Chama o método "selectedProperty()" para cada Sala na lista.
-		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
+		colSelect.setCellValueFactory(new PropertyValueFactory<>("selected"));
 
 		/*
 		 * Renderiza uma CheckBox na célula. Quando o valor da propridedade for true, a
 		 * CheckBox será renderizada como selecionada marcada.
 		*/
-		selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+		colSelect.setCellFactory(CheckBoxTableCell.forTableColumn(colSelect));
 		
 		//Chama o método "numSalaProperty()" para cada Sala na lista.
-		numCol.setCellValueFactory(new PropertyValueFactory<>("numSala"));
+		colNumSala.setCellValueFactory(new PropertyValueFactory<>("numSala"));
 
 		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
-		numCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+		colNumSala.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
 		//Não permite que o usuário edite o valor diretamente na tabela.
-		numCol.setEditable(false);
+		colNumSala.setEditable(false);
 	
 		//Chama o método "capacidadeProperty()" para cada Sala na lista.
-		capacidadeCol.setCellValueFactory(new PropertyValueFactory<>("capacidade"));
+		colCapacidade.setCellValueFactory(new PropertyValueFactory<>("capacidade"));
 		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
-		capacidadeCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+		colCapacidade.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
 		//Não permite que o usuário edite o valor diretamente na tabela.
-		capacidadeCol.setEditable(false);
+		colCapacidade.setEditable(false);
 
 	}
 
