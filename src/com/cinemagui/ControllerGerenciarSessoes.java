@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -25,6 +26,7 @@ import javafx.beans.value.ObservableValue;
 import java.time.LocalTime;
 
 import java.util.ResourceBundle;
+import java.util.ArrayList;
 
 import java.net.URL;
 
@@ -33,7 +35,7 @@ import java.net.URL;
  * o arquivo FXML (que possui essa classe como controlador) for carregado.
 */
 
-public class GerenciarSessoesController implements Initializable{
+public class ControllerGerenciarSessoes implements Initializable{
 	
 	//Inputs para coletar a hora e o valor do inresso.
 	@FXML private TextField inputHora, inputMinuto, inputValorIngresso;	
@@ -43,7 +45,7 @@ public class GerenciarSessoesController implements Initializable{
 	@FXML private ChoiceBox<Sala> choiceSalas;
 
 	//CheckBoxes para coletar o tipo de áudio e o tipo de exibição.
-	@FXML private CheckBox checkAudioLegendado, checkAudioOriginal, checkAudioDublado, 
+	@FXML private CheckBox checkAudioLegendado, checkAudioOriginal, checkAudioDublado;
 	@FXML private CheckBox checkExibicao3D, checkExibicao2D;
 
 	//Botões para criar ou editar os filmes.
@@ -62,7 +64,7 @@ public class GerenciarSessoesController implements Initializable{
 	@FXML private TableColumn<Sessao, LocalTime> colHorarioInicial, colHorarioFinal;
 	@FXML private TableColumn<Sessao, String> colTipoAudio;
 	@FXML private TableColumn<Sessao, Double> colValorIngresso;
-	@FXML private TableColumn<Sessao, Boolean> colTipoExibicao;	
+	@FXML private TableColumn<Sessao, Boolean> colTipoExibicao;
 
 	//Variável para armazenar a sessão que será editado
 	private Sessao sessaoSelected = null;
@@ -75,7 +77,7 @@ public class GerenciarSessoesController implements Initializable{
 		//Inicializa as fábricas de células.
 		factorys();
 
-		//Define a lista de filmes para aparecer na tabelas.
+		//Define a lista de sessões para aparecer na tabelas.
 		sessoesTable.setItems(Cinema.getSessoes());
 
 		//Caso a lista esteja vazia, a mensagem abaixo irá aparecer.
@@ -86,16 +88,16 @@ public class GerenciarSessoesController implements Initializable{
 	@FXML
 	private void openCreatePane() {
 
-		//Para de renderizar o painel de visualização dos filmes.
+		//Para de renderizar o painel de visualização das sessões.
 		paneViewSessoes.setVisible(false);
 
-		//Renderiza o painel de criação de filmes.
+		//Renderiza o painel de criação das sessões.
 		paneCreateSessao.setVisible(true);
 
 	}
 	
 	@FXML
-	private void openEditSessao(){
+	private void openEditPane(){
 
 		//Verificar se o usuário selecionou apenas 1 sessao.
 		int countSelect=0;
@@ -164,9 +166,9 @@ public class GerenciarSessoesController implements Initializable{
 	}
 	
 	@FXML
-	private void closeCreatingSessao(){
+	private void closeCreatePane(){
 
-		//Limpa os inputs e os CheckBoxes		
+		//Limpa os inputs e os CheckBoxes
 		inputHora.setText("");
 		inputMinuto.setText("");
 		inputValorIngresso.setText("");
@@ -176,11 +178,11 @@ public class GerenciarSessoesController implements Initializable{
 		checkExibicao3D.setSelected(false);
 		checkExibicao2D.setSelected(false);
 
-		//Para de renderizar o painel de visualização das salas.
-		paneCreateSessao.setVisible(false);
+		//Para de renderizar o painel de criação das sessões.
+		paneViewSessoes.setVisible(false);
 
-		//Renderiza o painel de criação de salas.
-		paneViewSessoes.setVisible(true);
+		//Renderiza o painel de visualização das sessões.
+		paneCreateSessao.setVisible(true);
 		
 	}
 
@@ -200,25 +202,25 @@ public class GerenciarSessoesController implements Initializable{
 		if(verifyInputs() && verifyTime(true, null)) {
 			
 			//Coleta os dados e armazena em variáveis temporárias
-			filme = choiceBoxFilmes.getValue();
+			filme = choiceFilmes.getValue();
 			
-			sala = choiceBoxSalas.getValue();
+			sala = choiceSalas.getValue();
 			
 			horarioInicial = LocalTime.of(Integer.parseInt(inputHora.getText()), 
 										  Integer.parseInt(inputMinuto.getText()));			  
 										  
 			horarioFinal = LocalTime.ofSecondOfDay(horarioInicial.toSecondOfDay() + 
-												   choiceBoxFilmes.getValue().getDuracao() * 60);	
+												   choiceFilmes.getValue().getDuracao() * 60);	
 												   
 			valorIngresso = Double.parseDouble(inputValorIngresso.getText());
 			
-			if (audioLegendado.isSelected()) {
+			if (checkAudioLegendado.isSelected()) {
 				tipoAudio = "Legendado";
-			} else if (audioDublado.isSelected()) {
+			} else if (checkAudioDublado.isSelected()) {
 				tipoAudio = "Dublado";
 			}
 			
-			if(exib3D.isSelected()) {
+			if(checkExibicao3D.isSelected()) {
 				exibicao3D = true;
 			}
 			
@@ -230,7 +232,7 @@ public class GerenciarSessoesController implements Initializable{
 			Cinema.addSessao(sessao);
 
 			//Fecha o painel de criação
-			closeCreateSessao();
+			closeCreatePane();
 			
 		}
 
@@ -239,7 +241,7 @@ public class GerenciarSessoesController implements Initializable{
 	@FXML
 	private void editSessao() {
 		
-		if(verifyInputs() && verifyTime) {
+		if(verifyInputs() && verifyTime(false, sessaoSelected)) {
 			
 			//Modifica os atributos da Sala selecionada.
 			sessaoSelected.setFilme(choiceFilmes.getValue());
@@ -255,15 +257,17 @@ public class GerenciarSessoesController implements Initializable{
 												   
 			sessaoSelected.setValorIngresso(Double.parseDouble(inputValorIngresso.getText()));
 			
-			if (audioLegendado.isSelected()) {
+			if (checkAudioLegendado.isSelected()) {
 				sessaoSelected.setTipoAudio("Legendado");
-			} else if (audioDublado.isSelected()) {
+
+			} else if (checkAudioDublado.isSelected()) {
 				sessaoSelected.setTipoAudio("Dublado");
-			} else if (audioOriginal.isSelected()) {
+
+			} else if (checkAudioOriginal.isSelected()) {
 				sessaoSelected.setTipoAudio("Original");
 			}
 			
-			if(exib3D.isSelected()) {
+			if(checkExibicao3D.isSelected()) {
 				sessaoSelected.setExibicao3D(true);
 			} else {
 				sessaoSelected.setExibicao3D(false);
@@ -285,7 +289,7 @@ public class GerenciarSessoesController implements Initializable{
 	private void deleteSessao(){
 
 		//Lista temporária para armazenar as sessões que serão removidas.
-		ArrayList<Sessao> oldSessoes;
+		ArrayList<Sessao> oldSessoes = new ArrayList<>();
 
 		for (Sessao sessao : Cinema.getSessoes()) {
 
@@ -299,7 +303,7 @@ public class GerenciarSessoesController implements Initializable{
 
 	private boolean verifyInputs() {
 
-		 /*
+		/*
 		 * Flag que será retornada.
 		 * Essa flag também será usada para evitar de fazer uma verificação quando outra já a invalidou.
 		*/
@@ -352,7 +356,7 @@ public class GerenciarSessoesController implements Initializable{
 			valid = false;
 		}
 
-		if(valid)
+		
 		return valid;
 	}	
 	
@@ -373,15 +377,15 @@ public class GerenciarSessoesController implements Initializable{
 		
 		LocalTime horarioInicial = LocalTime.of(hora, minuto, 0, 0);
 		LocalTime horarioFinal = null;
-		if((horarioInicial.toSecondOfDay() + choiceBoxFilmes.getValue().getDuracao() * 60) > 86399){
-			a = new Alert(AlertType.INFORMATION, "Não é possível criar sessões que só serão finalizadas depois das 23:59.");
+		if((horarioInicial.toSecondOfDay() + choiceFilmes.getValue().getDuracao() * 60) > 86399){
+			Alert a = new Alert(AlertType.INFORMATION, "Não é possível criar sessões que só serão finalizadas depois das 23:59.");
 			valid = false;
 		} else {
-			horarioFinal = LocalTime.ofSecondOfDay(horarioInicial.toSecondOfDay() + choiceBoxFilmes.getValue().getDuracao() * 60);
+			horarioFinal = LocalTime.ofSecondOfDay(horarioInicial.toSecondOfDay() + choiceFilmes.getValue().getDuracao() * 60);
 		}
 		
 		if(horarioInicial.toSecondOfDay() < LocalTime.now().toSecondOfDay()) {
-            a = new Alert(AlertType.INFORMATION, "\nAinda não podemos voltar no tempo. Por favor, defina um horário depois das " + 
+            Alert a = new Alert(AlertType.INFORMATION, "\nAinda não podemos voltar no tempo. Por favor, defina um horário depois das " + 
 												 LocalTime.now());
             valid = false;
         }
@@ -411,7 +415,7 @@ public class GerenciarSessoesController implements Initializable{
 					cancel=true;
 				}
 			}
-			if(sessaoExistente.getSala() == choiceBoxSalas.getValue() && !cancel) { 
+			if(sessaoExistente.getSala() == choiceSalas.getValue() && !cancel) { 
 			
 				//Horário encontrado é igual ao horário que está sendo definido.
 				if(inicioExistente - horarioInicial.toSecondOfDay() == 0){ 
@@ -441,135 +445,218 @@ public class GerenciarSessoesController implements Initializable{
 	
 	
 	private void factorys() {
-		choiceBoxFilmes.setConverter(new StringConverter<Filme>() {
+
+		/*
+		 * O "CellValueFactory" é a fabrica que coleta as propriedades dos objetos da lista
+		 * que foi definida para "tableSessoes".
+		 *
+		 * O "CellFactory" é a fábrica que define como que os valores coletados na fábrica
+		 * anterior serão renderizados na tabela.
+		*/
+
+		//Adiciona um conversor de Filme para String na ChoiceBox de filmes.
+		choiceFilmes.setConverter(new StringConverter<Filme>() {
+			
 			@Override
 			public String toString(Filme filme) {
+
 				if(!(filme==null)){
 					return filme.getTitulo();
 				} else {
 					return "Clique aqui para selecionar um filme...";
 				}
+
 			}
+
 			@Override
 			public Filme fromString(String string){
 				Filme filme=null;
 				for(Filme filmeFound : Cinema.getFilmes()) {
+
 					if(filmeFound.getTitulo() == filme.getTitulo())  {
 						filme = filmeFound;
 						break;
 					}
+
 				}
+
 				return filme;
 			}
 		});
 		
+		//Cria um "ouvinte de mudanças" para um lista de filmes.
 		ChangeListener<Filme> filmeListener = new ChangeListener<>() {
+			
 			@Override
 			public void changed(ObservableValue<? extends Filme> observable, Filme oldValue, Filme newValue) {
+
+				//Verifica se o filme permite exibição 3D.
 				if(newValue.getPermite3D()) {
-					exib3D.setVisible(true);
-					exib2D.setVisible(true);
+					checkExibicao3D.setVisible(true);
+					checkExibicao2D.setVisible(true);
 				} else {
-					exib3D.setVisible(false);
-					exib2D.setVisible(false);
-					exib3D.setSelected(false);
-					exib2D.setSelected(true);
+					checkExibicao3D.setVisible(false);
+					checkExibicao2D.setVisible(false);
+					checkExibicao3D.setSelected(false);
+					checkExibicao2D.setSelected(true);
 				}
 				
-				for(String string : newValue.getTipoAudio()) {
+				//Verifica quais tipos de áudio estão disponíveis para o filme.
+				for (String string : newValue.getTipoAudio()) {
+
 					if(string.equals("Dublado")) {
-					audioDublado.setVisible(true);
+						checkAudioDublado.setVisible(true);
 					}
 					if(string.equals("Legendado")) {
-						audioLegendado.setVisible(true);
+						checkAudioLegendado.setVisible(true);
 					}
 					if(string.equals("Original")) {
-						audioOriginal.setVisible(true);
+						checkAudioOriginal.setVisible(true);
 					}
+
 				}
+
 			}
+
 		};
-		choiceBoxFilmes.getSelectionModel().selectedItemProperty().addListener(filmeListener);
-		choiceBoxFilmes.getItems().addAll(Cinema.getFilmes());
-		
-		choiceBoxSalas.getItems().addAll(Cinema.getSalas());
-		choiceBoxSalas.setConverter(new StringConverter<Sala>() {
+
+		//Adiciona um "ouvinte de mudanças" na ChoiceBox de filmes.
+		choiceFilmes.getSelectionModel().selectedItemProperty().addListener(filmeListener);
+
+		//Adiciona a lista de filmes na ChoiceBox de filmes.
+		choiceFilmes.setItems(Cinema.getFilmes());
+
+		//Adiciona um conversor de Sala para String na ChoiceBox de salas.
+		choiceSalas.setConverter(new StringConverter<Sala>() {
+
+			@Override
 			public String toString(Sala sala) {
-				if(!(sala==null)){
+
+				if (sala != null) {
 					return Integer.toString(sala.getNumSala());
 				} else {
 					return "Clique aqui para selecionar uma sala...";
 				}
 			}
+			
 			@Override
 			public Sala fromString(String string){
 				Sala sala=null;
-				for(Sala salaFound : Cinema.getSalas()) {
-					if(salaFound.getNumSala() == sala.getNumSala())  {
+				for (Sala salaFound : Cinema.getSalas()) {
+
+					if (salaFound.getNumSala() == Integer.parseInt(string)) {
 						sala = salaFound;
 						break;
 					}
 				}
+
 				return sala;
 			}
 		});
+
+		//Adiciona a lista de salas na ChoiceBox de salas.
+		choiceSalas.getItems().addAll(Cinema.getSalas());
 		
-		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
-		selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+		//Chama o método "selectedProperty()" para cada Sessao na lista.
+		colSelect.setCellValueFactory(new PropertyValueFactory<>("selected"));
+
+		/*
+		 * Renderiza uma CheckBox na célula. Quando o valor da propridedade for true, a
+		 * CheckBox será renderizada como selecionada marcada.
+		*/
+		colSelect.setCellFactory(CheckBoxTableCell.forTableColumn(colSelect));
 		
-		filmeCol.setCellValueFactory(new PropertyValueFactory<>("filme"));
-		filmeCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Filme>() {
+		//Chama o método "filmeProperty()" para cada Sessao na lista.
+		colFilme.setCellValueFactory(new PropertyValueFactory<>("filme"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colFilme.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Filme>() {
+
 				@Override
 				public String toString(Filme filme) {
 					return filme.getTitulo();
 				}
+				
 				@Override
+				//Esse método não será utilizado.
 				public Filme fromString(String string) {
 					Filme filme=null;
 					for(Filme filmeFound : Cinema.getFilmes()) {
+
 						if(filmeFound.getTitulo() == string){
 							filme = filmeFound;
 							break;
 						}
 					}
+
 					return filme;
 				}
 			}));
-		filmeCol.setEditable(false);
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colFilme.setEditable(false);
 	
-		salaCol.setCellValueFactory(new PropertyValueFactory<>("sala"));
-		salaCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Sala>() {
+		//Chama o método "salaProperty()" para cada Sessao na lista.
+		colSala.setCellValueFactory(new PropertyValueFactory<>("sala"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colSala.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Sala>() {
+
 				@Override
 				public String toString(Sala sala) {
 					return Integer.toString(sala.getNumSala());
 				}
+
+				
 				@Override
+				//Esse método não será utilizado.
 				public Sala fromString(String string) {
 					Sala sala=null;
 					for(Sala salaFound : Cinema.getSalas()) {
+
 						if(Integer.toString(salaFound.getNumSala()) == string){
 							sala = salaFound;
 							break;
 						}
 					}
+
 					return sala;
 				}
 			}));
-		salaCol.setEditable(false);
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colSala.setEditable(false);
 	
-		horaIniCol.setCellValueFactory(new PropertyValueFactory<>("horarioInicial"));
-		horaIniCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
-		horaIniCol.setEditable(false);
+		//Chama o método "horarioInicialProperty()" para cada Sessao na lista.
+		colHorarioInicial.setCellValueFactory(new PropertyValueFactory<>("horarioInicial"));
 
-		horaFinCol.setCellValueFactory(new PropertyValueFactory<>("horarioFinal"));
-		horaIniCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
-		horaIniCol.setEditable(false);
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colHorarioInicial.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
 
-		audioCol.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
-		audioCol.setEditable(false);
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colHorarioInicial.setEditable(false);
 
-		exibicaoCol.setCellValueFactory(new PropertyValueFactory<>("exibicao3D"));
-		exibicaoCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
+		//Chama o método "horarioFinalProperty()" para cada Sessao na lista.
+		colHorarioFinal.setCellValueFactory(new PropertyValueFactory<>("horarioFinal"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colHorarioFinal.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colHorarioFinal.setEditable(false);
+
+		//Chama o método "tipoAudioProperty()" para cada Sessao na lista.
+		colTipoAudio.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTipoAudio.setEditable(false);
+
+		//Chama o método "exibicao3DProperty()" para cada Sessao na lista.
+		colTipoExibicao.setCellValueFactory(new PropertyValueFactory<>("exibicao3D"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colTipoExibicao.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
+
 				@Override
 				public String toString(Boolean perm3d) {
 					if(perm3d){
@@ -578,7 +665,10 @@ public class GerenciarSessoesController implements Initializable{
 						return "2D";
 					}
 				}
+
+				
 				@Override
+				////Esse método não será utilizado.
 				public Boolean fromString(String string){
 					if(string.equals("3D")){
 						return true;
@@ -588,55 +678,74 @@ public class GerenciarSessoesController implements Initializable{
 				}
 			
 			}));
-		exibicaoCol.setEditable(false);
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTipoExibicao.setEditable(false);
 	
-		valorCol.setCellValueFactory(new PropertyValueFactory<>("valorIngresso"));
-		valorCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-		valorCol.setEditable(false);
+		//Chama o método "valorIngressoProperty()" para cada Sessao na lista.
+		colValorIngresso.setCellValueFactory(new PropertyValueFactory<>("valorIngresso"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colValorIngresso.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colValorIngresso.setEditable(false);
 	}
 	
+	/*
+	 * Para o tipo de exibição e o tipo de produção o usuário só pode selecionar
+	 * uma das CheckBoxes disponíveis. Os métodos abaixo servem para garantir isso.
+	*/
 
 	@FXML
-	private void select3D(){
-		if(exib2D.isSelected()){
-			exib2D.fire();
+	private void selectExibicao3D(){
+		
+		if(checkExibicao2D.isSelected()){
+			checkExibicao2D.fire();
 		}
 	}
 
 	@FXML
-	private void select2D(){
-		if(exib3D.isSelected()){
-			exib3D.fire();
+	private void selectExibicao2D(){
+
+		if(checkExibicao3D.isSelected()){
+			checkExibicao3D.fire();
 		}
 	}
 	
 	@FXML
 	private void selectAudioDublado() {
-		if(audioOriginal.isSelected()){
-			audioOriginal.fire();
+
+		if(checkAudioOriginal.isSelected()){
+			checkAudioOriginal.fire();
 		}
-		if(audioLegendado.isSelected()){
-			audioLegendado.fire();
+
+		if(checkAudioLegendado.isSelected()){
+			checkAudioLegendado.fire();
 		}
 	}
 	
 	@FXML
 	private void selectAudioLegendado() {
-		if(audioDublado.isSelected()){
-			audioDublado.fire();
+
+		if(checkAudioDublado.isSelected()){
+			checkAudioDublado.fire();
 		}
-		if(audioOriginal.isSelected()){
-			audioOriginal.fire();
+
+		if(checkAudioOriginal.isSelected()){
+			checkAudioOriginal.fire();
 		}
 	}
 	
 	@FXML
 	private void selectAudioOriginal() {
-		if(audioDublado.isSelected()){
-			audioDublado.fire();
+
+		if(checkAudioDublado.isSelected()){
+			checkAudioDublado.fire();
 		}
-		if(audioLegendado.isSelected()){
-			audioLegendado.fire();
+
+		if(checkAudioLegendado.isSelected()){
+			checkAudioLegendado.fire();
 		}
 	}
 

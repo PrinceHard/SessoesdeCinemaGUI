@@ -23,7 +23,6 @@ public class Cinema {
      * então todas as variáveis e quase todos os métodos serão estáticos.
     */
 
-    private static SimpleStringProperty name = new SimpleStringProperty();
     private static SimpleDoubleProperty faturamentoInteiras = new SimpleDoubleProperty();
     private static SimpleDoubleProperty faturamentoInteiras3D = new SimpleDoubleProperty();
     private static SimpleDoubleProperty faturamentoMeias = new SimpleDoubleProperty();
@@ -213,15 +212,8 @@ public class Cinema {
     public static SimpleIntegerProperty ingressosMeias3DProperty() {
         return ingressosMeias3D;
     }
-	
-	public static SimpleStringProperty nameProperty() {
-		return name;
-	}
 
     //Getters dos valores
-    public static String getName() {
-        return name.get();
-    }
     
     public static double getFaturamentoInteiras(){
         return faturamentoInteiras.get();
@@ -266,10 +258,5 @@ public class Cinema {
     public static ObservableList<Sessao> getSessoes(){
         return sessoes.get();
     }
-	
-	//Setters dos valores
-	public static void setName(String nameCinema) {
-		name.set(nameCinema);
-	}
 
 }

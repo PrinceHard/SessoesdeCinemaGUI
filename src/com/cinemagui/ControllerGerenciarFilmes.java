@@ -12,6 +12,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.collections.FXCollections;
@@ -19,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.StringConverter;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ import java.net.URL;
  * o arquivo FXML (que possui essa classe como controlador) for carregado.
 */
 
-public class GerenciarFilmesController implements Initializable{
+public class ControllerGerenciarFilmes implements Initializable{
 
 	//Inputs para coletar o título e a duração.
 	@FXML private TextField inputTitulo, inputDuracao;
@@ -91,8 +93,7 @@ public class GerenciarFilmesController implements Initializable{
 
 		//Verificar se o usuário selecionou apenas 1 filme.
 		int countSelect=0;
-		Filme filmeSelect=null;
-		for(Filme filme : filmesList()){
+		for(Filme filme : Cinema.getFilmes()){
 
 			if(filme.isSelected()){
 				countSelect += 1;
@@ -113,29 +114,32 @@ public class GerenciarFilmesController implements Initializable{
 			openCreatePane();
 
 			//Preenche os inputs com as informações do filme que o usuário escolheu.
-			inputTitulo.setText(filmeSelect.getTitulo());
-			inputDuracao.setText(Integer.toString(filmeSelect.getDuracao()));
+			inputTitulo.setText(filmeSelected.getTitulo());
+			inputDuracao.setText(Integer.toString(filmeSelected.getDuracao()));
 			
 			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
-			if(filmeSelect.getTipoProducao().equals("Nacional")){
-				prodNac.setSelected(true);
+			if(filmeSelected.getTipoProducao().equals("Nacional")){
+				checkProdNacional.setSelected(true);
 			} else {
-				prodEst.setSelected(true);
+				checkProdEstrangeira.setSelected(true);
 			}
 			
 			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
-			switch (filmeSelect.getTipoAudio()) {
-				case "Dublado":
-					audioDublado.setSelected(true);
-				case "Legendado":
-					audioLegendado.setSelected(true);
-				case "Original":
-					audioOriginal.setSelected(true);
+			for (String string : filmeSelected.getTipoAudio()) {
+				if(string.equals("Dublado")) {
+					checkAudioDublado.setSelected(true);
+				}
+				if(string.equals("Legendado")) {
+					checkAudioLegendado.setSelected(true);
+				}
+				if(string.equals("Original")) {
+					checkAudioOriginal.setSelected(true);
+				}
 			}
 			
 			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
-			if(filmeSelect.getPermite3D()){
-					sim3D.setSelected(true);
+			if(filmeSelected.getPermite3D()){
+				checkPermite3D.setSelected(true);
 			} 
 			
 		} else if(countSelect == 0){
@@ -174,7 +178,7 @@ public class GerenciarFilmesController implements Initializable{
 
 		//Variáveis temporárias
 		String titulo = "";
-		Strin tipoProducao = "";
+		String tipoProducao = "Nacional";
 		ArrayList<String> tipoAudioTemporario = new ArrayList<>();;
 		int duracao;
 		boolean permite3D = false;
@@ -185,31 +189,29 @@ public class GerenciarFilmesController implements Initializable{
 			titulo = inputTitulo.getText();
 			duracao = Integer.parseInt(inputDuracao.getText());
 
-			if(prodNac.isSelected()){
-				tipoProducao = prodNac.getText();
-			} else if(prodEst.isSelected()){
-				tipoProducao = prodEst.getText();
+			if(checkProdEstrangeira.isSelected()){
+				tipoProducao = "Estrangeira";
 			}
 
-			if(audioOriginal.isSelected() ){
-				tipoAudioTemporario.add(audioOriginal.getText());
+			if(checkAudioOriginal.isSelected() ){
+				tipoAudioTemporario.add("Original");
 			}
-			if(audioDublado.isSelected()){
-				tipoAudioTemporario.add(audioDublado.getText());
+			if(checkAudioDublado.isSelected()){
+				tipoAudioTemporario.add("Dublado");
 			}
-			if(audioLegendado.isSelected()){
-				tipoAudioTemporario.add(audioLegendado.getText());
+			if(checkAudioLegendado.isSelected()){
+				tipoAudioTemporario.add("Legendado");
 			}
 
 			String[] tipoAudioFinal = new String[tipoAudioTemporario.size()];
 			tipoAudioTemporario.toArray(tipoAudioFinal);
 
-			if(sim3D.isSelected()){
+			if(checkPermite3D.isSelected()){
 				permite3D = true;
 			}
 
 			//Cria o filme
-			Filme filme = new Filme(titulo, duracao, tipoProducao, audioFinal, permite3D);
+			Filme filme = new Filme(titulo, duracao, tipoProducao, tipoAudioFinal, permite3D);
 
 			//Adiciona o filme na lista.
 			Cinema.addFilme(filme);
@@ -239,22 +241,22 @@ public class GerenciarFilmesController implements Initializable{
 			}
 
 			if(checkAudioOriginal.isSelected()){
-				tipoAudioTemporario.add(checkAudioOriginal.getText());
+				tipoAudioTemporario.add("Original");
 			}
 			if(checkAudioDublado.isSelected()){
-				tipoAudioTemporario.add(checkAudioDublado.getText());
+				tipoAudioTemporario.add("Dublado");
 			}
 			if(checkAudioLegendado.isSelected()){
-				tipoAudioTemporario.add(checkAudioLegendado.getText());
+				tipoAudioTemporario.add("Legendado");
 			}
 
 			String[] tipoAudioFinal = new String[tipoAudioTemporario.size()];
 			filmeSelected.setTipoAudio(tipoAudioTemporario.toArray(tipoAudioFinal));
 
 			if(checkPermite3D.isSelected()){
-				filmeSelect.setPermite3D(true);
+				filmeSelected.setPermite3D(true);
 			} else {
-				filmeSelect.setPermite3D(false);
+				filmeSelected.setPermite3D(false);
 			}
 
 			//Para de renderizar o botão de criar sala (botão do painel de criação).
@@ -273,11 +275,11 @@ public class GerenciarFilmesController implements Initializable{
 	private void deleteFilme() {
 
 		//Lista temporária para armazenar os filmes e as sessões que serão removidas.
-		ArrayList<Sala> oldFilmes;
-		ArrayList<Sessao> oldSessoes;
+		ArrayList<Filme> oldFilmes = new ArrayList<>();
+		ArrayList<Sessao> oldSessoes = new ArrayList<>();
 
 		//Flag para cancelar a exclusão.
-		boolean cancel = false;
+		final SimpleBooleanProperty cancel = new SimpleBooleanProperty(false);
 
 		for (Filme filme : Cinema.getFilmes()) {
 			if(filme.isSelected()) {
@@ -285,7 +287,7 @@ public class GerenciarFilmesController implements Initializable{
 				//Verifica se existem sessões que reproduzem este filme.
 				for(Sessao sessao : Cinema.getSessoes()) {
 
-					if (sessao.getFilme() == sala) {
+					if (sessao.getFilme() == filme) {
 						Alert a = new Alert(AlertType.CONFIRMATION, "A sessão " + sessao.getFilme().getTitulo() + 
 																	" (" + sessao.getHorarioInicial() + ")" +  
 																	"reproduz este filme. Se continuar, a sessão será apagada.");
@@ -293,10 +295,13 @@ public class GerenciarFilmesController implements Initializable{
 						//Verifica se o usuário ainda deseja excluir.
 						a.showAndWait().ifPresent(response -> {
 							if(response != ButtonType.OK) {
-								cancel = true;
-								break;
+								cancel.set(true);
 							}
 						});
+
+						if (cancel.get())  {
+							break;
+						}
 
 						oldSessoes.add(sessao);
 
@@ -304,7 +309,7 @@ public class GerenciarFilmesController implements Initializable{
 
 				}
 
-				if(cancel) {
+				if (cancel.get()) {
 					break;
 				}
 
@@ -312,7 +317,7 @@ public class GerenciarFilmesController implements Initializable{
 			}
 		}
 
-		if(!cancel) {
+		if(!cancel.get()) {
 			Cinema.removeSessoes(oldSessoes);
 			Cinema.removeFilmes(oldFilmes);			
 		}
@@ -320,9 +325,11 @@ public class GerenciarFilmesController implements Initializable{
 
 	private boolean verifyInputs() {
 
-		//Flag que será retornada.
-		//Essa flag também será usada para evitar de fazer uma verificação quando outra já a invalidou.
-		valid = true;
+		/*
+		 * Flag que será retornada.
+		 * Essa flag também será usada para evitar de fazer uma verificação quando outra já a invalidou.
+		*/
+		boolean valid = true;
 
 		//Verifica se o input de título está vazio.
 		if(inputTitulo.getText().isEmpty()) {
@@ -341,7 +348,7 @@ public class GerenciarFilmesController implements Initializable{
 		}
 
 		//Verifica se o usuário selecionou um tipo de produção.
-		if(!(checkProdNacional.isSelected || checkProdEstrangeira) && valid) {
+		if(!(checkProdNacional.isSelected() || checkProdEstrangeira.isSelected()) && valid) {
 			valid = false;
 			Alert a = new Alert(AlertType.INFORMATION, "Selecione um tipo de produção.");
 		}
@@ -368,6 +375,8 @@ public class GerenciarFilmesController implements Initializable{
 			}
 		}
 
+		return valid;
+
 	}
 
 	private void factorys() {
@@ -392,9 +401,6 @@ public class GerenciarFilmesController implements Initializable{
 		//Chama o método "tituloProperty()" para cada Sala na lista.
 		colTitulo.setCellValueFactory(new PropertyValueFactory("titulo"));
 
-		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
-		colTitulo.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
-
 		//Não permite que o usuário edite o valor diretamente na tabela.
 		colTitulo.setEditable(false);
 
@@ -410,9 +416,6 @@ public class GerenciarFilmesController implements Initializable{
 		//Chama o método "tipoProducaoProperty()" para cada Sala na lista.
 		colTipoProducao.setCellValueFactory(new PropertyValueFactory<>("tipoProducao"));
 
-		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
-		colTipoProducao.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
-
 		//Não permite que o usuário edite o valor diretamente na tabela.
 		colTipoProducao.setEditable(false);
 
@@ -426,7 +429,7 @@ public class GerenciarFilmesController implements Initializable{
 				public String toString(String[] audios){
 					return Arrays.toString(audios).replace("[", " ").replace("]", " ");
 				}
-
+				
 				@Override
 				public String[] fromString(String string){
 
@@ -437,7 +440,7 @@ public class GerenciarFilmesController implements Initializable{
 			}));
 
 		//Não permite que o usuário edite o valor diretamente na tabela.
-		audioCol.setEditable(false);
+		colTipoAudio.setEditable(false);
 
 		//Chama o método "tipoExibicaoProperty()" para cada Sala na lista.
 		colTipoExibicao.setCellValueFactory(new PropertyValueFactory<>("permite3D"));
@@ -478,7 +481,7 @@ public class GerenciarFilmesController implements Initializable{
 	*/
 	
 	@FXML
-	private void selectProdNac(){
+	private void selectProdNacional(){
 		if(checkProdEstrangeira.isSelected()){
 			checkProdEstrangeira.fire();
 			
@@ -486,7 +489,7 @@ public class GerenciarFilmesController implements Initializable{
 	}
 
 	@FXML
-	private void selectProdEst(){
+	private void selectProdEstrangeira(){
 		if(checkProdNacional.isSelected()){
 			checkProdNacional.fire();
 		}
@@ -500,7 +503,7 @@ public class GerenciarFilmesController implements Initializable{
 	}
 
 	@FXML
-	private void selectNao3D(){
+	private void selectNaoPermite3D(){
 		if(checkPermite3D.isSelected()){
 			checkPermite3D.fire();
 		}

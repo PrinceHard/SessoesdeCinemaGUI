@@ -12,29 +12,29 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerVendas">
    <children>
-      <Pane fx:id="viewTableSessoes" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="true">
+      <Pane fx:id="paneViewSessoes" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="true">
          <children>
-            <TableView fx:id="sessoesTable" editable="true" layoutX="5.0" layoutY="57.0" prefHeight="545.0" prefWidth="989.0">
+            <TableView fx:id="tableSessoes" editable="true" layoutX="5.0" layoutY="57.0" prefHeight="545.0" prefWidth="989.0">
                <columns>
-                  <TableColumn fx:id="selectCol" maxWidth="900.0" prefWidth="20.0" />
-                  <TableColumn fx:id="filmeCol" prefWidth="391.33331298828125" text="FILME" />
-                  <TableColumn fx:id="salaCol" minWidth="0.0" prefWidth="92.66668701171875" text="SALA" />
+                  <TableColumn fx:id="colSelect" maxWidth="900.0" prefWidth="20.0" />
+                  <TableColumn fx:id="colFilme" prefWidth="391.33331298828125" text="FILME" />
+                  <TableColumn fx:id="colSala" minWidth="0.0" prefWidth="92.66668701171875" text="SALA" />
                   <TableColumn minWidth="0.0" prefWidth="175.33331298828125" text="HORÁRIO">
                      <columns>
-                        <TableColumn fx:id="horaIniCol" prefWidth="75.0" text="INICIAL" />
-                        <TableColumn fx:id="horaFinCol" prefWidth="75.0" text="FINAL" />
+                        <TableColumn fx:id="colHorarioInicial" prefWidth="75.0" text="INICIAL" />
+                        <TableColumn fx:id="colHorarioFinal" prefWidth="75.0" text="FINAL" />
                      </columns>
                   </TableColumn>
-                  <TableColumn fx:id="audioCol" prefWidth="153.0" text="ÁUDIO" />
-                  <TableColumn fx:id="exibicaoCol" prefWidth="79.66668701171875" text="EXIBIÇÃO" />
-                  <TableColumn fx:id="valorCol" prefWidth="59.6666259765625" text="VALOR" />
-                  <TableColumn fx:id="taxaOcupacao" prefWidth="59.6666259765625" text="OCUPAÇAO" />
+                  <TableColumn fx:id="colTipoAudio" prefWidth="153.0" text="ÁUDIO" />
+                  <TableColumn fx:id="colTipoExibicao" prefWidth="79.66668701171875" text="EXIBIÇÃO" />
+                  <TableColumn fx:id="colValorIngresso" prefWidth="59.6666259765625" text="VALOR" />
+                  <TableColumn fx:id="colTaxaOcupacao" prefWidth="59.6666259765625" text="OCUPAÇAO" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button onAction="#openVenderIngresso" layoutX="359.0" layoutY="618.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="VENDER INGRESSO">
+            <Button onAction="#openIngressoPane" layoutX="359.0" layoutY="618.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="VENDER INGRESSO">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
@@ -46,9 +46,9 @@
             </Label>
          </children>
       </Pane>
-      <Pane fx:id="paneSellTicket" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="false">
+      <Pane fx:id="paneTicket" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="false">
          <children>
-            <Button layoutX="567.0" layoutY="501.0" mnemonicParsing="false" onAction="#cancelVenda" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
+            <Button layoutX="567.0" layoutY="501.0" mnemonicParsing="false" onAction="#closeIngressoPane" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>

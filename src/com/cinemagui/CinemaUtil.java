@@ -53,8 +53,8 @@ import java.io.IOException;
  * 1 - Chama o método init().
  * 3 - Chama o método start(Stage).
  * 4 - Espera a aplicação finalizar. Isso pode acontecer de duas formas:
-       * A aplicação chama Platform.exit().
-	 * A última janela é fechada e o atributo implicitExit da Platform é true.
+ *   -> A aplicação chama Platform.exit().
+ *   -> A última janela é fechada e o atributo implicitExit da Platform é true.
  * 5 - Chama o método stop().
  *
 */
@@ -67,7 +67,7 @@ public class CinemaUtil extends Application{
 		
 	@FXML
 	//Input para coletar o nome do cinema.
-	private TextField userInput;
+	private TextField inputCinemaName;
 	
 	/* 
 	 * O método main é opcional em uma aplicação JavaFx.
@@ -87,29 +87,31 @@ public class CinemaUtil extends Application{
 	
 	@Override
 	public void init() throws Exception {
+
 		//Carregando as fontes necessárias.
-		Font.loadFont("resources/fonts/Montserrat-Light.ttf", 300);
-		Font.loadFont("resources/fonts/Montserrat-Medium.ttf", 500);
-		Font.loadFont("resources/fonts/Montserrat-MediumItalic.ttf", 500);
-		Font.loadFont("resources/fonts/Montserrat-SemiBold.ttf", 600); 
-		Font.loadFont("resources/fonts/Montserrat-Bold.ttf", 700); 
-		Font.loadFont("resources/fonts/Montserrat-Black.ttf", 900);
+		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-Light.ttf").toString(), 300);
+		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-Medium.ttf").toString(), 500);
+		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-MediumItalic.ttf").toString(), 500);
+		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-SemiBold.ttf").toString(), 600); 
+		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-Bold.ttf").toString(), 700); 
+		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-Black.ttf").toString(), 900);
 		
-		//Chama o método deserializar os dados armazenados.
+		//Chama o método para deserializar os dados armazenados.
 		Cinema.unserializeData();
+
 	}
 
 	@Override
 	public void start(Stage stageMain) throws Exception {
 
 		//Carrega a SceneGraph principal.
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("mainSceneGraph.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("SceneGraphMain.fxml"));
 
 		//Carrega o nó raiz da SceneGraph principal.
 		Parent rootNodeSceneMain = (Parent) loader.load();
 
 		//Obtém o controlador da SceneGraph principal.
-		SceneController controllerMain = loader.getController();
+		ControllerMain controllerMain = loader.getController();
 
 		//Carrega o nó raiz da SceneGraph responsável por perguntar o nome do cinema.
 		Parent rootNodeGetCinemaName = FXMLLoader.load(getClass().getResource("sceneGraphGetCinemaName.fxml"));
@@ -163,10 +165,10 @@ public class CinemaUtil extends Application{
 	private void enterCinemaName() {
 
 		//Verifica se o input está vazio.
-		if(!userInput.getText().isEmpty()){
+		if(!inputCinemaName.getText().isEmpty()){
 
 			//Se não estiver, define o texto para ser o nome do cinema.
-			Cinema.setName(userInput.getText());
+			ControllerMain.setName(inputCinemaName.getText());
 
 			//Encerra o Stage.
 			stageGetCinemaName.close();
@@ -177,7 +179,7 @@ public class CinemaUtil extends Application{
 				FileWriter writerFlagCinemaName = new FileWriter("cinemaName.flag");
 
 				writerFlagCinemaName.write("1");
-				writerFlagCinemaName.write(Cinema.getName());
+				writerFlagCinemaName.write(inputCinemaName.getText());
 
 				writerFlagCinemaName.close();
 
@@ -195,9 +197,10 @@ public class CinemaUtil extends Application{
 
 	public void stop() throws Exception {
 		try {
+			//Chama o método para serializar os dados
 			Cinema.serializeData();
 		} catch (IOException e) {
-			System.out.println("Serialized file not found, aborting serializaton.");
+			System.out.println("Serialize file not found, aborting serializaton.");
 		}
 	}
 

@@ -12,13 +12,17 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.beans.property.SimpleBooleanProperty;
 
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
 import java.net.URL;
 
 /*
@@ -29,7 +33,7 @@ import java.net.URL;
 public class ControllerGerenciarSalas implements Initializable{
 	
 	//Inputs para coletar o número da sala e a capacidade.
-	@FXML private TextField inputNumSala, inputCapacity;
+	@FXML private TextField inputNumSala, inputCapacidade;
 	
 	//Botões para criar ou editar as salas.
 	@FXML private Button buttonCreate, buttonEdit;
@@ -42,13 +46,13 @@ public class ControllerGerenciarSalas implements Initializable{
 	
 	//Colunas da tabela
 	@FXML private TableColumn<Sala, Boolean> colSelect;
-	@FXML private TableColumn<Sala, Integer> colNumSala, colCapacity;	
+	@FXML private TableColumn<Sala, Integer> colNumSala, colCapacidade;	
 	
 	//Sala selecionada para edição.
 	private Sala salaSelected = null;
 
 	@Override
-
+	//Location retorna o path para o arquivo fxml
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println(location);
 		System.out.println(resources);
@@ -76,7 +80,7 @@ public class ControllerGerenciarSalas implements Initializable{
 	}
 
 	@FXML
-	private void openEditSala() {
+	private void openEditPane() {
 
 		//Verificar se o usuário selecionou apenas 1 sala.
 		int countSelect=0;
@@ -177,7 +181,7 @@ public class ControllerGerenciarSalas implements Initializable{
 			buttonEdit.setVisible(true);
 
 			//Fecha o painel de criação
-			closeCreatingSala();
+			closeCreatePane();
 
 		}
 				
@@ -187,11 +191,11 @@ public class ControllerGerenciarSalas implements Initializable{
 	private void deleteSalas() {
 
 		//Lista temporária para armazenar as salas e as sessões que serão removidas.
-		ArrayList<Sala> oldSalas;
-		ArrayList<Sessao> oldSessoes;
+		ArrayList<Sala> oldSalas = new ArrayList<>();
+		ArrayList<Sessao> oldSessoes = new ArrayList<>();
 
 		//Flag para cancelar a exclusão.
-		boolean cancel = false;
+		final SimpleBooleanProperty cancel = new SimpleBooleanProperty(false);
 
 		for (Sala sala : Cinema.getSalas()) {
 			if (sala.isSelected()) {
@@ -206,11 +210,15 @@ public class ControllerGerenciarSalas implements Initializable{
 
 						//Verifica se o usuário ainda deseja excluir.
 						a.showAndWait().ifPresent(response -> {
+
 							if(!(response == ButtonType.OK)) {
-								cancel = true;
-								break;
+								cancel.set(true);
 							}
 						});
+
+						if (cancel.get()) {
+							break;
+						}
 
 						oldSessoes.add(sessao);
 
@@ -218,7 +226,7 @@ public class ControllerGerenciarSalas implements Initializable{
 
 				}
 				
-				if(cancel) {
+				if (cancel.get()) {
 					break;
 				} 	
 
@@ -228,7 +236,7 @@ public class ControllerGerenciarSalas implements Initializable{
 
 		}
 
-		if(!cancel) {
+		if(!cancel.get()) {
 			Cinema.removeSessoes(oldSessoes);
 			Cinema.removeSalas(oldSalas);
 		}
@@ -243,8 +251,8 @@ public class ControllerGerenciarSalas implements Initializable{
 		try {
 
 			//Coleta o texto do input e converte em número.
-			numSala = Integer.parseInt(inputNumSala.getText());
-			capacidade = Integer.parseInt(inputCapacidade.getText());
+			int numSala = Integer.parseInt(inputNumSala.getText());
+			int capacidade = Integer.parseInt(inputCapacidade.getText());
 			
 			//Verifica se já existe uma sala com esse número.
 			for (Sala sala : Cinema.getSalas()) {

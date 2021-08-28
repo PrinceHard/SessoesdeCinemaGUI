@@ -4,78 +4,81 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-import java.time.LocalTime;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Label;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
-import java.time.LocalTime;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.CheckBox;
-import javafx.util.converter.LocalTimeStringConverter;
 import javafx.scene.layout.Pane;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.control.CheckBox;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.Label;
+import javafx.util.StringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
+import javafx.util.converter.DoubleStringConverter;
+
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.net.URL;
 
-public class VendasController implements Initializable {
+import java.util.ResourceBundle;
 
-	@FXML
-	private Pane viewTableSessoes, paneSellTicket;
+/*
+ * A interface Initializable possui o método "initialize()" que é chamado quando
+ * o arquivo FXML (que possui essa classe como controlador) for carregado.
+*/
 
-	@FXML
-	private CheckBox selectInteiro, selectMeio;
-
-	@FXML
-	private TextField inputPoltrona;
-
-	@FXML
-	private Label showSessao;
+public class ControllerVendas implements Initializable {
 	
-	@FXML
-	private TableView<Sessao> sessoesTable;
-	@FXML
-	private TableColumn<Sessao, Filme> filmeCol;
-	@FXML
-	private TableColumn<Sessao, Sala> salaCol;
-	@FXML
-	private TableColumn<Sessao, LocalTime> horaIniCol, horaFinCol;
-	@FXML
-	private TableColumn<Sessao, String> audioCol;
-	@FXML
-	private TableColumn<Sessao, Double> valorCol, taxaOcupacao;
-	@FXML
-	private TableColumn<Sessao, Boolean> exibicaoCol, selectCol;
+	//Inputs para coletar o número da poltrona.
+	@FXML private TextField inputPoltrona;
+
+	//Painel para visualizar as salas e painel para criar/editar as salas.
+	@FXML private Pane paneViewSessoes, paneTicket;
+
+	//CheckBoxes para coletar o tipo de ingresso.
+	@FXML private CheckBox selectInteiro, selectMeio;
+
+	//Label para mostrar para qual sessão o usuário está vendendo o ingresso.
+	@FXML private Label showSessao;
+	
+	//Tabela para visualizar as sessões.
+	@FXML private TableView<Sessao> tableSessoes;
+
+	//Colunas da tabela
+	@FXML private TableColumn<Sessao, Boolean> colSelect;
+	@FXML private TableColumn<Sessao, Filme> colFilme;
+	@FXML private TableColumn<Sessao, Sala> colSala;
+	@FXML private TableColumn<Sessao, LocalTime> colHorarioInicial, colHorarioFinal;
+	@FXML private TableColumn<Sessao, String> colTipoAudio;
+	@FXML private TableColumn<Sessao, Boolean> colTipoExibicao;	
+	@FXML private TableColumn<Sessao, Double> colValorIngresso;
+	@FXML private TableColumn<Sessao, Double> colTaxaOcupacao;
+
+	//Variável para armazenar a sessão que o usuário estará vendendo o ingresso.
+	private Sessao sessaoSelected = null;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		System.out.println(location);
+		System.out.println(resources);
+
+		//Inicializa as fábricas de células.
 		factorys();
-		sessoesTable.setItems(Cinema.getSessoes());
-		sessoesTable.setPlaceholder(new Label("Nenhuma sessão existente."));
+
+		//Define a lista de sessões para aparecer na tabelas.
+		tableSessoes.setItems(Cinema.getSessoes());
+
+		//Caso a lista esteja vazia, a mensagem abaixo irá aparecer.
+		tableSessoes.setPlaceholder(new Label("Nenhuma sessão existente."));
 	}
 	
 	@FXML
-	private void openVenderIngresso() {
-		Alert a;
+	private void openIngressoPane() {
+
+		//Verificar se o usuário selecionou apenas 1 sessao.
 		int countSelect=0;
-		Sessao sessaoSelected = null;
 		for (Sessao sessao : Cinema.getSessoes()) {
+
 			if(sessao.isSelected()) {
 				countSelect += 1;
 				sessaoSelected = sessao;
@@ -83,148 +86,241 @@ public class VendasController implements Initializable {
 		}
 
 		if(countSelect == 1) {
-			paneSellTicket.setVisible(true);
-			viewTableSessoes.setVisible(false);
+
+			//Para de renderizar o painel de visualização das sessões.
+			paneViewSessoes.setVisible(false);
+
+			//Renderiza o painel de venda ou cancelamento de venda de ingressos.
+			paneTicket.setVisible(true);
 			
+			//Coloca o a sessão na label para mostrar ao usuário para qual sessão o ingresso será vendido.
 			showSessao.setText(sessaoSelected.getFilme().getTitulo());
 			
 		} else if(countSelect == 0){
-			a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhuma sessão.");
+			Alert a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhuma sessão.");
 			a.showAndWait();
 		} else {
-			a = new Alert(AlertType.INFORMATION, "Selecione apenas 1 sessão.");
+			Alert a = new Alert(AlertType.INFORMATION, "Selecione apenas 1 sessão.");
 			a.showAndWait();
 		}
 		
 	}
 
 	@FXML
-	private void cancelVenda() {
-		paneSellTicket.setVisible(false);
-		viewTableSessoes.setVisible(true);
+	private void closeIngressoPane() {
+
+		//Limpa os inputs e os CheckBoxes
 		inputPoltrona.setText("");
 		selectInteiro.setSelected(false);
 		selectMeio.setSelected(false);
+
+		//Para de renderizar o painel de vendas.
+		paneTicket.setVisible(false);
+
+		//Renderiza o painel de criação de salas.
+		paneViewSessoes.setVisible(true);
+
 	}
 
 	@FXML
 	private void vender() {
-		Alert a;
-		Sessao sessaoSelected = null;
-		for (Sessao sessao : Cinema.getSessoes()) {
-			if(sessao.isSelected()) {
-				sessaoSelected = sessao;
-				break;
+
+		//Variáveis temporárias.
+		char tipoIngresso = 'i';
+
+		if (verifyInputs(true)) {
+
+			//Coleta os dados e armazena em variáveis temporárias.
+			if(selectInteiro.isSelected()) {
+				tipoIngresso = 'm';
 			}
-		}
 
-		char tipoIngresso;
-		if(selectInteiro.isSelected()) {
-			tipoIngresso = 'i';
-		} else {
-			tipoIngresso = 'm';
-		}
-
-		if (verifyInputs()) {
-
+			//Tenta ocuapr a poltrona.
 			if (Cinema.venderIngresso(sessaoSelected, tipoIngresso, Integer.parseInt(inputPoltrona.getText()))) {
-				a = new Alert(AlertType.INFORMATION, "Ingresso vendido com sucesso!");
+				Alert a = new Alert(AlertType.INFORMATION, "Ingresso vendido com sucesso!");
 				a.showAndWait();
 
-				cancelVenda();
-				
+				//Fecha o painel de vendas.
+				closeIngressoPane();
+			
 			} else {
-				a = new Alert(AlertType.INFORMATION, "Essa poltrona já foi vendida!");
+				Alert a = new Alert(AlertType.INFORMATION, "Essa poltrona já foi vendida!");
 				a.showAndWait();
 			}
 
-		} else {
-			a = new Alert(AlertType.INFORMATION, "Verifique se você preencheu todos os campos.");
 		}
+
 	}
 
-	private boolean verifyInputs() {
+	@FXML
+	private void cancelarVenda() {
+
+		if (verifyInputs(false)) {
+
+			//Tenta desocupar a poltrona.
+			if (Cinema.cancelarVenda(sessaoSelected, Integer.parseInt(inputPoltrona.getText()))) {
+				Alert a = new Alert(AlertType.INFORMATION, "Venda cancelada com sucesso!");
+				a.showAndWait();
+
+				//Fecha o painel de vendas.
+				closeIngressoPane();
+			
+			} else {
+				Alert a = new Alert(AlertType.INFORMATION, "Essa poltrona não foi vendida!");
+				a.showAndWait();
+			}
+
+		}
+
+	}
+
+	private boolean verifyInputs(boolean vendendo) {
+
+		/*
+		 * Esse método pode ser usado tanto na venda ou no cancelamento da venda do ingresso. Isso é definido através 
+		 * do parâmetro "vendendo"
+		*/
+
+		/*
+		 * Flag que será retornada.
+		 * Essa flag também será usada para evitar de fazer uma verificação quando outra já a invalidou.
+		*/
 		boolean valid = true;
 
+		//Verifica se o input está vazio.
 		if(inputPoltrona.getText().isEmpty()) {
 			valid = false;
 		}
 
-		try {
-			int i = Integer.parseInt(inputPoltrona.getText());
-		} catch (Exception e) {
-			valid = false;
+		//Verifica se a poltrona pode ser convertida para inteiro.
+		if(valid) {
+
+			try {
+				int i = Integer.parseInt(inputPoltrona.getText());
+			} catch (Exception e) {
+				valid = false;
+			}
+
 		}
 
-			//Duas caixas selecionadas
-		if (selectInteiro.isSelected() && selectMeio.isSelected() ||
-			//Nenhuma caixa selecionada
-			!(selectInteiro.isSelected() || selectMeio.isSelected())) {
+		//Verifica se o usuário selecionou um tipo de ingresso.
+		if (vendendo && !(selectInteiro.isSelected() || selectMeio.isSelected())) {
 				valid = false;
 		} 
 
 		return valid;
 	}
 
-
 	private void factorys() {
+
+		/*
+		 * O "CellValueFactory" é a fabrica que coleta as propriedades dos objetos da lista
+		 * que foi definida para "tableSessoes".
+		 *
+		 * O "CellFactory" é a fábrica que define como que os valores coletados na fábrica
+		 * anterior serão renderizados na tabela.
+		*/
 		
-		selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
-		selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+		//Chama o método "selectedProperty()" para cada Sessao na lista.
+		colSelect.setCellValueFactory(new PropertyValueFactory<>("selected"));
+
+		/*
+		 * Renderiza uma CheckBox na célula. Quando o valor da propridedade for true, a
+		 * CheckBox será renderizada como selecionada marcada.
+		*/
+		colSelect.setCellFactory(CheckBoxTableCell.forTableColumn(colSelect));
 		
-		filmeCol.setCellValueFactory(new PropertyValueFactory<>("filme"));
-		filmeCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Filme>() {
+		//Chama o método "filmeProperty()" para cada Sessao na lista.
+		colFilme.setCellValueFactory(new PropertyValueFactory<>("filme"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colFilme.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Filme>() {
+
 				@Override
 				public String toString(Filme filme) {
 					return filme.getTitulo();
 				}
+				
 				@Override
+				//Esse método não será utilizado.
 				public Filme fromString(String string) {
 					Filme filme=null;
 					for(Filme filmeFound : Cinema.getFilmes()) {
+
 						if(filmeFound.getTitulo() == string){
 							filme = filmeFound;
 							break;
 						}
 					}
+
 					return filme;
 				}
 			}));
-		filmeCol.setEditable(false);
 
-		salaCol.setCellValueFactory(new PropertyValueFactory<>("sala"));
-		salaCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Sala>() {
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colFilme.setEditable(false);
+	
+		//Chama o método "salaProperty()" para cada Sessao na lista.
+		colSala.setCellValueFactory(new PropertyValueFactory<>("sala"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colSala.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Sala>() {
+
 				@Override
 				public String toString(Sala sala) {
 					return Integer.toString(sala.getNumSala());
 				}
+
+				
 				@Override
+				//Esse método não será utilizado.
 				public Sala fromString(String string) {
 					Sala sala=null;
 					for(Sala salaFound : Cinema.getSalas()) {
+
 						if(Integer.toString(salaFound.getNumSala()) == string){
 							sala = salaFound;
 							break;
 						}
 					}
+
 					return sala;
 				}
 			}));
-		salaCol.setEditable(false);
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colSala.setEditable(false);
 	
-		horaIniCol.setCellValueFactory(new PropertyValueFactory<>("horarioInicial"));
-		horaIniCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
-		horaIniCol.setEditable(false);
+		//Chama o método "horarioInicialProperty()" para cada Sessao na lista.
+		colHorarioInicial.setCellValueFactory(new PropertyValueFactory<>("horarioInicial"));
 
-		horaFinCol.setCellValueFactory(new PropertyValueFactory<>("horarioFinal"));
-		horaIniCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
-		horaIniCol.setEditable(false);
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colHorarioInicial.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
 
-		audioCol.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
-		audioCol.setEditable(false);
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colHorarioInicial.setEditable(false);
 
-		exibicaoCol.setCellValueFactory(new PropertyValueFactory<>("exibicao3D"));
-		exibicaoCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
+		//Chama o método "horarioFinalProperty()" para cada Sessao na lista.
+		colHorarioFinal.setCellValueFactory(new PropertyValueFactory<>("horarioFinal"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colHorarioFinal.setCellFactory(TextFieldTableCell.forTableColumn(new LocalTimeStringConverter()));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colHorarioFinal.setEditable(false);
+
+		//Chama o método "tipoAudioProperty()" para cada Sessao na lista.
+		colTipoAudio.setCellValueFactory(new PropertyValueFactory<>("tipoAudio"));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTipoAudio.setEditable(false);
+
+		//Chama o método "exibicao3DProperty()" para cada Sessao na lista.
+		colTipoExibicao.setCellValueFactory(new PropertyValueFactory<>("exibicao3D"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colTipoExibicao.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Boolean>() {
+
 				@Override
 				public String toString(Boolean perm3d) {
 					if(perm3d){
@@ -233,7 +329,10 @@ public class VendasController implements Initializable {
 						return "2D";
 					}
 				}
+
+				
 				@Override
+				////Esse método não será utilizado.
 				public Boolean fromString(String string){
 					if(string.equals("3D")){
 						return true;
@@ -243,14 +342,44 @@ public class VendasController implements Initializable {
 				}
 			
 			}));
-		exibicaoCol.setEditable(false);
-	
-		valorCol.setCellValueFactory(new PropertyValueFactory<>("valorIngresso"));
-		valorCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-		valorCol.setEditable(false);
 
-		taxaOcupacao.setCellValueFactory(new PropertyValueFactory<>("taxaOcupacao"));
-		taxaOcupacao.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));	
-		taxaOcupacao.setEditable(false);
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTipoExibicao.setEditable(false);
+	
+		//Chama o método "valorIngressoProperty()" para cada Sessao na lista.
+		colValorIngresso.setCellValueFactory(new PropertyValueFactory<>("valorIngresso"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colValorIngresso.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colValorIngresso.setEditable(false);
+
+		//Chama o método "taxaOcupacaoProperty()" para cada Sessao na lista.
+		colTaxaOcupacao.setCellValueFactory(new PropertyValueFactory<>("taxaOcupacao"));
+
+		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
+		colTaxaOcupacao.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+
+		//Não permite que o usuário edite o valor diretamente na tabela.
+		colTaxaOcupacao.setEditable(false);
+	}
+
+	//O usuário só pode selecionar um tipo de ingresso. Os métodos abaixo servem para garantir isso.
+
+	@FXML
+	private void inteiroSelected(){
+		
+		if(selectMeio.isSelected()){
+			selectMeio.fire();
+		}
+	}
+
+	@FXML
+	private void meioSelected(){
+
+		if(selectInteiro.isSelected()){
+			selectInteiro.fire();
+		}
 	}
 }	
