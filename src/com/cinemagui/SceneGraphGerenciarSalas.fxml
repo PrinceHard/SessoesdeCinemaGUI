@@ -13,11 +13,11 @@
    <children>
       <Pane fx:id="paneViewSalas" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="true">
          <children>
-            <TableView fx:id="tableSalas" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
+            <TableView fx:id="tableSalas" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0" stylesheets="@style.css">
               <columns>
                 <TableColumn fx:id="colSelect" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" />
-                <TableColumn fx:id="colNumSala" prefWidth="391.33331298828125" text="NÚMERO DA SALA" />
-                <TableColumn fx:id="colCapacidade" minWidth="0.0" prefWidth="92.66668701171875" text="CAPACIDADE" />
+                <TableColumn fx:id="colNumSala" prefWidth="391.33331298828125" styleClass="columns" text="NÚMERO DA SALA" />
+                <TableColumn fx:id="colCapacidade" minWidth="0.0" prefWidth="92.66668701171875" styleClass="columns" text="CAPACIDADE" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

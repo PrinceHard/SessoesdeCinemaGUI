@@ -16,7 +16,7 @@
       </Label>
       <TextField fx:id="inputCinemaName" layoutX="100.0" layoutY="72.0" prefHeight="24.0" prefWidth="294.0" promptText="Digite aqui...">
          <font>
-            <Font name="Montserrat Medium" size="12.0" />
+            <Font name="Montserrat Bold" size="18.0" />
          </font>
       </TextField>
       <Button layoutX="206.0" layoutY="121.0" mnemonicParsing="false" onAction="#enterCinemaName" styleClass="innerButtons" stylesheets="@style.css" text="Continuar" />

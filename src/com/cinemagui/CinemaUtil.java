@@ -114,7 +114,7 @@ public class CinemaUtil extends Application{
 		ControllerMain controllerMain = loader.getController();
 
 		//Carrega o nó raiz da SceneGraph responsável por perguntar o nome do cinema.
-		Parent rootNodeGetCinemaName = FXMLLoader.load(getClass().getResource("sceneGraphGetCinemaName.fxml"));
+		Parent rootNodeGetCinemaName = FXMLLoader.load(getClass().getResource("SceneGraphGetCinemaName.fxml"));
 			
 		//A partir dos SceneGraph carregados anteriormente, cria as Scenes utilizando o nó raiz.
 		Scene sceneMain = new Scene(rootNodeSceneMain);

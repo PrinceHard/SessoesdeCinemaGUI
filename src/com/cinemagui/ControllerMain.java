@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.net.URL;
 
@@ -31,6 +33,11 @@ public class ControllerMain implements Initializable{
 	//Label que indica o nome do cinema.
 	@FXML private static Label labelCinemaName;
 
+	//Carrega as labels do faturamento.
+	@FXML private static Label labelSalesDayMoney, labelSalesDay, labelIntTicketsMoney, labelInt3DTicketsMoney,
+							   labelMeioTicketsMoney, labelMeio3DTickets, labelIntTickets, labelInt3DTickets,
+							   labelMeioTickets, labelMeio3DTicketsMoney, labelDay;
+
 	//Painel para visualizar a página inicial e painel para visualizar a página de gerenciamento.
 	@FXML private Pane paneHome, paneGerenciamento;
 
@@ -49,7 +56,10 @@ public class ControllerMain implements Initializable{
 		stageGerenciarSalas.initModality(Modality.APPLICATION_MODAL);
 		stageGerenciarFilmes.initModality(Modality.APPLICATION_MODAL);
 		stageVendas.initModality(Modality.APPLICATION_MODAL);
-		stageCancelarVendas.initModality(Modality.APPLICATION_MODAL);;
+		stageCancelarVendas.initModality(Modality.APPLICATION_MODAL);
+
+		//Atualiza o painel de faturamento.
+		updateFaturamento();
 
 	}
 
@@ -209,6 +219,105 @@ public class ControllerMain implements Initializable{
 		//Abre a Stage e aguarda sua finalização.
 		stageCancelarVendas.showAndWait();
 		
+	}
+
+	public static void updateFaturamento() {
+
+		/*
+		 * Esses métodos adicionam um Listener em cada propriedade de faturamento. Assim, quando os valores mudarem, 
+		 * a informação será atualizada automaticamente para o usuário.
+		*/
+
+		Cinema.faturamentoTotalProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelSalesDayMoney.setText(Double.toString(newValue.doubleValue()));
+			}
+		});
+
+		Cinema.ingressosTotalProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelSalesDay.setText(Integer.toString(newValue.intValue()));
+			}
+
+		});
+
+		Cinema.faturamentoInteirasProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelIntTicketsMoney.setText(Double.toString(newValue.doubleValue()));
+			}
+
+		});
+
+		Cinema.faturamentoInteiras3DProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelInt3DTicketsMoney.setText(Double.toString(newValue.doubleValue()));
+			}
+
+		});
+
+		Cinema.faturamentoMeiasProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelMeioTicketsMoney.setText(Double.toString(newValue.doubleValue()));
+			}
+
+
+		});
+
+		Cinema.faturamentoMeias3DProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelMeio3DTickets.setText(Double.toString(newValue.doubleValue()));
+			}
+
+		});
+
+		Cinema.ingressosInteirasProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelIntTickets.setText(Integer.toString(newValue.intValue()));
+			}
+
+		});
+
+		Cinema.ingressosInteiras3DProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelInt3DTickets.setText(Integer.toString(newValue.intValue()));
+			}
+
+		});
+
+		Cinema.ingressosMeiasProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelMeioTickets.setText(Integer.toString(newValue.intValue()));
+			}
+
+		});
+
+		Cinema.ingressosMeias3DProperty().addListener(new ChangeListener<>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				labelMeioTickets.setText(Integer.toString(newValue.intValue()));
+			}
+
+		});
+
 	}
 
 }

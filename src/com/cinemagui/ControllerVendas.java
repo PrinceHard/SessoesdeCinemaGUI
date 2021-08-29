@@ -16,6 +16,8 @@ import javafx.scene.control.Label;
 import javafx.util.StringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
 import javafx.util.converter.DoubleStringConverter;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
 
 import java.time.LocalTime;
 import java.net.URL;
@@ -28,6 +30,12 @@ import java.util.ResourceBundle;
 */
 
 public class ControllerVendas implements Initializable {
+
+	//Botões para abris os painéis de venda e de cancelamento.
+	@FXML private Button buttonVender, buttonCancelar;
+
+	//Text para informar as poltronas.
+	@FXML private Text textListPoltronas;
 	
 	//Inputs para coletar o número da poltrona.
 	@FXML private TextField inputPoltrona;
@@ -59,8 +67,6 @@ public class ControllerVendas implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println(location);
-		System.out.println(resources);
 
 		//Inicializa as fábricas de células.
 		factorys();
@@ -70,6 +76,9 @@ public class ControllerVendas implements Initializable {
 
 		//Caso a lista esteja vazia, a mensagem abaixo irá aparecer.
 		tableSessoes.setPlaceholder(new Label("Nenhuma sessão existente."));
+
+		//Atualiza as sessões.
+		Cinema.updateSessaoList();
 	}
 	
 	@FXML
@@ -95,6 +104,28 @@ public class ControllerVendas implements Initializable {
 			
 			//Coloca o a sessão na label para mostrar ao usuário para qual sessão o ingresso será vendido.
 			showSessao.setText(sessaoSelected.getFilme().getTitulo());
+
+			//Se estiver vendendo ingresso, esse bloco é executado.
+			if(buttonVender.isVisible()) {
+				//Mostra as poltronas disponíveis.
+				for (int i = 0; i < sessaoSelected.getPoltronas().length; i++) {
+
+					if(sessaoSelected.getPoltronas()[i] == 'l') {
+						textListPoltronas.setText(textListPoltronas.getText() + (i+1) + "   ");
+					}
+				}
+
+			//Se estiver cancelando a venda de um ingresso, esse bloco é executado.
+			} else {
+
+				//Mostra as poltronas disponíveis.
+				for (int i = 0; i < sessaoSelected.getPoltronas().length; i++) {
+
+					if(sessaoSelected.getPoltronas()[i] != 'l') {
+						textListPoltronas.setText(textListPoltronas.getText() + (i+1) + "   ");
+					}
+				}
+			}
 			
 		} else if(countSelect == 0){
 			Alert a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhuma sessão.");
@@ -113,6 +144,7 @@ public class ControllerVendas implements Initializable {
 		inputPoltrona.setText("");
 		selectInteiro.setSelected(false);
 		selectMeio.setSelected(false);
+		textListPoltronas.setText("");
 
 		//Para de renderizar o painel de vendas.
 		paneTicket.setVisible(false);
@@ -197,6 +229,13 @@ public class ControllerVendas implements Initializable {
 
 			try {
 				int i = Integer.parseInt(inputPoltrona.getText());
+
+				if(!(i > 0 && i <= sessaoSelected.getSala().getCapacidade())) {
+					valid = false;
+
+					Alert a = new Alert(AlertType.INFORMATION, "Essa sessão só possui" + sessaoSelected.getSala().getCapacidade());
+				}
+
 			} catch (Exception e) {
 				valid = false;
 			}

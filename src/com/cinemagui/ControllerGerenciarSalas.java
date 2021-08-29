@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -54,8 +55,6 @@ public class ControllerGerenciarSalas implements Initializable{
 	@Override
 	//Location retorna o path para o arquivo fxml
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println(location);
-		System.out.println(resources);
 
 		//Inicializa as fábricas de células.
 		factorys();
@@ -65,6 +64,9 @@ public class ControllerGerenciarSalas implements Initializable{
 
 		//Caso a lista esteja vazia, a mensagem abaixo irá aparecer.
 		tableSalas.setPlaceholder(new Label("Nenhuma sala existente."));
+
+		//Atualiza as sessões.
+		Cinema.updateSessaoList();
 
 	}	
 
@@ -84,7 +86,6 @@ public class ControllerGerenciarSalas implements Initializable{
 
 		//Verificar se o usuário selecionou apenas 1 sala.
 		int countSelect=0;
-		Sala salaSelected=null;
 		for(Sala sala : Cinema.getSalas()) {
 
 			if (sala.isSelected()) {
@@ -92,8 +93,17 @@ public class ControllerGerenciarSalas implements Initializable{
 				salaSelected = sala;
 			}
 		}
+
+		//Flag pra indicar se o usuário pode editar o filme.
+		boolean valid = true;
+		for(Sessao sessao : Cinema.getSessoes()) {
+			if(sessao.getSala() == salaSelected) {
+				valid = false;
+				break;
+			}
+		}
 		
-		if(countSelect == 1) {
+		if(countSelect == 1 && valid) {
 
 			//Para de renderizar o botão de criar sala (botão do painel de criação).
 			buttonCreate.setVisible(false);
@@ -112,6 +122,11 @@ public class ControllerGerenciarSalas implements Initializable{
 
 			//Cria um pop-up
 			Alert a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhuma sala.");
+			a.showAndWait();
+
+		} else if(!valid) {
+
+			Alert a = new Alert(AlertType.INFORMATION, "Uma sessão será reproduzida nesta sala, você não\npode modificá-la.");
 			a.showAndWait();
 
 		} else {
@@ -147,6 +162,9 @@ public class ControllerGerenciarSalas implements Initializable{
 		//Flag de verificação.
 		boolean salaExiste=false;
 
+		//Sala selected só deve ser usada para edição.
+		salaSelected = null;
+
 		if(verifyInputs()) {
 
 			//Cria a sala
@@ -163,16 +181,13 @@ public class ControllerGerenciarSalas implements Initializable{
 	}
 
 	@FXML
-	private void editSala()  {
-
-		//Variáveis temporárias
-		int numSala=0, capacidade=0;		
+	private void editSala()  {		
 
 		if (verifyInputs()) {
 
 			//Modifica os atributos da Sala selecionada.
-			salaSelected.setNumSala(numSala);
-			salaSelected.setCapacidade(capacidade);
+			salaSelected.setNumSala(Integer.parseInt(inputNumSala.getText()));
+			salaSelected.setCapacidade(Integer.parseInt(inputCapacidade.getText()));
 
 			//Para de renderizar o botão de criar sala (botão do painel de criação).
 			buttonCreate.setVisible(false);
@@ -204,9 +219,11 @@ public class ControllerGerenciarSalas implements Initializable{
 				for(Sessao sessao : Cinema.getSessoes()) {
 
 					if (sessao.getSala() == sala) {
-						Alert a = new Alert(AlertType.CONFIRMATION, "A sessão " + sessao.getFilme().getTitulo() + " (" + sessao.getHorarioInicial() + ")" +  
-																	"acontece na sala " + sala.getNumSala() + "." +   
-																   "Se continuar, a sessão será apagada.");
+						Alert a = new Alert(AlertType.CONFIRMATION);
+						Text t = new Text("A sessão " + sessao.getFilme().getTitulo() + " (" + sessao.getHorarioInicial() + 
+								 		  ")" + " acontece na sala " + sala.getNumSala() + "." + " Se continuar, a sessão será apagada.");
+						
+						a.getDialogPane().setContent(t); 
 
 						//Verifica se o usuário ainda deseja excluir.
 						a.showAndWait().ifPresent(response -> {
@@ -271,6 +288,9 @@ public class ControllerGerenciarSalas implements Initializable{
 			}
 
 		} catch (Exception e) {
+
+			Alert a = new Alert(AlertType.INFORMATION, "Verifique se você preencheu todos os campos \ncom valores numéricos.");
+			a.showAndWait();
 
 			valid = false;
 

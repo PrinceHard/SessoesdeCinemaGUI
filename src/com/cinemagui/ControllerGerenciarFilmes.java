@@ -21,6 +21,7 @@ import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.StringConverter;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,8 +65,6 @@ public class ControllerGerenciarFilmes implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println(location);
-		System.out.println(resources);
 
 		//Inicializa as fábricas de células.
 		factorys();
@@ -75,6 +74,9 @@ public class ControllerGerenciarFilmes implements Initializable{
 
 		//Caso a lista esteja vazia, a mensagem abaixo irá aparecer.
 		tableFilmes.setPlaceholder(new Label("Nenhum filmes existente."));
+
+		//Atualiza as sessões.
+		Cinema.updateSessaoList();
 
 	}	
 
@@ -92,7 +94,7 @@ public class ControllerGerenciarFilmes implements Initializable{
 	private void openEditFilme() {
 
 		//Verificar se o usuário selecionou apenas 1 filme.
-		int countSelect=0;
+		int countSelect = 0;
 		for(Filme filme : Cinema.getFilmes()){
 
 			if(filme.isSelected()){
@@ -101,8 +103,17 @@ public class ControllerGerenciarFilmes implements Initializable{
 			}
 
 		}
-		
-		if(countSelect == 1) {
+
+		//Flag pra indicar se o usuário pode editar o filme.
+		boolean valid = true;
+		for(Sessao sessao : Cinema.getSessoes()) {
+			if(sessao.getFilme() == filmeSelected) {
+				valid = false;
+				break;
+			}
+		}
+
+		if(countSelect == 1 && valid) {
 
 			//Para de renderizar o botão de criar filme (botão do painel de criação).
 			buttonCreate.setVisible(false);
@@ -140,11 +151,18 @@ public class ControllerGerenciarFilmes implements Initializable{
 			//Preenche os CheckBoxes com as informações do filme que o usuário escolheu.
 			if(filmeSelected.getPermite3D()){
 				checkPermite3D.setSelected(true);
-			} 
+			} else {
+				checkNaoPermite3D.setSelected(true);
+			}
 			
 		} else if(countSelect == 0){
 			Alert a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhum filme.");
 			a.showAndWait();
+
+		} else if (!valid) {
+			Alert a = new Alert(AlertType.INFORMATION, "Uma sessão irá reproduzir esse filme, você não\npode modificá-lo.");
+				a.showAndWait();
+
 		} else {
 			Alert a = new Alert(AlertType.INFORMATION, "Selecione apenas 1 filme.");
 			a.showAndWait();
@@ -182,6 +200,9 @@ public class ControllerGerenciarFilmes implements Initializable{
 		ArrayList<String> tipoAudioTemporario = new ArrayList<>();;
 		int duracao;
 		boolean permite3D = false;
+
+		//Filme selected só deve ser usada para edição.
+		filmeSelected = null;
 
 		if(verifyInputs()) {
 
@@ -288,9 +309,12 @@ public class ControllerGerenciarFilmes implements Initializable{
 				for(Sessao sessao : Cinema.getSessoes()) {
 
 					if (sessao.getFilme() == filme) {
-						Alert a = new Alert(AlertType.CONFIRMATION, "A sessão " + sessao.getFilme().getTitulo() + 
-																	" (" + sessao.getHorarioInicial() + ")" +  
-																	"reproduz este filme. Se continuar, a sessão será apagada.");
+						Alert a = new Alert(AlertType.CONFIRMATION);
+						Text t = new Text("A sessão " + sessao.getFilme().getTitulo() + 
+										  " (" + sessao.getHorarioInicial() + ") " +  
+										  "reproduz este filme. Se continuar, a sessão será apagada.");
+
+						a.getDialogPane().setContent(t); 
 
 						//Verifica se o usuário ainda deseja excluir.
 						a.showAndWait().ifPresent(response -> {
@@ -335,6 +359,7 @@ public class ControllerGerenciarFilmes implements Initializable{
 		if(inputTitulo.getText().isEmpty()) {
 			valid = false;
 			Alert a = new Alert(AlertType.INFORMATION, "O título não pode ser vazio.");
+			a.showAndWait();
 		}
 
 		//Verifica se a duração passada pode ser transformada em inteiro.
@@ -344,6 +369,7 @@ public class ControllerGerenciarFilmes implements Initializable{
 			} catch (NumberFormatException e) {
 				valid = false;
 				Alert a = new Alert(AlertType.INFORMATION, "A duração é inválida.");
+				a.showAndWait();
 			}
 		}
 
@@ -351,6 +377,7 @@ public class ControllerGerenciarFilmes implements Initializable{
 		if(!(checkProdNacional.isSelected() || checkProdEstrangeira.isSelected()) && valid) {
 			valid = false;
 			Alert a = new Alert(AlertType.INFORMATION, "Selecione um tipo de produção.");
+			a.showAndWait();
 		}
 
 		//Verifica se o usuário selecionou um tipo de áudio.
@@ -358,18 +385,21 @@ public class ControllerGerenciarFilmes implements Initializable{
 		   valid) {
 			valid = false;
 			Alert a = new Alert(AlertType.INFORMATION, "Selecione um tipo de áudio.");
+			a.showAndWait();
 		}
 
 		//Verifica se o usuário selecionou um tipo de exibição.
 		if(!(checkPermite3D.isSelected() || checkNaoPermite3D.isSelected()) && valid) {
 			valid = false;
 			Alert a = new Alert(AlertType.INFORMATION, "Defina se o filme permite exibição 3D ou não.");
+			a.showAndWait();
 		}
 
 		//Verifica se o filme já foi definido.
 		for(Filme filme : Cinema.getFilmes()){
 			if(filme.getTitulo().equals(inputTitulo.getText()) && filme != filmeSelected){
 				Alert a = new Alert(AlertType.INFORMATION, "Filme já existente, defina outro!");
+				a.showAndWait();
 				valid = false;
 				break;
 			}
