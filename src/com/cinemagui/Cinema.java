@@ -29,6 +29,7 @@ public class Cinema {
      * serão estáticos.
     */
 
+    private static SimpleStringProperty name = new SimpleStringProperty();
     private static SimpleObjectProperty<Calendar> today = new SimpleObjectProperty<>();
     private static SimpleDoubleProperty faturamentoTotal = new SimpleDoubleProperty();
     private static SimpleIntegerProperty ingressosTotal = new SimpleIntegerProperty();
@@ -266,6 +267,10 @@ public class Cinema {
     }
 
     //Getters das propriedas
+    public static SimpleStringProperty nameProperty() {
+        return name;
+    }
+
     public static SimpleDoubleProperty faturamentoTotalProperty() {
         return faturamentoTotal;
     }
@@ -307,6 +312,10 @@ public class Cinema {
     }
 
     //Getters dos valores
+    public static String getName() {
+        return name.get();
+    }
+
     public static Calendar getToday() {
         return today.get();
     }
@@ -361,6 +370,11 @@ public class Cinema {
 
     public static ObservableList<Sessao> getSessoes(){
         return sessoes.get();
+    }
+
+    //Setters dos valores
+    public static void setName(String cinemaName) {
+        name.set(cinemaName);
     }
 
 }

@@ -111,7 +111,7 @@ public class ControllerGerenciarSessoes implements Initializable{
 			}
 		}
 		
-		if(countSelect == 1) {
+		if(countSelect == 1 && sessaoSelected.getTaxaOcupacao() == 0.0) {
 
 			//Para de renderizar o botão de criar sessão (botão do painel de criação).
 			buttonCreate.setVisible(false);
@@ -155,11 +155,14 @@ public class ControllerGerenciarSessoes implements Initializable{
 				}
 			}
 			
-		} else if(countSelect == 0){
+		} else if (countSelect == 0){
 			Alert a = new Alert(AlertType.INFORMATION, "Você não selecionou nenhuma sala.");
 			a.showAndWait();
-		} else {
+		} else if (countSelect > 1){
 			Alert a = new Alert(AlertType.INFORMATION, "Selecione apenas 1 sala.");
+			a.showAndWait();
+		} else {
+			Alert a = new Alert(AlertType.INFORMATION, "Você já vendeu ingressos para essa sessão, então\nnão pode modificá-la.");
 			a.showAndWait();
 		}
 		
