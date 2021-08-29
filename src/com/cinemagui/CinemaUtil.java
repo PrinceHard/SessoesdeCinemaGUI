@@ -64,7 +64,7 @@ public class CinemaUtil extends Application{
 
 	//Stage para perguntar o nome do cinema.
 	private static Stage stageGetCinemaName = new Stage();
-		
+
 	@FXML
 	//Input para coletar o nome do cinema.
 	private TextField inputCinemaName;
@@ -95,6 +95,9 @@ public class CinemaUtil extends Application{
 		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-SemiBold.ttf").toString(), 600); 
 		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-Bold.ttf").toString(), 700); 
 		Font.loadFont(getClass().getResource("resources/fonts/Montserrat-Black.ttf").toString(), 900);
+
+		//Impede que o usuário consiga redimensionar a janela.
+		stageGetCinemaName.setResizable(false);
 		
 		//Chama o método para deserializar os dados armazenados.
 		Cinema.unserializeData();
@@ -149,6 +152,9 @@ public class CinemaUtil extends Application{
 		} catch (IOException e) {
 			System.out.println("Flag not found!");
 		}
+		
+		//Impede que o usuário consiga redimensionar a janela.
+		stageMain.setResizable(false);
 		
 		//Abre a Stage principal
 		stageMain.show();

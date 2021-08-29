@@ -10,18 +10,18 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerGerenciarFilmes">
+<AnchorPane prefHeight="632.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerGerenciarFilmes">
    <children>
       <Pane fx:id="paneViewFilmes" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0">
          <children>
             <TableView fx:id="tableFilmes" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0" stylesheets="@style.css">
               <columns>
-                <TableColumn fx:id="colSelect" maxWidth="40.0" minWidth="40.0" />
-                <TableColumn fx:id="colTitulo" prefWidth="391.33331298828125" styleClass="columns" text="TÍTULO" />
-                <TableColumn fx:id="colDuracao" minWidth="0.0" prefWidth="92.66668701171875" styleClass="columns" text="DURAÇÃO" />
-                <TableColumn fx:id="colTipoProducao" minWidth="0.0" prefWidth="92.66668701171875" styleClass="columns" text="TIPO DE PRODUÇÃO" />
-				<TableColumn fx:id="colTipoAudio" prefWidth="391.33331298828125" styleClass="columns" text="TIPO DE ÁUDIO" />
-                <TableColumn fx:id="colTipoExibicao" minWidth="0.0" prefWidth="92.66668701171875" styleClass="columns" text="DISPONÍVEL EM 3D" />
+                <TableColumn fx:id="colSelect" maxWidth="30.0" minWidth="30.0" />
+                <TableColumn fx:id="colTitulo" minWidth="250.0" styleClass="columns" text="TÍTULO" />
+                <TableColumn fx:id="colDuracao" minWidth="90.0" maxWidth="90.0" styleClass="columns" text="DURAÇÃO" />
+                <TableColumn fx:id="colTipoProducao" minWidth="130.0" maxWidth="130.0" styleClass="columns" text="TIPO DE PRODUÇÃO" />
+				    <TableColumn fx:id="colTipoAudio" minWidth="180.0" maxWidth="180.0" styleClass="columns" text="TIPO DE ÁUDIO" />
+                <TableColumn fx:id="colTipoExibicao" styleClass="columns" text="DISPONÍVEL EM 3D" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -78,7 +78,7 @@
             </Label>
             <TextField fx:id="inputTitulo" layoutX="449.0" layoutY="198.0" prefHeight="32.0" prefWidth="340.0" promptText="Digite aqui...">
                <font>
-                  <Font name="Montserrat Bold" size="18.0" />
+                  <Font name="Montserrat Bold" size="15.0" />
                </font>
             </TextField>
             <Label alignment="CENTER_RIGHT" layoutX="153.0" layoutY="238.0" prefHeight="32.0" prefWidth="261.0" text="Duração do filme">
@@ -88,7 +88,7 @@
             </Label>
             <TextField fx:id="inputDuracao" layoutX="449.0" layoutY="238.0" prefHeight="32.0" prefWidth="340.0" promptText="Digite aqui...">
                <font>
-                  <Font name="Montserrat Bold" size="18.0" />
+                  <Font name="Montserrat Bold" size="15.0" />
                </font>
             </TextField>
             <Label alignment="CENTER_RIGHT" layoutX="153.0" layoutY="278.0" prefHeight="32.0" prefWidth="261.0" text="Tipo de produção">
@@ -133,12 +133,12 @@
             </Label>
             <CheckBox fx:id="checkPermite3D" layoutX="449.0" layoutY="358.0" mnemonicParsing="false" onKeyPressed="#selectPermite3D" onMouseClicked="#selectPermite3D" prefHeight="32.0" text="Sim" textFill="#807b7b">
                <font>
-                  <Font name="Montserrat Bold" size="18.0" />
+                  <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
             <CheckBox fx:id="checkNaoPermite3D" layoutX="561.0" layoutY="358.0" mnemonicParsing="false" onKeyPressed="#selectNaoPermite3D" onMouseClicked="#selectNaoPermite3D" prefHeight="32.0" text="Não" textFill="#807b7b">
                <font>
-                  <Font name="Montserrat Bold" size="18.0" />
+                  <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
          </children>

@@ -158,17 +158,17 @@ public class ControllerVendas implements Initializable {
 	private void vender() {
 
 		//Variáveis temporárias.
-		char tipoIngresso = 'i';
+		char tipoIngresso = 'm';
 
 		if (verifyInputs(true)) {
 
 			//Coleta os dados e armazena em variáveis temporárias.
 			if(selectInteiro.isSelected()) {
-				tipoIngresso = 'm';
+				tipoIngresso = 'i';
 			}
 
-			//Tenta ocuapr a poltrona.
-			if (Cinema.venderIngresso(sessaoSelected, tipoIngresso, Integer.parseInt(inputPoltrona.getText()))) {
+			//Tenta ocupar a poltrona.
+			if (Cinema.venderIngresso(sessaoSelected, tipoIngresso, Integer.parseInt(inputPoltrona.getText())-1)) {
 				Alert a = new Alert(AlertType.INFORMATION, "Ingresso vendido com sucesso!");
 				a.showAndWait();
 
@@ -190,7 +190,7 @@ public class ControllerVendas implements Initializable {
 		if (verifyInputs(false)) {
 
 			//Tenta desocupar a poltrona.
-			if (Cinema.cancelarVenda(sessaoSelected, Integer.parseInt(inputPoltrona.getText()))) {
+			if (Cinema.cancelarVenda(sessaoSelected, Integer.parseInt(inputPoltrona.getText())-1)) {
 				Alert a = new Alert(AlertType.INFORMATION, "Venda cancelada com sucesso!");
 				a.showAndWait();
 
@@ -222,6 +222,8 @@ public class ControllerVendas implements Initializable {
 		//Verifica se o input está vazio.
 		if(inputPoltrona.getText().isEmpty()) {
 			valid = false;
+			Alert a = new Alert(AlertType.INFORMATION, "Digite o número da poltrona.");
+			a.showAndWait();
 		}
 
 		//Verifica se a poltrona pode ser convertida para inteiro.
@@ -234,6 +236,7 @@ public class ControllerVendas implements Initializable {
 					valid = false;
 
 					Alert a = new Alert(AlertType.INFORMATION, "Essa sessão só possui" + sessaoSelected.getSala().getCapacidade());
+					a.showAndWait();
 				}
 
 			} catch (Exception e) {
@@ -245,6 +248,8 @@ public class ControllerVendas implements Initializable {
 		//Verifica se o usuário selecionou um tipo de ingresso.
 		if (vendendo && !(selectInteiro.isSelected() || selectMeio.isSelected())) {
 				valid = false;
+				Alert a = new Alert(AlertType.INFORMATION, "Selecione o tipo de ingresso.");
+				a.showAndWait();
 		} 
 
 		return valid;
@@ -398,7 +403,21 @@ public class ControllerVendas implements Initializable {
 		colTaxaOcupacao.setCellValueFactory(new PropertyValueFactory<>("taxaOcupacao"));
 
 		//Renderiza uma TextField na célula e converte o valor da propriedade para String.
-		colTaxaOcupacao.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+		colTaxaOcupacao.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Double>() {
+
+				@Override
+				public String toString(Double taxa) {
+					return Double.toString(taxa * 100);
+				}
+
+				
+				@Override
+				//Esse método não será utilizado.
+				public Double fromString(String string){
+					return Double.parseDouble(string);
+				}
+			
+			}));
 
 		//Não permite que o usuário edite o valor diretamente na tabela.
 		colTaxaOcupacao.setEditable(false);

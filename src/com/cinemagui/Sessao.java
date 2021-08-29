@@ -74,9 +74,10 @@ public class Sessao implements Comparable<Sessao>, Serializable{
         if(poltronas.get()[poltrona] == 'l') {
             poltronas.get()[poltrona] = tipoIngresso;
 
-			int ocupados=0;			
+			double ocupados=0;			
 			for (char p : poltronas.get()) {
 				if(p != 'l'){
+                    System.out.println("Achou ocupado");
 				    ocupados++;
 				}
             }         
@@ -96,9 +97,10 @@ public class Sessao implements Comparable<Sessao>, Serializable{
         if(poltronas.get()[poltrona] != 'l') {
             poltronas.get()[poltrona] = 'l';
 
-			int ocupados=0;			
+			double ocupados=0;			
 			for (char p : poltronas.get()) {
 				if(p != 'l'){
+                    System.out.println("Achou");
 				    ocupados++;
 				}
             }         
