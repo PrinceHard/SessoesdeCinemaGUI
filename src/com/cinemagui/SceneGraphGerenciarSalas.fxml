@@ -9,38 +9,38 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.GerenciarSalasController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerGerenciarSalas">
    <children>
       <Pane fx:id="paneViewSalas" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="true">
          <children>
-            <TableView fx:id="salasTable" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0">
+            <TableView fx:id="tableSalas" editable="true" layoutX="12.0" layoutY="9.0" prefHeight="545.0" prefWidth="977.0" stylesheets="@style.css">
               <columns>
-                <TableColumn fx:id="selectCol" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" />
-                <TableColumn fx:id="numCol" prefWidth="391.33331298828125" text="NÚMERO DA SALA" />
-                <TableColumn fx:id="capacidadeCol" minWidth="0.0" prefWidth="92.66668701171875" text="CAPACIDADE" />
+                <TableColumn fx:id="colSelect" maxWidth="40.0" minWidth="40.0" prefWidth="-1.0" />
+                <TableColumn fx:id="colNumSala" prefWidth="391.33331298828125" styleClass="columns" text="NÚMERO DA SALA" />
+                <TableColumn fx:id="colCapacidade" minWidth="0.0" prefWidth="92.66668701171875" styleClass="columns" text="CAPACIDADE" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="13.0" layoutY="561.0" mnemonicParsing="false" onAction="#newSala" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="CRIAR NOVA SALA">
+            <Button layoutX="13.0" layoutY="561.0" mnemonicParsing="false" onAction="#openCreatePane" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="CRIAR NOVA SALA">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="699.0" layoutY="561.0" mnemonicParsing="false" onAction="#deleteSala" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="APAGAR SELECIONADOS">
+            <Button layoutX="699.0" layoutY="561.0" mnemonicParsing="false" onAction="#deleteSalas" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="APAGAR SELECIONADOS">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="357.0" layoutY="561.0" mnemonicParsing="false" onAction="#openEditSala" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="EDITAR SELECIONADO">
+            <Button layoutX="357.0" layoutY="561.0" mnemonicParsing="false" onAction="#openEditPane" prefHeight="51.0" prefWidth="290.0" styleClass="innerButtons" stylesheets="@style.css" text="EDITAR SELECIONADO">
                <font>
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </Button>
          </children>
       </Pane>
-      <Pane fx:id="paneCreatingSala" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="false">
+      <Pane fx:id="paneCreateSala" layoutX="11.0" layoutY="8.0" prefHeight="618.0" prefWidth="1002.0" visible="false">
          <children>
             <Button fx:id="buttonCreate" layoutX="340.0" layoutY="428.0" mnemonicParsing="false" onAction="#createSala" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="PRONTO">
                <font>
@@ -52,7 +52,7 @@
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
             </Button>
-            <Button layoutX="517.0" layoutY="428.0" mnemonicParsing="false" onAction="#cancelCreatingSala" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
+            <Button layoutX="517.0" layoutY="428.0" mnemonicParsing="false" onAction="#closeCreatePane" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>

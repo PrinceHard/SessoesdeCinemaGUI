@@ -39,3 +39,7 @@
 	-fx-font-smoothing-type: gray;
 }
 
+.columns{
+	-fx-alignment: CENTER;
+}
+
