@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerMain">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerMain">
      <children>
         <VBox prefHeight="720.0" prefWidth="297.0" style="-fx-background-color: #f3f3f3;" styleClass="shadow" stylesheets="@style.css">
            <children>
@@ -97,17 +97,17 @@
                     <Font name="Montserrat Bold" size="25.0" />
                  </font>
               </Label>
-              <Label layoutX="67.0" layoutY="320.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
+              <Label fx:id="labelFaturamentoDay" layoutX="160.0" layoutY="320.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
                  <font>
                     <Font name="Montserrat Light" size="25.0" />
                  </font>
               </Label>
-              <Label layoutX="67.0" layoutY="426.0" prefHeight="56.0" prefWidth="347.0" text="FATURAMENTO MENSAL">
+              <Label layoutX="67.0" layoutY="426.0" prefHeight="56.0" prefWidth="347.0" text="TOTAL DE INGRESSOS">
                  <font>
                     <Font name="Montserrat Bold" size="25.0" />
                  </font>
               </Label>
-              <Label layoutX="67.0" layoutY="472.0" prefHeight="36.0" prefWidth="192.0" text="R$00,00">
+              <Label fx:id="labelIngressosDay" layoutX="195.0" layoutY="472.0" prefHeight="36.0" prefWidth="192.0" text="0">
                  <font>
                     <Font name="Montserrat Light" size="25.0" />
                  </font>

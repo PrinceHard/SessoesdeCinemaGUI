@@ -65,6 +65,9 @@ public class CinemaUtil extends Application{
 	//Stage para perguntar o nome do cinema.
 	private static Stage stageGetCinemaName = new Stage();
 
+	//Essa classe será utilizada pelos métodos "Start()" e "enterCinemaName()".
+	private static ControllerMain controllerMain = null;
+
 	@FXML
 	//Input para coletar o nome do cinema.
 	private TextField inputCinemaName;
@@ -113,6 +116,9 @@ public class CinemaUtil extends Application{
 		//Carrega o nó raiz da SceneGraph principal.
 		Parent rootNodeSceneMain = (Parent) loader.load();
 
+		//Carregar a classe controladora da SceneGraph principal para a variável especificada.
+		controllerMain = loader.getController();
+
 		//Carrega o nó raiz da SceneGraph responsável por perguntar o nome do cinema.
 		Parent rootNodeGetCinemaName = FXMLLoader.load(getClass().getResource("SceneGraphGetCinemaName.fxml"));
 			
@@ -126,6 +132,7 @@ public class CinemaUtil extends Application{
 
 		try {
 			//Carrega o arquivo que sinaliza o nome do cinema.
+			System.out.println(new FileReader("cinemaName.flag"));
 			FileReader readerFlagCinemaName = new FileReader("cinemaName.flag");
 
 			/*
@@ -143,7 +150,17 @@ public class CinemaUtil extends Application{
 				*/
 
 				stageGetCinemaName.showAndWait();
+			} else {
+
+				String cinemaName = "";
+				while (readerFlagCinemaName.ready()) {
+					cinemaName += (char) readerFlagCinemaName.read();
+				}
+
+				controllerMain.setName(cinemaName);
+
 			}
+
 
 			readerFlagCinemaName.close();
 		} catch (IOException e) {
@@ -171,7 +188,7 @@ public class CinemaUtil extends Application{
 		if(!inputCinemaName.getText().isEmpty()){
 
 			//Se não estiver, define o texto para ser o nome do cinema.
-			ControllerMain.setName(inputCinemaName.getText());
+			controllerMain.setName(inputCinemaName.getText());
 
 			//Encerra o Stage.
 			stageGetCinemaName.close();
@@ -183,6 +200,8 @@ public class CinemaUtil extends Application{
 
 				writerFlagCinemaName.write("1");
 				writerFlagCinemaName.write(inputCinemaName.getText());
+				System.out.println(Cinema.getName());
+				System.out.println(inputCinemaName.getText());
 
 				writerFlagCinemaName.close();
 

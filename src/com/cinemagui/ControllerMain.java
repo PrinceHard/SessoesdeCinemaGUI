@@ -30,8 +30,8 @@ public class ControllerMain implements Initializable{
 	private Stage stageVendas = new Stage();
 	private Stage stageCancelarVendas = new Stage();
 	
-	//Label que indica o nome do cinema.
-	@FXML private static Label labelCinemaName;
+	//Carrega as labels do painel inicial.
+	@FXML private Label labelCinemaName, labelIngressosDay, labelFaturamentoDay;
 
 	//Carrega as labels do faturamento.
 	@FXML private Label labelSalesDayMoney, labelSalesDay, labelIntTicketsMoney, labelInt3DTicketsMoney,
@@ -63,9 +63,12 @@ public class ControllerMain implements Initializable{
 		stageCancelarVendas.initModality(Modality.APPLICATION_MODAL);
 		stageCancelarVendas.setResizable(false);
 
+		//Atualiza o faturamento.
+		updateFaturamento();
+
 	}
 
-	public static void setName(String name) {
+	public void setName(String name) {
 		//Define o nome do cinema na label especificada.
 		labelCinemaName.setText(name);
 	}	
@@ -84,6 +87,9 @@ public class ControllerMain implements Initializable{
 
 		//Para de renderizar o painel de faturamento.
 		paneFaturamento.setVisible(false);
+
+		//Atualiza o faturamento.
+		updateFaturamento();
 
 	}
 	
@@ -229,18 +235,20 @@ public class ControllerMain implements Initializable{
 	public void updateFaturamento() {
 
 		//Esse métodos puxam o faturamento da classe Cinema e adicionam nas labels.
-		labelSalesDayMoney.setText("R$" + Double.toString(Cinema.getFaturamentoTotal()));
-		labelSalesDay.setText(Integer.toString(Cinema.getIngressosTotal()));
-		labelIntTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoInteiras()));
-		labelInt3DTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoInteiras3D()));
-		labelMeioTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoMeias()));
-		labelMeio3DTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoMeias3D()));
-		labelIntTickets.setText(Integer.toString(Cinema.getIngressosInteiras()));
-		labelInt3DTickets.setText(Integer.toString(Cinema.getIngressosInteiras3D()));
-		labelMeioTickets.setText(Integer.toString(Cinema.getIngressosMeias()));
-		labelMeio3DTickets.setText(Integer.toString(Cinema.getIngressosMeias3D()));
-		labelDay.setText(Cinema.getToday().get(Cinema.getToday().DAY_OF_MONTH) + " - " + Cinema.getToday().get(Cinema.getToday().MONTH) +
+		labelSalesDayMoney.setText("R$" + Cinema.getFaturamentoTotal());
+		labelSalesDay.setText("" + Cinema.getIngressosTotal());
+		labelIntTicketsMoney.setText("R$" + Cinema.getFaturamentoInteiras());
+		labelInt3DTicketsMoney.setText("R$" + Cinema.getFaturamentoInteiras3D());
+		labelMeioTicketsMoney.setText("R$" + Cinema.getFaturamentoMeias());
+		labelMeio3DTicketsMoney.setText("R$" + Cinema.getFaturamentoMeias3D());
+		labelIntTickets.setText("" + Cinema.getIngressosInteiras());
+		labelInt3DTickets.setText("" + Cinema.getIngressosInteiras3D());
+		labelMeioTickets.setText("" + Cinema.getIngressosMeias());
+		labelMeio3DTickets.setText("" + Cinema.getIngressosMeias3D());
+		labelDay.setText(Cinema.getToday().get(Cinema.getToday().DAY_OF_MONTH) + " - " + (Cinema.getToday().get(Cinema.getToday().MONTH)+1) +
 						 " - " + (Cinema.getToday().get(Cinema.getToday().YEAR)));
+		labelIngressosDay.setText("" + Cinema.getIngressosTotal());
+		labelFaturamentoDay.setText("R$" + Cinema.getFaturamentoTotal());
 
 	}
 
