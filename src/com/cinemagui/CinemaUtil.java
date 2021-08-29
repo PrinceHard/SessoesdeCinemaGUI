@@ -113,9 +113,6 @@ public class CinemaUtil extends Application{
 		//Carrega o nó raiz da SceneGraph principal.
 		Parent rootNodeSceneMain = (Parent) loader.load();
 
-		//Obtém o controlador da SceneGraph principal.
-		ControllerMain controllerMain = loader.getController();
-
 		//Carrega o nó raiz da SceneGraph responsável por perguntar o nome do cinema.
 		Parent rootNodeGetCinemaName = FXMLLoader.load(getClass().getResource("SceneGraphGetCinemaName.fxml"));
 			
@@ -195,7 +192,7 @@ public class CinemaUtil extends Application{
 
 		} else {
 
-			//Cria um alerta para informar o usuário que input está vazio
+			//Cria um alerta para informar o usuário que o input está vazio
 			Alert a = new Alert(AlertType.INFORMATION, "Ops! Parece que você não digitou o nome do cinema.");
 			a.showAndWait();
 		}

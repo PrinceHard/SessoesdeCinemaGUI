@@ -20,6 +20,20 @@ public class Sala implements Comparable<Sala>, Serializable{
 		this.capacidade = new SimpleIntegerProperty(capacidade);
 		this.selected = new SimpleBooleanProperty(false);
 	}
+
+	//Ler objeto serializado.
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeObject(numSala.get());
+		out.writeObject(capacidade.get());
+		out.writeObject(selected.get());
+	}
+	
+	//Serializar objeto
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		numSala = new SimpleIntegerProperty( (int) in.readObject());
+		capacidade = new SimpleIntegerProperty( (int) in.readObject());
+		selected = new SimpleBooleanProperty( (boolean) in.readObject());
+	}
 	
 	//Getters Properties
 	public SimpleBooleanProperty selectedProperty() {
@@ -59,20 +73,6 @@ public class Sala implements Comparable<Sala>, Serializable{
 	public void setCapacidade(int capacidade) {
 		this.capacidade.set(capacidade);
     }
-	
-	//Custom serializer
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.writeObject(numSala.get());
-		out.writeObject(capacidade.get());
-		out.writeObject(selected.get());
-	}
-	
-	//Custom deserializer
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		numSala = new SimpleIntegerProperty( (int) in.readObject());
-		capacidade = new SimpleIntegerProperty( (int) in.readObject());
-		selected = new SimpleBooleanProperty( (boolean) in.readObject());
-	}
 
 	@Override
 	public int compareTo(Sala sala) {

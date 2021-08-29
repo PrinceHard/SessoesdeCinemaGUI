@@ -154,7 +154,7 @@ public class ControllerMain implements Initializable{
 		stageGerenciarSessoes.setScene(sceneGerenciarSessoes);
 
 		//Abre a Stage e aguarda sua finalização.
-		stageGerenciarSessoes.showAndWait();
+		stageGerenciarSessoes.show();
 
 	}
 
@@ -171,7 +171,7 @@ public class ControllerMain implements Initializable{
 		stageGerenciarFilmes.setScene(sceneGerenciarSalas);
 
 		//Abre a Stage e aguarda sua finalização.
-		stageGerenciarFilmes.showAndWait();
+		stageGerenciarFilmes.show();
 
 	}
 
@@ -188,7 +188,7 @@ public class ControllerMain implements Initializable{
 		stageGerenciarSalas.setScene(sceneGerenciarFilmes);
 
 		//Abre a Stage e aguarda sua finalização.
-		stageGerenciarSalas.showAndWait();
+		stageGerenciarSalas.show();
 
 	}
 
@@ -205,7 +205,7 @@ public class ControllerMain implements Initializable{
 		stageVendas.setScene(sceneVendas);
 
 		//Abre a Stage e aguarda sua finalização.
-		stageVendas.showAndWait();
+		stageVendas.show();
 
 	}
 
@@ -222,7 +222,7 @@ public class ControllerMain implements Initializable{
 		stageCancelarVendas.setScene(sceneCancelarVendas);
 
 		//Abre a Stage e aguarda sua finalização.
-		stageCancelarVendas.showAndWait();
+		stageCancelarVendas.show();
 		
 	}
 

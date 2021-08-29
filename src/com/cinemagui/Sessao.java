@@ -112,52 +112,6 @@ public class Sessao implements Comparable<Sessao>, Serializable{
             return false;
         }
     }
-   
-    public String poltronasLivres(){
-        int quantidade = 0;
-        String poltronasLivres = "|  ";
-
-        for(int i = 0; i < poltronas.get().length; i++){
-
-            if(poltronas.get()[i] == 'l'){
-                quantidade++;
-
-                if (i<9){
-                    poltronasLivres += " " + (i+1) + "  |  ";    
-                } else {
-                    poltronasLivres += (i+1) + "  |  ";
-                }
-
-                if((i+1) % 10 == 0 && i != 0 && i != poltronas.get().length) { //Dividir em 10 colunas
-                    poltronasLivres += "\n|  ";
-                }
-            }
-        }
-        return "Quantidade de poltronas livres: " + quantidade + "\n   > Poltronas <   \n" + poltronasLivres;
-    }
-
-    public String poltronasOcupadas(){
-        int quantidade = 0;
-        String poltronasOcupadas = "|  ";
-
-        for(int i = 0; i < poltronas.get().length; i++){
-
-            if(poltronas.get()[i] != 'l'){
-                quantidade++;
-
-                if (i<9){
-                    poltronasOcupadas += " " + (i+1) + "  |  ";    
-                } else {
-                    poltronasOcupadas += (i+1) + "  |  ";    
-                }
-
-                if(i % 9 == 0 && i != 0 && i != poltronas.get().length) { //Dividir em 10 colunas
-                    poltronasOcupadas += "\n|  ";
-                }
-            }
-        }
-        return "\n Quantidade de poltronas Ocupadas: " + quantidade + "\n\n    > Poltronas <   \n" + poltronasOcupadas;
-    }
 	
 	//Propertys getters
 	public SimpleObjectProperty<Filme> filmeProperty() {
