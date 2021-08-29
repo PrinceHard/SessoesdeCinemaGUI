@@ -1,4 +1,4 @@
-# SessoesdeCinemaGUI
+# SessoesDeCinemaGUI
 
 Este projeto propõe-se a implementar uma interface gráfica em um projeto Java já construído. O projeto é destinado à gerência de sessões de cinema, mas disponibiliza uma interface de linha de comando. Por outro lado, esse tipo de interface já não é mais viável para usuários comuns (público-alvo da aplicação). Em vista disso, uma interface gráfica faz-se necessária. Além disso, o projeto-base também não conta com um recurso para salvar os dados quando o programa for finalizado. Esse projeto também pretende oferecer uma solução a isso.
 
