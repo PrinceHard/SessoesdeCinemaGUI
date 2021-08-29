@@ -11,25 +11,25 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerVendas">
+<AnchorPane prefHeight="710.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cinemagui.ControllerVendas">
    <children>
-      <Pane fx:id="paneViewSessoes" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="false">
+      <Pane fx:id="paneViewSessoes" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" >
          <children>
             <TableView fx:id="tableSessoes" editable="true" layoutX="5.0" layoutY="57.0" prefHeight="545.0" prefWidth="989.0" stylesheets="@style.css">
                <columns>
-                  <TableColumn fx:id="colSelect" maxWidth="900.0" prefWidth="20.0" />
-                  <TableColumn fx:id="colFilme" prefWidth="391.33331298828125" styleClass="columns" text="FILME" />
-                  <TableColumn fx:id="colSala" minWidth="0.0" prefWidth="92.66668701171875" styleClass="columns" text="SALA" />
-                  <TableColumn minWidth="0.0" prefWidth="175.33331298828125" text="HORÁRIO">
+                  <TableColumn fx:id="colSelect" maxWidth="40.0" minWidth="40.0" />
+                  <TableColumn fx:id="colFilme" minWidth="120.0" styleClass="columns" text="FILME" />
+                  <TableColumn fx:id="colSala" maxWidth="50.0" minWidth="50.0" styleClass="columns" text="SALA" />
+                  <TableColumn text="HORÁRIO">
                      <columns>
-                        <TableColumn fx:id="colHorarioInicial" prefWidth="75.0" styleClass="columns" text="INICIAL" />
-                        <TableColumn fx:id="colHorarioFinal" prefWidth="75.0" styleClass="columns" text="FINAL" />
+                        <TableColumn fx:id="colHorarioInicial" maxWidth="75.0" minWidth="75.0" styleClass="columns" text="INICIAL" />
+                        <TableColumn fx:id="colHorarioFinal" maxWidth="75.0" minWidth="75.0" styleClass="columns" text="FINAL" />
                      </columns>
                   </TableColumn>
-                  <TableColumn fx:id="colTipoAudio" prefWidth="153.0" styleClass="columns" text="ÁUDIO" />
-                  <TableColumn fx:id="colTipoExibicao" prefWidth="79.66668701171875" styleClass="columns" text="EXIBIÇÃO" />
-                  <TableColumn fx:id="colValorIngresso" prefWidth="59.6666259765625" styleClass="columns" text="VALOR" />
-                  <TableColumn fx:id="colTaxaOcupacao" prefWidth="59.6666259765625" styleClass="columns" text="OCUPAÇAO" />
+                  <TableColumn fx:id="colTipoAudio" prefWidth="120.0" styleClass="columns" text="ÁUDIO" />
+                  <TableColumn fx:id="colTipoExibicao" maxWidth="75.0" minWidth="75.0" styleClass="columns" text="EXIBIÇÃO" />
+                  <TableColumn fx:id="colValorIngresso" prefWidth="59.0" styleClass="columns" text="VALOR (R$)" />
+                  <TableColumn fx:id="colTaxaOcupacao" prefWidth="59.0" styleClass="columns" text="OCUPAÇAO (%)" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -40,71 +40,79 @@
                   <Font name="Montserrat SemiBold" size="20.0" />
                </font>
             </Button>
-            <Label layoutX="372.0" layoutY="4.0" text="Escolha a sessao:">
+            <Label layoutX="372.0" layoutY="4.0" text="Escolha a sessão:">
                <font>
                   <Font name="Montserrat SemiBold" size="27.0" />
                </font>
             </Label>
          </children>
       </Pane>
-      <Pane fx:id="paneTicket" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0">
+      <Pane fx:id="paneTicket" layoutX="13.0" layoutY="12.0" prefHeight="677.0" prefWidth="1002.0" visible="false">
          <children>
-            <Text fx:id="textListPoltronas" fontSmoothingType="LCD" layoutX="186.0" layoutY="242.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="659.718017578125">
+            <Text fx:id="textListPoltronas" fontSmoothingType="LCD" layoutX="166.0" layoutY="242.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="659.718017578125">
                <font>
                   <Font name="Montserrat SemiBold" size="18.0" />
                </font>
             </Text>
-            <Button layoutX="567.0" layoutY="501.0" mnemonicParsing="false" onAction="#closeIngressoPane" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
+            <Button layoutX="556.0" layoutY="501.0" mnemonicParsing="false" onAction="#closeIngressoPane" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="CANCELAR">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
             </Button>
-            <Label layoutX="265.0" layoutY="104.0" text="Você está vendendo um ingresso!">
+            <Label layoutX="280.0" layoutY="104.0" text="Você está vendendo um ingresso!">
                <font>
                   <Font name="Montserrat SemiBold" size="27.0" />
                </font>
             </Label>
-            <Label layoutX="383.0" layoutY="148.0" text="Preencha os campos abaixo.">
+            <Label layoutX="398.0" layoutY="148.0" text="Preencha os campos abaixo.">
                <font>
                   <Font name="Montserrat Medium" size="15.0" />
                </font>
             </Label>
-            <Label alignment="CENTER_RIGHT" layoutX="202.0" layoutY="328.0" prefHeight="32.0" prefWidth="261.0" text="Sessao">
+            <Label alignment="CENTER_RIGHT" layoutX="193.0" layoutY="328.0" prefHeight="32.0" prefWidth="261.0" text="Sessao">
                <font>
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <CheckBox fx:id="selectMeio" layoutX="591.0" layoutY="408.0" mnemonicParsing="false" prefHeight="32.0" text="Meio" textFill="#807b7b">
+            <CheckBox fx:id="selectMeio" onKeyPressed="#meioSelected" onMousePressed="#meioSelected" layoutX="582.0" layoutY="408.0" mnemonicParsing="false" prefHeight="32.0" text="Meio" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <TextField fx:id="inputPoltrona" layoutX="488.0" layoutY="371.0" prefHeight="32.0" prefWidth="261.0" promptText="Digite aqui...">
+            <TextField fx:id="inputPoltrona" layoutX="479.0" layoutY="371.0" prefHeight="32.0" prefWidth="261.0" promptText="Digite aqui...">
                <font>
-                  <Font name="Montserrat Bold" size="18.0" />
+                  <Font size="15.0" />
                </font>
             </TextField>
-            <Label fx:id="showSessao" layoutX="488.0" layoutY="328.0" prefHeight="32.0" prefWidth="261.0" text="Sessao" />
-            <Label alignment="CENTER_RIGHT" layoutX="202.0" layoutY="368.0" prefHeight="32.0" prefWidth="261.0" text="Número da poltrona">
+            <Label fx:id="showSessao" layoutX="479.0" layoutY="328.0" prefHeight="32.0" prefWidth="261.0" text="Sessao">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label alignment="CENTER_RIGHT" layoutX="193.0" layoutY="368.0" prefHeight="32.0" prefWidth="261.0" text="Número da poltrona">
                <font>
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <Label alignment="CENTER_RIGHT" layoutX="202.0" layoutY="408.0" prefHeight="32.0" prefWidth="261.0" text="Tipo de ingresso">
+            <Label alignment="CENTER_RIGHT" layoutX="193.0" layoutY="408.0" prefHeight="32.0" prefWidth="261.0" text="Tipo de ingresso">
                <font>
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <CheckBox fx:id="selectInteiro" layoutX="488.0" layoutY="408.0" mnemonicParsing="false" prefHeight="32.0" text="Inteiro" textFill="#807b7b">
+            <CheckBox fx:id="selectInteiro" onKeyPressed="#inteiroSelected" onMousePressed="#inteiroSelected" layoutX="479.0" layoutY="408.0" mnemonicParsing="false" prefHeight="32.0" text="Inteiro" textFill="#807b7b">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>
             </CheckBox>
-            <Button layoutX="313.0" layoutY="502.0" mnemonicParsing="false" onAction="#vender" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="PRONTO">
+            <Button layoutX="302.0" layoutY="502.0" mnemonicParsing="false" onAction="#vender" prefHeight="51.0" prefWidth="142.0" styleClass="innerButtons" stylesheets="@style.css" text="PRONTO">
                <font>
                   <Font name="Montserrat SemiBold" size="15.0" />
                </font>
             </Button>
+            <Label layoutX="415.0" layoutY="186.0" text="Poltronas disponíveis:">
+               <font>
+                  <Font name="Montserrat Medium" size="15.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>

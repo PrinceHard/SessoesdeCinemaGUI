@@ -80,31 +80,31 @@ public class Cinema {
 
                 if(tipoIngresso == 'i') {
                     ingressosInteiras3D.set(ingressosInteiras3D.get() + 1);
-                    faturamentoInteiras.set(faturamentoInteiras3D.get() + sessao.getValorIngresso());
+                    faturamentoInteiras3D.set(faturamentoInteiras3D.get() + sessao.getValorIngresso());
+                    faturamentoTotal.set(faturamentoTotal.get()  + sessao.getValorIngresso());
                 } else {
                     ingressosMeias3D.set(ingressosMeias3D.get() + 1);
                     faturamentoMeias3D.set(faturamentoMeias3D.get() + sessao.getValorIngresso() / 2);               
+                    faturamentoTotal.set(faturamentoTotal.get()  + sessao.getValorIngresso() / 2);
                 }
 
                 ingressosTotal.set(ingressosTotal.get() + 1);
-                faturamentoTotal.set(faturamentoTotal.get()  + sessao.getValorIngresso());
-
-                System.out.println(faturamentoTotal.get());
+                
 
             } else {                       
 
                 if(tipoIngresso == 'i') {
                     ingressosInteiras.set(ingressosInteiras.get() + 1);
                     faturamentoInteiras.set(faturamentoInteiras.get() + sessao.getValorIngresso());
+                    faturamentoTotal.set(faturamentoTotal.get()  + sessao.getValorIngresso());
                 } else {
                     ingressosMeias.set(ingressosMeias.get() + 1);
                     faturamentoMeias.set(faturamentoMeias.get() + sessao.getValorIngresso() / 2);
+                    faturamentoTotal.set(faturamentoTotal.get()  + sessao.getValorIngresso() / 2);
                 }
 
                 ingressosTotal.set(ingressosTotal.get() + 1);
-                faturamentoTotal.set(faturamentoTotal.get()  + sessao.getValorIngresso());
-
-                System.out.println(faturamentoTotal.get());
+                
             }
 
         } else {
@@ -131,13 +131,15 @@ public class Cinema {
                 if(tipoIngresso == 'i') {
                     ingressosInteiras3D.set(ingressosInteiras3D.get()-1);
                     faturamentoInteiras.set(faturamentoInteiras3D.get() - sessao.getValorIngresso());
+                    faturamentoTotal.set(faturamentoTotal.get() - sessao.getValorIngresso());
                 } else {
                     ingressosMeias3D.set(ingressosMeias3D.get()-1);
                     faturamentoMeias3D.set(faturamentoMeias3D.get() - sessao.getValorIngresso() / 2);
+                    faturamentoTotal.set(faturamentoTotal.get() - sessao.getValorIngresso() / 2);
                 }
 
                 ingressosTotal.set(ingressosTotal.get() - 1);
-                faturamentoTotal.set(faturamentoTotal.get() - sessao.getValorIngresso());
+                
 
             } else {                       
 
@@ -204,6 +206,9 @@ public class Cinema {
                            faturamentoInteiras3D.get(), faturamentoMeias3D.get());
         out.writeObject(faturamento);
 
+        out.writeObject(faturamentoTotal.get());
+        out.writeObject(ingressosTotal.get());
+
     }
 
     //Método para deserializar os dados.
@@ -234,7 +239,9 @@ public class Cinema {
                 faturamentoInteiras3D.set(faturamento.get(2));
                 faturamentoMeias3D.set(faturamento.get(3));
 
-                ControllerMain.updateFaturamento();
+                faturamentoTotal.set( (double) in.readObject());
+                ingressosTotal.set( (int) in.readObject());
+
             } else {
                 today.set(newToday);
             }
@@ -252,6 +259,8 @@ public class Cinema {
             sessoes.set(FXCollections.observableArrayList());
             filmes.set(FXCollections.observableArrayList());
             salas.set(FXCollections.observableArrayList());
+            today.set(Calendar.getInstance());
+
 
         }
     }
@@ -295,10 +304,21 @@ public class Cinema {
 
     public static SimpleIntegerProperty ingressosMeias3DProperty() {
         return ingressosMeias3D;
-    }/*
+    }
 
     //Getters dos valores
+    public static Calendar getToday() {
+        return today.get();
+    }
+
+    public static double getFaturamentoTotal() {
+        return faturamentoTotal.get();
+    }
     
+    public static int getIngressosTotal() {
+        return ingressosTotal.get();
+    }
+
     public static double getFaturamentoInteiras(){
         return faturamentoInteiras.get();
     }
@@ -329,7 +349,7 @@ public class Cinema {
 
     public static int getIngressosMeias3D(){
         return ingressosMeias3D.get();
-    }*/
+    }
 
     public static ObservableList<Sala> getSalas(){
         return salas.get();

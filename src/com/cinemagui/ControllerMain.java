@@ -34,9 +34,9 @@ public class ControllerMain implements Initializable{
 	@FXML private static Label labelCinemaName;
 
 	//Carrega as labels do faturamento.
-	@FXML private static Label labelSalesDayMoney, labelSalesDay, labelIntTicketsMoney, labelInt3DTicketsMoney,
-							   labelMeioTicketsMoney, labelMeio3DTickets, labelIntTickets, labelInt3DTickets,
-							   labelMeioTickets, labelMeio3DTicketsMoney, labelDay;
+	@FXML private Label labelSalesDayMoney, labelSalesDay, labelIntTicketsMoney, labelInt3DTicketsMoney,
+						labelMeioTicketsMoney, labelMeio3DTickets, labelIntTickets, labelInt3DTickets,
+						labelMeioTickets, labelMeio3DTicketsMoney, labelDay;
 
 	//Painel para visualizar a página inicial e painel para visualizar a página de gerenciamento.
 	@FXML private Pane paneHome, paneGerenciamento;
@@ -53,13 +53,15 @@ public class ControllerMain implements Initializable{
         */
 
 		stageGerenciarSessoes.initModality(Modality.APPLICATION_MODAL);
+		stageGerenciarSessoes.setResizable(false);
 		stageGerenciarSalas.initModality(Modality.APPLICATION_MODAL);
+		stageGerenciarSalas.setResizable(false);
 		stageGerenciarFilmes.initModality(Modality.APPLICATION_MODAL);
+		stageGerenciarFilmes.setResizable(false);
 		stageVendas.initModality(Modality.APPLICATION_MODAL);
+		stageVendas.setResizable(false);
 		stageCancelarVendas.initModality(Modality.APPLICATION_MODAL);
-
-		//Atualiza o painel de faturamento.
-		updateFaturamento();
+		stageCancelarVendas.setResizable(false);
 
 	}
 
@@ -132,7 +134,10 @@ public class ControllerMain implements Initializable{
 		paneVendas.setVisible(false);
 
 		//Renderizar o painel de faturamento.
-		paneFaturamento.setVisible(true);;
+		paneFaturamento.setVisible(true);
+
+		//Atualiza o faturamento.
+		updateFaturamento();
 
 	}
 	
@@ -221,102 +226,21 @@ public class ControllerMain implements Initializable{
 		
 	}
 
-	public static void updateFaturamento() {
+	public void updateFaturamento() {
 
-		/*
-		 * Esses métodos adicionam um Listener em cada propriedade de faturamento. Assim, quando os valores mudarem, 
-		 * a informação será atualizada automaticamente para o usuário.
-		*/
-
-		Cinema.faturamentoTotalProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelSalesDayMoney.setText(Double.toString(newValue.doubleValue()));
-			}
-		});
-
-		Cinema.ingressosTotalProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelSalesDay.setText(Integer.toString(newValue.intValue()));
-			}
-
-		});
-
-		Cinema.faturamentoInteirasProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelIntTicketsMoney.setText(Double.toString(newValue.doubleValue()));
-			}
-
-		});
-
-		Cinema.faturamentoInteiras3DProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelInt3DTicketsMoney.setText(Double.toString(newValue.doubleValue()));
-			}
-
-		});
-
-		Cinema.faturamentoMeiasProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelMeioTicketsMoney.setText(Double.toString(newValue.doubleValue()));
-			}
-
-
-		});
-
-		Cinema.faturamentoMeias3DProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelMeio3DTickets.setText(Double.toString(newValue.doubleValue()));
-			}
-
-		});
-
-		Cinema.ingressosInteirasProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelIntTickets.setText(Integer.toString(newValue.intValue()));
-			}
-
-		});
-
-		Cinema.ingressosInteiras3DProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelInt3DTickets.setText(Integer.toString(newValue.intValue()));
-			}
-
-		});
-
-		Cinema.ingressosMeiasProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelMeioTickets.setText(Integer.toString(newValue.intValue()));
-			}
-
-		});
-
-		Cinema.ingressosMeias3DProperty().addListener(new ChangeListener<>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				labelMeioTickets.setText(Integer.toString(newValue.intValue()));
-			}
-
-		});
+		//Esse métodos puxam o faturamento da classe Cinema e adicionam nas labels.
+		labelSalesDayMoney.setText("R$" + Double.toString(Cinema.getFaturamentoTotal()));
+		labelSalesDay.setText(Integer.toString(Cinema.getIngressosTotal()));
+		labelIntTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoInteiras()));
+		labelInt3DTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoInteiras3D()));
+		labelMeioTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoMeias()));
+		labelMeio3DTicketsMoney.setText("R$" + Double.toString(Cinema.getFaturamentoMeias3D()));
+		labelIntTickets.setText(Integer.toString(Cinema.getIngressosInteiras()));
+		labelInt3DTickets.setText(Integer.toString(Cinema.getIngressosInteiras3D()));
+		labelMeioTickets.setText(Integer.toString(Cinema.getIngressosMeias()));
+		labelMeio3DTickets.setText(Integer.toString(Cinema.getIngressosMeias3D()));
+		labelDay.setText(Cinema.getToday().get(Cinema.getToday().DAY_OF_MONTH) + " - " + Cinema.getToday().get(Cinema.getToday().MONTH) +
+						 " - " + (Cinema.getToday().get(Cinema.getToday().YEAR)));
 
 	}
 
