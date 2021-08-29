@@ -86,7 +86,7 @@
                   <Font name="Montserrat Medium" size="22.0" />
                </font>
             </Label>
-            <TextField fx:id="inputDuracao" layoutX="449.0" layoutY="238.0" prefHeight="32.0" prefWidth="340.0" promptText="Digite aqui...">
+            <TextField fx:id="inputDuracao" layoutX="449.0" layoutY="238.0" prefHeight="32.0" prefWidth="340.0" promptText="Em minutos...">
                <font>
                   <Font name="Montserrat Bold" size="15.0" />
                </font>

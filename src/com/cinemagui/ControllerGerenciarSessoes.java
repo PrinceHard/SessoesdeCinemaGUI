@@ -222,7 +222,7 @@ public class ControllerGerenciarSessoes implements Initializable{
 			
 			if(checkExibicao3D.isSelected()) {
 				exibicao3D = true;
-				valorIngresso += 1.25;
+				valorIngresso *= 1.25;
 			}
 			
 			//Cria o sessão
@@ -431,21 +431,29 @@ public class ControllerGerenciarSessoes implements Initializable{
 				//Horário encontrado é igual ao horário que está sendo definido.
 				if(inicioExistente - horarioInicial.toSecondOfDay() == 0){ 
 					valid = false;
+					Alert a = new Alert(AlertType.INFORMATION, "Já existe uma sessão que ocorre nesse horário.");
+					a.showAndWait();
 					break;
 				//O horário que está sendo definido vai acontecer em um horário que já estará ocorrendo uma sessão.
 				} else if(horarioInicial.toSecondOfDay() > inicioExistente && 
 						  horarioInicial.toSecondOfDay() < finalExistente) { 
 					valid = false;
+					Alert a = new Alert(AlertType.INFORMATION, "Uma sessão irá ocorrer nesse horário.");
+					a.showAndWait();
 					break;
 				//O intervalo entre cada sessão precisa ser de 20 minutos.
 				} else if(Math.abs(finalExistente - horarioInicial.toSecondOfDay()) < 1200 || 
 				          Math.abs(inicioExistente - horarioFinal.toSecondOfDay()) < 1200) {
 					valid = false;
+					Alert a = new Alert(AlertType.INFORMATION, "O intervalo entre cada sessão precisa ser de 20 minutos.");
+					a.showAndWait();
 					break;
 				//O horário inicial da sessão que está sendo criada + o tempo do filme ultrapassam o horário inicial da próxima sessão.
 				} else if (inicioExistente > horarioInicial.toSecondOfDay() && 
 					       inicioExistente < horarioFinal.toSecondOfDay()){
 					valid = false;
+					Alert a = new Alert(AlertType.INFORMATION, "Essa sessão não vai acabar antes do início da próxima.");
+					a.showAndWait();
 					break;
 				}
 			}
