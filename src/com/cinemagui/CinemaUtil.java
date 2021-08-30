@@ -18,7 +18,6 @@ package com.cinemagui;
  * robusta com outras classes do Kit de Ferramentas JavaFX. Por exemplo,
  * é possível detectar facilmente quando o valor de uma propriedade for
  * modificada e, assim, atualizar os dados que o usuário está visualizando.
- * usuário na interface gráfica.
  *
  * Em vista disso, foram utilizadas propriedades nas principais classes do
  * projeto (Filme, Sessao, Sala e Cinema).
