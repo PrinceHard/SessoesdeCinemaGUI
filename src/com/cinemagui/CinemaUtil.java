@@ -64,7 +64,7 @@ public class CinemaUtil extends Application{
 	//Stage para perguntar o nome do cinema.
 	private static Stage stageGetCinemaName = new Stage();
 
-	//Essa classe será utilizada pelos métodos "Start()" e "enterCinemaName()".
+	//Esse objeto será utilizada pelos métodos "Start()" e "enterCinemaName()".
 	private static ControllerMain controllerMain = null;
 
 	@FXML
